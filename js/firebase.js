@@ -1,13 +1,13 @@
 // firebase.js — inicialización Firebase (CDN, sin build step)
-// Proyecto: bodas-b9fb6
+// Proyecto: invitaciones-e768f
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCG_c3EVdKElSZRLI462AzJTQfz9pOX8v8",
-  authDomain: "bodas-b9fb6.firebaseapp.com",
-  projectId: "bodas-b9fb6",
-  storageBucket: "bodas-b9fb6.firebasestorage.app",
-  messagingSenderId: "783561257826",
-  appId: "1:783561257826:web:855340ea5e4fe3fd2af23b"
+  apiKey: "AIzaSyD2DJfvlVs3uw11H2r4TYJ5-tbbTMqdWuQ",
+  authDomain: "invitaciones-e768f.firebaseapp.com",
+  projectId: "invitaciones-e768f",
+  storageBucket: "invitaciones-e768f.firebasestorage.app",
+  messagingSenderId: "429462791386",
+  appId: "1:429462791386:web:2fed974c1b9ed421e771e3"
 };
 
 // Firebase se carga via CDN en cada HTML.
