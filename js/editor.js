@@ -57,6 +57,9 @@ const EDITOR = (() => {
     _setCheck('chk-historia', boda.historia.activa);
     _setVal('inp-galeria', boda.galeria.fotos.join('\n'));
     _setCheck('chk-galeria', boda.galeria.activa);
+    _setVal('inp-musica-titulo', boda.musica ? boda.musica.titulo : '');
+    _setVal('inp-musica-url', boda.musica ? boda.musica.url : '');
+    _setCheck('chk-musica', boda.musica ? boda.musica.activa : true);
     _setVal('inp-lugar', boda.evento.lugar);
     _setVal('inp-direccion', boda.evento.direccion);
     _setVal('inp-maps-url', boda.evento.googleMapsUrl);
@@ -100,6 +103,9 @@ const EDITOR = (() => {
     on('inp-hora', 'fecha.hora');
     on('inp-historia', 'historia.texto');
     on('chk-historia', 'historia.activa');
+    on('chk-musica',        'musica.activa');
+    on('inp-musica-titulo', 'musica.titulo');
+    on('inp-musica-url',    'musica.url');
     on('inp-lugar', 'evento.lugar');
     on('inp-direccion', 'evento.direccion');
     on('inp-maps-url', 'evento.googleMapsUrl');
