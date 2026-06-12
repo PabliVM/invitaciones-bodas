@@ -443,3 +443,85 @@
   color: #fff;
   letter-spacing: 2px;
 }
+
+/* ─── Música ─── */
+.inv-musica {
+  padding: 32px;
+  background: #fff;
+  border-top: 1px solid rgba(184,134,11,0.1);
+  border-bottom: 1px solid rgba(184,134,11,0.1);
+}
+
+.inv-musica__inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.inv-musica__nota {
+  font-size: 28px;
+  color: var(--color-primario);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.inv-musica__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inv-musica__titulo {
+  font-family: var(--fuente-display);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-texto);
+  font-style: italic;
+}
+
+.inv-musica__sub {
+  font-family: var(--fuente-body);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #aaa;
+}
+
+.inv-musica__btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-primario);
+  background: transparent;
+  color: var(--color-primario);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.inv-musica__btn:hover {
+  background: var(--color-primario);
+  color: #fff;
+}
+
+.inv-musica__btn.playing {
+  background: var(--color-primario);
+  color: #fff;
+}
+
+.inv-musica__btn-icon {
+  font-size: 14px;
+  line-height: 1;
+  margin-left: 2px;
+}
+
+.inv-musica__btn.playing .inv-musica__btn-icon {
+  margin-left: 0;
+}
