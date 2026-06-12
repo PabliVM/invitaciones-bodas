@@ -1,45 +1,445 @@
-/* editor.css — Layout y panel del editor */
+/* styles.css — Estilos de la invitación.
+   Todo color/tipografía via variables CSS.
+   Se usa en invitation.html y en el preview del editor. */
 
+/* ─── Google Fonts ─── */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap');
+
+/* ─── Variables (override desde renderer.js) ─── */
 :root {
-  --editor-panel-width: 320px;
-  --editor-bg: #0f0f0f;
-  --editor-panel-bg: #1a1a1a;
-  --editor-border: #2a2a2a;
-  --editor-input-bg: #242424;
-  --editor-text: #e0e0e0;
-  --editor-text-muted: #777;
-  --editor-accent: #b8860b;
+  --color-primario: #b8860b;
+  --color-secundario: #f5f0e8;
+  --color-texto: #2c2c2c;
+  --color-accent: #8b6914;
+  --fuente-display: 'Cormorant Garamond', serif;
+  --fuente-body: 'Lato', sans-serif;
+  --max-width: 480px;
+  --spacing-seccion: 64px;
 }
 
-html, body { height: 100%; background: var(--editor-bg); font-family: 'Lato', sans-serif; }
+/* ─── Reset ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.editor-layout {
+/* ─── Invitación contenedor ─── */
+.inv-root {
+  background: var(--color-secundario);
+  color: var(--color-texto);
+  font-family: var(--fuente-body);
+  min-height: 100vh;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+/* ─── Portada ─── */
+.inv-portada {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 32px;
+  background: var(--color-secundario);
+  position: relative;
+}
+
+.inv-portada__ornamento {
+  font-size: 20px;
+  color: var(--color-primario);
+  margin-bottom: 24px;
+  letter-spacing: 8px;
+}
+
+.inv-portada__preludio {
+  font-family: var(--fuente-body);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 24px;
+}
+
+.inv-portada__nombres {
+  font-family: var(--fuente-display);
+  font-weight: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.1;
+}
+
+.inv-portada__nombres span:first-child,
+.inv-portada__nombres span:last-child {
+  font-size: clamp(42px, 10vw, 64px);
+  color: var(--color-texto);
+}
+
+.inv-portada__amp {
+  font-family: var(--fuente-display);
+  font-style: italic;
+  font-size: clamp(32px, 7vw, 48px);
+  color: var(--color-primario);
+  line-height: 1.2;
+}
+
+.inv-portada__fecha {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--fuente-body);
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.inv-portada__fecha-sep {
+  opacity: 0.4;
+}
+
+.inv-portada__linea {
+  width: 48px;
+  height: 1px;
+  background: var(--color-primario);
+  margin-top: 32px;
+  opacity: 0.5;
+}
+
+/* ─── Cuenta atrás ─── */
+.inv-countdown {
+  padding: 48px 24px;
+  text-align: center;
+  background: var(--color-primario);
+}
+
+.inv-countdown__label,
+.inv-countdown__sublabel {
+  font-family: var(--fuente-body);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+
+.inv-countdown__label { margin-bottom: 20px; }
+.inv-countdown__sublabel { margin-top: 16px; }
+
+.inv-countdown__bloques {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.inv-countdown__bloque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.inv-countdown__num {
+  font-family: var(--fuente-display);
+  font-size: 42px;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1;
+}
+
+.inv-countdown__unit {
+  font-family: var(--fuente-body);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+
+.inv-countdown__hoy {
+  font-family: var(--fuente-display);
+  font-size: 28px;
+  color: #fff;
+  font-style: italic;
+}
+
+/* ─── Secciones comunes ─── */
+.inv-seccion {
+  padding: var(--spacing-seccion) 32px;
+}
+
+.inv-seccion__header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.inv-seccion__ornamento {
+  display: block;
+  font-size: 14px;
+  color: var(--color-primario);
+  letter-spacing: 6px;
+  margin-bottom: 12px;
+}
+
+.inv-seccion__titulo {
+  font-family: var(--fuente-display);
+  font-size: clamp(26px, 6vw, 34px);
+  font-weight: 300;
+  color: var(--color-texto);
+  letter-spacing: 1px;
+}
+
+.inv-seccion__linea {
+  width: 40px;
+  height: 1px;
+  background: var(--color-primario);
+  margin: 16px auto 0;
+  opacity: 0.5;
+}
+
+/* ─── Historia ─── */
+.inv-historia__texto {
+  font-family: var(--fuente-display);
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.8;
+  text-align: center;
+  color: var(--color-texto);
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+/* ─── Galería ─── */
+.inv-galeria__grid {
   display: grid;
-  grid-template-columns: var(--editor-panel-width) 1fr;
-  grid-template-rows: 48px 1fr;
-  height: 100vh; overflow: hidden;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
 
-.editor-topbar {
+.inv-galeria__item {
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+
+.inv-galeria__item:first-child {
   grid-column: 1 / -1;
-  background: var(--editor-panel-bg);
-  border-bottom: 1px solid var(--editor-border);
-  display: flex; align-items: center;
-  justify-content: space-between; padding: 0 16px;
+  aspect-ratio: 4/3;
 }
 
-.editor-panel {
-  background: var(--editor-panel-bg);
-  border-right: 1px solid var(--editor-border);
-  overflow-y: auto;
+.inv-galeria__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
-.preview-phone {
-  width: 375px;
-  background: #fff; border-radius: 40px;
-  box-shadow: 0 0 0 10px #1e1e1e, 0 0 0 12px #111, 0 32px 80px rgba(0,0,0,0.6);
-  overflow: hidden; min-height: 680px;
+.inv-galeria__item img:hover {
+  transform: scale(1.03);
 }
 
-/* Campos, toggles, color pickers, acordeón...
-   Ver archivo completo en el ZIP */
+/* ─── Evento ─── */
+.inv-evento__card {
+  background: #fff;
+  border: 1px solid rgba(184,134,11,0.2);
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.inv-evento__fecha-completa {
+  font-family: var(--fuente-display);
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--color-texto);
+  margin-bottom: 8px;
+}
+
+.inv-evento__hora {
+  font-family: var(--fuente-body);
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.inv-evento__divider {
+  width: 32px;
+  height: 1px;
+  background: var(--color-primario);
+  margin: 20px auto;
+  opacity: 0.4;
+}
+
+.inv-evento__lugar {
+  font-family: var(--fuente-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--color-texto);
+  margin-bottom: 8px;
+}
+
+.inv-evento__direccion {
+  font-family: var(--fuente-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: #888;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.inv-evento__mapa-btn {
+  display: inline-block;
+  font-family: var(--fuente-body);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primario);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-primario);
+  padding-bottom: 2px;
+  transition: opacity 0.2s;
+}
+
+.inv-evento__mapa-btn:hover { opacity: 0.6; }
+
+/* ─── Dresscode ─── */
+.inv-dresscode { background: #fff; }
+
+.inv-dresscode__texto {
+  font-family: var(--fuente-display);
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  text-align: center;
+  color: var(--color-texto);
+  line-height: 1.7;
+}
+
+/* ─── RSVP ─── */
+.inv-rsvp__fecha {
+  font-family: var(--fuente-body);
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.inv-rsvp__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inv-rsvp__input,
+.inv-rsvp__textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: #fff;
+  font-family: var(--fuente-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-texto);
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+
+.inv-rsvp__input:focus,
+.inv-rsvp__textarea:focus {
+  border-color: var(--color-primario);
+}
+
+.inv-rsvp__radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inv-rsvp__radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--fuente-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-texto);
+  cursor: pointer;
+}
+
+.inv-rsvp__btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--color-primario);
+  color: #fff;
+  border: none;
+  font-family: var(--fuente-body);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 8px;
+}
+
+.inv-rsvp__btn:hover { opacity: 0.85; }
+
+.inv-rsvp__enviado {
+  text-align: center;
+  font-family: var(--fuente-display);
+  font-size: 18px;
+  font-style: italic;
+  color: var(--color-accent);
+  padding: 24px 0;
+}
+
+/* ─── Mensaje final ─── */
+.inv-mensaje {
+  background: var(--color-primario);
+  text-align: center;
+  padding: 64px 32px;
+}
+
+.inv-mensaje__ornamento-top {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 12px;
+  margin-bottom: 32px;
+}
+
+.inv-mensaje__ornamento-bottom {
+  font-size: 16px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 32px;
+  letter-spacing: 4px;
+}
+
+.inv-mensaje__texto {
+  font-family: var(--fuente-display);
+  font-size: clamp(18px, 4vw, 24px);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.8;
+  max-width: 320px;
+  margin: 0 auto 24px;
+}
+
+.inv-mensaje__firma {
+  font-family: var(--fuente-display);
+  font-size: 22px;
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: 2px;
+}
