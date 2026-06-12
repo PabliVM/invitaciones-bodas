@@ -439,3 +439,95 @@ html, body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ─── Presets grid ─── */
+.presets-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 4px;
+  background: var(--editor-input-bg);
+  border: 1px solid var(--editor-border);
+  cursor: pointer;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+
+.preset-btn:hover {
+  border-color: var(--editor-accent);
+}
+
+.preset-btn.activo {
+  border-color: var(--editor-accent);
+  background: rgba(184,134,11,0.08);
+}
+
+.preset-btn__muestra {
+  display: flex;
+  width: 100%;
+  height: 20px;
+  overflow: hidden;
+}
+
+.preset-btn__color {
+  flex: 1;
+  height: 100%;
+}
+
+.preset-btn__nombre {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: var(--editor-text-muted);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.preset-btn:hover .preset-btn__nombre {
+  color: var(--editor-text);
+}
+
+/* ─── Divisor panel ─── */
+.panel-divisor {
+  height: 1px;
+  background: var(--editor-border);
+  margin: 4px 0;
+}
+
+/* ─── Selector de plantillas ─── */
+.plantillas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.plantilla-btn {
+  background: var(--editor-input-bg);
+  border: 2px solid var(--editor-border);
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.15s;
+  font-family: inherit;
+  overflow: hidden;
+}
+
+.plantilla-btn:hover {
+  border-color: #555;
+}
+
+.plantilla-btn--activa {
+  border-color: var(--editor-accent) !important;
+}
+
+.plantilla-btn__preview {
+  display: flex;
+  height: 80px;
+}
