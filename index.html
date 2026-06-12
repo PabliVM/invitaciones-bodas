@@ -9,14 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0f0f0f;
-      --surface: #1a1a1a;
-      --border: #2a2a2a;
-      --text: #e0e0e0;
-      --text-muted: #666;
-      --accent: #b8860b;
-      --accent-hover: #d4a017;
-      --danger: #c0392b;
+      --bg: #0f0f0f; --surface: #1a1a1a; --border: #2a2a2a;
+      --text: #e0e0e0; --text-muted: #666;
+      --accent: #b8860b; --accent-hover: #d4a017; --danger: #c0392b;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'Lato', sans-serif; min-height: 100vh; }
@@ -35,7 +30,7 @@
     .boda-card__nombres { font-size: 18px; font-weight: 300; color: var(--text); margin-bottom: 6px; }
     .boda-card__meta { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
     .boda-card__acciones { display: flex; gap: 8px; }
-    .btn { padding: 8px 14px; border: none; font-family: inherit; font-size: 12px; cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; }
+    .btn { padding: 8px 14px; border: none; font-family: inherit; font-size: 12px; font-weight: 400; cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; }
     .btn--primario { background: var(--accent); color: #fff; flex: 1; text-align: center; }
     .btn--primario:hover { background: var(--accent-hover); }
     .btn--secundario { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
@@ -59,12 +54,10 @@
 
   <main class="main">
     <p class="main__titulo">Tus bodas</p>
-
     <div class="card-nueva" id="btn-nueva-boda">
       <div class="card-nueva__icono">＋</div>
       <div class="card-nueva__texto">Crear nueva boda</div>
     </div>
-
     <div id="bodas-container">
       <div class="cargando">Cargando…</div>
     </div>
@@ -78,26 +71,37 @@
   <script>
     DB.init();
 
-    document.getElementById('btn-nueva-boda').addEventListener('click', () => {
+    document.getElementById('btn-nueva-boda').addEventListener('click', function() {
       window.location.href = 'editor.html';
     });
 
     async function cargarBodas() {
-      const container = document.getElementById('bodas-container');
+      var container = document.getElementById('bodas-container');
       try {
-        const bodas = await DB.listarBodas();
+        var bodas = await DB.listarBodas();
         if (bodas.length === 0) {
           container.innerHTML = '<div class="vacio"><p class="vacio__texto">Aún no hay bodas creadas.</p><p class="vacio__sub">Crea la primera con el botón de arriba.</p></div>';
           return;
         }
-        const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-        container.innerHTML = '<div class="bodas-grid">' + bodas.map(b => {
-          const nombre = b.pareja ? (b.pareja.novio||'—') + ' & ' + (b.pareja.novia||'—') : (b.meta?.titulo || 'Sin nombre');
-          const fechaMes = b.fecha?.mes ? meses[parseInt(b.fecha.mes)-1] : '—';
-          const fechaStr = b.fecha ? b.fecha.dia+' '+fechaMes+' '+b.fecha.anio : '—';
-          const creadoEn = b.creadoEn?.toDate ? b.creadoEn.toDate().toLocaleDateString('es-ES') : '—';
-          return '<div class="boda-card"><div class="boda-card__nombres">'+nombre+'</div><div class="boda-card__meta">Fecha: '+fechaStr+'<br>Creada: '+creadoEn+'</div><div class="boda-card__acciones"><a href="editor.html?id='+b.id+'" class="btn btn--primario">Editar</a><a href="invitation.html?id='+b.id+'" target="_blank" class="btn btn--secundario">Ver</a><button class="btn btn--peligro" onclick="eliminar(''+b.id+'')">✕</button></div></div>';
-        }).join('') + '</div>';
+        var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+        var html = '<div class="bodas-grid">';
+        for (var i = 0; i < bodas.length; i++) {
+          var b = bodas[i];
+          var nombre = (b.pareja) ? ((b.pareja.novio || '—') + ' & ' + (b.pareja.novia || '—')) : (b.meta && b.meta.titulo ? b.meta.titulo : 'Sin nombre');
+          var fechaMes = (b.fecha && b.fecha.mes) ? meses[parseInt(b.fecha.mes) - 1] : '—';
+          var fechaStr = b.fecha ? (b.fecha.dia + ' ' + fechaMes + ' ' + b.fecha.anio) : '—';
+          var creadoEn = (b.creadoEn && b.creadoEn.toDate) ? b.creadoEn.toDate().toLocaleDateString('es-ES') : '—';
+          html += '<div class="boda-card">';
+          html += '<div class="boda-card__nombres">' + nombre + '</div>';
+          html += '<div class="boda-card__meta">Fecha: ' + fechaStr + '<br>Creada: ' + creadoEn + '</div>';
+          html += '<div class="boda-card__acciones">';
+          html += '<a href="editor.html?id=' + b.id + '" class="btn btn--primario">Editar</a>';
+          html += '<a href="invitation.html?id=' + b.id + '" target="_blank" class="btn btn--secundario">Ver</a>';
+          html += '<button class="btn btn--peligro" onclick="eliminar(\'' + b.id + '\')">✕</button>';
+          html += '</div></div>';
+        }
+        html += '</div>';
+        container.innerHTML = html;
       } catch (err) {
         container.innerHTML = '<div class="cargando">Error al cargar. Revisa la consola.</div>';
         console.error(err);
@@ -114,4 +118,4 @@
   </script>
 
 </body>
-</html>
+</html>>
