@@ -12,15 +12,18 @@
 </head>
 <body>
 
+  <!-- Overlay de carga -->
   <div class="editor-cargando" id="editor-cargando">
     <div class="editor-cargando__spinner"></div>
     <span class="editor-cargando__texto">Cargando boda…</span>
   </div>
 
+  <!-- Indicador de guardado automático -->
   <div class="indicador-guardado" id="indicador-guardado"></div>
 
   <div class="editor-layout">
 
+    <!-- ── TOPBAR ── -->
     <header class="editor-topbar">
       <a href="index.html" class="editor-topbar__logo">← Wedding Builder</a>
       <div class="editor-topbar__actions">
@@ -31,21 +34,23 @@
       </div>
     </header>
 
+    <!-- ── PANEL LATERAL ── -->
     <aside class="editor-panel">
 
+      <!-- URL de la invitación -->
       <div class="url-panel" id="url-panel">
         <span class="url-panel__label">URL del cliente</span>
         <div class="url-panel__row">
           <input type="text" class="url-panel__input" id="url-invitacion" readonly />
-          <button class="btn btn--secundario" onclick="
+          <button class="btn btn--secundario" id="btn-copiar-url-panel" onclick="
             navigator.clipboard.writeText(document.getElementById('url-invitacion').value);
-            this.textContent='✓';
-            setTimeout(()=>this.textContent='Copiar',1500);
+            this.textContent = '✓';
+            setTimeout(() => this.textContent = 'Copiar', 1500);
           ">Copiar</button>
         </div>
       </div>
 
-      <!-- SECCIÓN: LA BODA -->
+      <!-- SECCIÓN: BODA -->
       <div class="panel-seccion abierta">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
           <span class="panel-seccion__titulo">La boda</span>
@@ -53,15 +58,15 @@
         </div>
         <div class="panel-seccion__body">
           <div class="campo">
-            <label class="campo__label">Título interno</label>
+            <label class="campo__label" for="inp-titulo">Título interno</label>
             <input type="text" class="campo__input" id="inp-titulo" placeholder="Ej: Boda García-López" />
           </div>
           <div class="campo">
-            <label class="campo__label">Nombre del novio</label>
+            <label class="campo__label" for="inp-novio">Nombre del novio</label>
             <input type="text" class="campo__input" id="inp-novio" placeholder="Alejandro" />
           </div>
           <div class="campo">
-            <label class="campo__label">Nombre de la novia</label>
+            <label class="campo__label" for="inp-novia">Nombre de la novia</label>
             <input type="text" class="campo__input" id="inp-novia" placeholder="Sofía" />
           </div>
           <div class="campo">
@@ -73,13 +78,13 @@
             </div>
           </div>
           <div class="campo">
-            <label class="campo__label">Hora</label>
+            <label class="campo__label" for="inp-hora">Hora</label>
             <input type="time" class="campo__input" id="inp-hora" />
           </div>
         </div>
       </div>
 
-      <!-- HISTORIA -->
+      <!-- SECCIÓN: HISTORIA -->
       <div class="panel-seccion">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
           <span class="panel-seccion__titulo">Historia</span>
@@ -88,16 +93,19 @@
         <div class="panel-seccion__body">
           <div class="campo campo--horizontal">
             <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle"><input type="checkbox" id="chk-historia" checked /><span class="campo__toggle-slider"></span></label>
+            <label class="campo__toggle">
+              <input type="checkbox" id="chk-historia" checked />
+              <span class="campo__toggle-slider"></span>
+            </label>
           </div>
           <div class="campo">
-            <label class="campo__label">Texto</label>
-            <textarea class="campo__textarea" id="inp-historia" rows="5"></textarea>
+            <label class="campo__label" for="inp-historia">Texto</label>
+            <textarea class="campo__textarea" id="inp-historia" rows="5" placeholder="Vuestra historia…"></textarea>
           </div>
         </div>
       </div>
 
-      <!-- GALERÍA -->
+      <!-- SECCIÓN: GALERÍA -->
       <div class="panel-seccion">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
           <span class="panel-seccion__titulo">Galería</span>
@@ -106,16 +114,50 @@
         <div class="panel-seccion__body">
           <div class="campo campo--horizontal">
             <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle"><input type="checkbox" id="chk-galeria" checked /><span class="campo__toggle-slider"></span></label>
+            <label class="campo__toggle">
+              <input type="checkbox" id="chk-galeria" checked />
+              <span class="campo__toggle-slider"></span>
+            </label>
           </div>
           <div class="campo">
-            <label class="campo__label">URLs de fotos (una por línea)</label>
-            <textarea class="campo__textarea" id="inp-galeria" rows="6" placeholder="https://…"></textarea>
+            <label class="campo__label" for="inp-galeria">URLs de fotos (una por línea)</label>
+            <textarea class="campo__textarea" id="inp-galeria" rows="6" placeholder="https://…&#10;https://…&#10;https://…"></textarea>
           </div>
+          <p style="font-size:11px;color:#555;line-height:1.5">
+            Sube las fotos a cualquier servicio (Google Drive, Imgur, Cloudinary) y pega las URLs directas aquí.
+          </p>
         </div>
       </div>
 
-      <!-- EVENTO -->
+      <!-- SECCIÓN: MÚSICA -->
+      <div class="panel-seccion">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">Música</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="campo campo--horizontal">
+            <label class="campo__label">Mostrar sección</label>
+            <label class="campo__toggle">
+              <input type="checkbox" id="chk-musica" checked />
+              <span class="campo__toggle-slider"></span>
+            </label>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Título de la canción</label>
+            <input type="text" class="campo__input" id="inp-musica-titulo" placeholder="Ej: Perfect – Ed Sheeran" />
+          </div>
+          <div class="campo">
+            <label class="campo__label">URL del MP3</label>
+            <input type="url" class="campo__input" id="inp-musica-url" placeholder="https://…/cancion.mp3" />
+          </div>
+          <p style="font-size:11px;color:#555;line-height:1.6">
+            Sube el MP3 a Google Drive, hazlo público y pega el enlace directo. O usa cualquier URL directa a un archivo .mp3.
+          </p>
+        </div>
+      </div>
+
+      <!-- SECCIÓN: EVENTO -->
       <div class="panel-seccion">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
           <span class="panel-seccion__titulo">El evento</span>
@@ -124,24 +166,27 @@
         <div class="panel-seccion__body">
           <div class="campo campo--horizontal">
             <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle"><input type="checkbox" id="chk-evento" checked /><span class="campo__toggle-slider"></span></label>
+            <label class="campo__toggle">
+              <input type="checkbox" id="chk-evento" checked />
+              <span class="campo__toggle-slider"></span>
+            </label>
           </div>
           <div class="campo">
-            <label class="campo__label">Nombre del lugar</label>
-            <input type="text" class="campo__input" id="inp-lugar" />
+            <label class="campo__label" for="inp-lugar">Nombre del lugar</label>
+            <input type="text" class="campo__input" id="inp-lugar" placeholder="Finca La Alameda" />
           </div>
           <div class="campo">
-            <label class="campo__label">Dirección</label>
-            <input type="text" class="campo__input" id="inp-direccion" />
+            <label class="campo__label" for="inp-direccion">Dirección</label>
+            <input type="text" class="campo__input" id="inp-direccion" placeholder="Ctra. de Burgos, km 24" />
           </div>
           <div class="campo">
-            <label class="campo__label">Enlace Google Maps</label>
-            <input type="url" class="campo__input" id="inp-maps-url" />
+            <label class="campo__label" for="inp-maps-url">Enlace Google Maps</label>
+            <input type="url" class="campo__input" id="inp-maps-url" placeholder="https://maps.google.com/…" />
           </div>
         </div>
       </div>
 
-      <!-- DRESS CODE -->
+      <!-- SECCIÓN: DRESS CODE -->
       <div class="panel-seccion">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
           <span class="panel-seccion__titulo">Dress code</span>
@@ -150,16 +195,19 @@
         <div class="panel-seccion__body">
           <div class="campo campo--horizontal">
             <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle"><input type="checkbox" id="chk-dresscode" checked /><span class="campo__toggle-slider"></span></label>
+            <label class="campo__toggle">
+              <input type="checkbox" id="chk-dresscode" checked />
+              <span class="campo__toggle-slider"></span>
+            </label>
           </div>
           <div class="campo">
-            <label class="campo__label">Indicaciones</label>
-            <textarea class="campo__textarea" id="inp-dresscode" rows="3"></textarea>
+            <label class="campo__label" for="inp-dresscode">Indicaciones</label>
+            <textarea class="campo__textarea" id="inp-dresscode" rows="3" placeholder="Elegante. Tonos claros bienvenidos."></textarea>
           </div>
         </div>
       </div>
 
-      <!-- RSVP -->
+      <!-- SECCIÓN: RSVP -->
       <div class="panel-seccion">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
           <span class="panel-seccion__titulo">RSVP</span>
@@ -168,20 +216,23 @@
         <div class="panel-seccion__body">
           <div class="campo campo--horizontal">
             <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle"><input type="checkbox" id="chk-rsvp" checked /><span class="campo__toggle-slider"></span></label>
+            <label class="campo__toggle">
+              <input type="checkbox" id="chk-rsvp" checked />
+              <span class="campo__toggle-slider"></span>
+            </label>
           </div>
           <div class="campo">
-            <label class="campo__label">Fecha límite</label>
+            <label class="campo__label" for="inp-rsvp-fecha">Fecha límite</label>
             <input type="date" class="campo__input" id="inp-rsvp-fecha" />
           </div>
           <div class="campo">
-            <label class="campo__label">Email</label>
-            <input type="email" class="campo__input" id="inp-rsvp-email" />
+            <label class="campo__label" for="inp-rsvp-email">Email de confirmaciones</label>
+            <input type="email" class="campo__input" id="inp-rsvp-email" placeholder="boda@ejemplo.com" />
           </div>
         </div>
       </div>
 
-      <!-- MENSAJE FINAL -->
+      <!-- SECCIÓN: MENSAJE FINAL -->
       <div class="panel-seccion">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
           <span class="panel-seccion__titulo">Mensaje final</span>
@@ -190,78 +241,101 @@
         <div class="panel-seccion__body">
           <div class="campo campo--horizontal">
             <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle"><input type="checkbox" id="chk-mensaje" checked /><span class="campo__toggle-slider"></span></label>
+            <label class="campo__toggle">
+              <input type="checkbox" id="chk-mensaje" checked />
+              <span class="campo__toggle-slider"></span>
+            </label>
           </div>
           <div class="campo">
-            <label class="campo__label">Texto</label>
-            <textarea class="campo__textarea" id="inp-mensaje" rows="4"></textarea>
+            <label class="campo__label" for="inp-mensaje">Texto</label>
+            <textarea class="campo__textarea" id="inp-mensaje" rows="4" placeholder="Vuestra presencia es el mejor regalo…"></textarea>
           </div>
         </div>
       </div>
 
-      <!-- ESTILO -->
+      <!-- SECCIÓN: ESTILO -->
       <div class="panel-seccion">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
           <span class="panel-seccion__titulo">Estilo</span>
           <span class="panel-seccion__chevron">▼</span>
         </div>
         <div class="panel-seccion__body">
+
           <div class="campo">
-            <label class="campo__label">Color primario</label>
+            <label class="campo__label">Color primario (dorado)</label>
             <div class="campo__color">
-              <label class="campo__color-swatch"><input type="color" id="inp-color-primario-picker" /></label>
+              <label class="campo__color-swatch">
+                <input type="color" id="inp-color-primario-picker" />
+              </label>
               <input type="text" class="campo__color-value" id="inp-color-primario" maxlength="7" placeholder="#b8860b" />
             </div>
           </div>
+
           <div class="campo">
-            <label class="campo__label">Color fondo</label>
+            <label class="campo__label">Color secundario (fondo)</label>
             <div class="campo__color">
-              <label class="campo__color-swatch"><input type="color" id="inp-color-secundario-picker" /></label>
+              <label class="campo__color-swatch">
+                <input type="color" id="inp-color-secundario-picker" />
+              </label>
               <input type="text" class="campo__color-value" id="inp-color-secundario" maxlength="7" placeholder="#f5f0e8" />
             </div>
           </div>
+
           <div class="campo">
-            <label class="campo__label">Color texto</label>
+            <label class="campo__label">Color de texto</label>
             <div class="campo__color">
-              <label class="campo__color-swatch"><input type="color" id="inp-color-texto-picker" /></label>
+              <label class="campo__color-swatch">
+                <input type="color" id="inp-color-texto-picker" />
+              </label>
               <input type="text" class="campo__color-value" id="inp-color-texto" maxlength="7" placeholder="#2c2c2c" />
             </div>
           </div>
+
           <div class="campo">
-            <label class="campo__label">Color acento</label>
+            <label class="campo__label">Color de acento</label>
             <div class="campo__color">
-              <label class="campo__color-swatch"><input type="color" id="inp-color-accent-picker" /></label>
+              <label class="campo__color-swatch">
+                <input type="color" id="inp-color-accent-picker" />
+              </label>
               <input type="text" class="campo__color-value" id="inp-color-accent" maxlength="7" placeholder="#8b6914" />
             </div>
           </div>
+
           <div class="campo">
-            <label class="campo__label">Tipografía</label>
+            <label class="campo__label" for="sel-fuente">Tipografía principal</label>
             <select class="campo__select" id="sel-fuente">
-              <option value="Cormorant Garamond">Cormorant Garamond</option>
-              <option value="Playfair Display">Playfair Display</option>
-              <option value="Great Vibes">Great Vibes</option>
-              <option value="Libre Baskerville">Libre Baskerville</option>
-              <option value="EB Garamond">EB Garamond</option>
+              <option value="Cormorant Garamond">Cormorant Garamond (elegante)</option>
+              <option value="Playfair Display">Playfair Display (clásica)</option>
+              <option value="Great Vibes">Great Vibes (caligráfica)</option>
+              <option value="Libre Baskerville">Libre Baskerville (editorial)</option>
+              <option value="EB Garamond">EB Garamond (literaria)</option>
             </select>
           </div>
+
         </div>
       </div>
 
     </aside>
 
+    <!-- ── ZONA DE PREVIEW ── -->
     <section class="editor-preview">
       <div class="preview-phone">
         <div class="preview-phone__notch"></div>
         <div class="preview-phone__screen">
-          <div class="inv-root" id="preview-root"></div>
+          <div class="inv-root" id="preview-root">
+            <!-- El renderer dibuja aquí -->
+          </div>
         </div>
       </div>
     </section>
 
-  </div>
+  </div><!-- /editor-layout -->
 
+  <!-- Firebase SDKs (compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <!-- App -->
   <script src="js/firebase.js"></script>
   <script src="js/db.js"></script>
   <script src="js/state.js"></script>
@@ -269,35 +343,52 @@
   <script src="js/editor.js"></script>
 
   <script>
+    // ── Acordeón del panel ──
     function toggleSeccion(header) {
       header.parentElement.classList.toggle('abierta');
     }
 
+    // ── Sincronización color picker ↔ input texto ──
     function sincronizarColor(pickerId, textId, ruta) {
       const picker = document.getElementById(pickerId);
       const text = document.getElementById(textId);
+
       if (!picker || !text) return;
+
+      // Inicializar swatch con valor actual
       text.addEventListener('input', () => {
-        if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) picker.value = text.value;
+        if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) {
+          picker.value = text.value;
+        }
       });
+
       picker.addEventListener('input', () => {
         text.value = picker.value;
         STATE.set(ruta, picker.value);
       });
+
+      // Al poblar el panel, sincronizar el swatch
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          if (text.value) picker.value = text.value;
+        }, 100);
+      });
     }
 
-    sincronizarColor('inp-color-primario-picker',   'inp-color-primario',   'estilos.colorPrimario');
+    sincronizarColor('inp-color-primario-picker', 'inp-color-primario', 'estilos.colorPrimario');
     sincronizarColor('inp-color-secundario-picker', 'inp-color-secundario', 'estilos.colorSecundario');
-    sincronizarColor('inp-color-texto-picker',      'inp-color-texto',      'estilos.colorTexto');
-    sincronizarColor('inp-color-accent-picker',     'inp-color-accent',     'estilos.colorAccent');
+    sincronizarColor('inp-color-texto-picker', 'inp-color-texto', 'estilos.colorTexto');
+    sincronizarColor('inp-color-accent-picker', 'inp-color-accent', 'estilos.colorAccent');
 
+    // Actualizar swatches cuando el STATE cargue datos de Firebase
     STATE.suscribir((boda) => {
-      [
-        ['inp-color-primario-picker',   boda.estilos.colorPrimario],
+      const sets = [
+        ['inp-color-primario-picker', boda.estilos.colorPrimario],
         ['inp-color-secundario-picker', boda.estilos.colorSecundario],
-        ['inp-color-texto-picker',      boda.estilos.colorTexto],
-        ['inp-color-accent-picker',     boda.estilos.colorAccent],
-      ].forEach(([id, val]) => {
+        ['inp-color-texto-picker', boda.estilos.colorTexto],
+        ['inp-color-accent-picker', boda.estilos.colorAccent],
+      ];
+      sets.forEach(([id, val]) => {
         const el = document.getElementById(id);
         if (el && val) el.value = val;
       });
