@@ -1,5 +1,4 @@
 // state.js — Estado en memoria. Una sola fuente de verdad.
-// El editor lee y escribe aquí. El renderer lee desde aquí.
 
 const STATE = (() => {
   const defaultBoda = () => ({
@@ -17,6 +16,11 @@ const STATE = (() => {
         'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800',
         'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800',
       ],
+    },
+    musica: {
+      activa: true,
+      url: '',
+      titulo: 'Nuestra canción',
     },
     evento: {
       activo: true,
@@ -45,7 +49,6 @@ const STATE = (() => {
   function getId() { return _id; }
   function setId(id) { _id = id; }
 
-  // Actualización profunda por ruta: set('pareja.novio', 'Carlos')
   function set(ruta, valor) {
     const partes = ruta.split('.');
     let obj = _boda;
