@@ -253,6 +253,17 @@
         </div>
       </div>
 
+      <!-- SECCIÓN: PLANTILLA -->
+      <div class="panel-seccion abierta">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">Plantilla</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="plantillas-grid" id="plantillas-grid"></div>
+        </div>
+      </div>
+
       <!-- SECCIÓN: ESTILO -->
       <div class="panel-seccion abierta">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
@@ -347,6 +358,10 @@
   <script src="js/db.js"></script>
   <script src="js/state.js"></script>
   <script src="js/renderer.js"></script>
+  <script src="js/renderers/clasica.js"></script>
+  <script src="js/renderers/floral.js"></script>
+  <script src="js/renderers/moderna.js"></script>
+  <script src="js/renderers/mediterranea.js"></script>
   <script src="js/presets.js"></script>
   <script src="js/editor.js"></script>
 
@@ -376,7 +391,80 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       initPresets();
+      initPlantillas();
     });
+
+    // ── Selector de plantillas ──
+    var PLANTILLAS_DEF = [
+      { id: 'clasica',      nombre: 'Clásica',       desc: 'Crema y dorado',     colores: ['#f5f0e8','#b8860b','#2c2c2c'] },
+      { id: 'floral',       nombre: 'Floral',         desc: 'Flores y romance',   colores: ['#fdf8f5','#d4788a','#7a9e7e'] },
+      { id: 'moderna',      nombre: 'Moderna',        desc: 'Negro y blanco',     colores: ['#111111','#ffffff','#666666'] },
+      { id: 'mediterranea', nombre: 'Mediterránea',   desc: 'Azul marino',        colores: ['#1e4d8c','#faf7f0','#c4a466'] },
+    ];
+
+    function initPlantillas() {
+      var grid = document.getElementById('plantillas-grid');
+      if (!grid) return;
+      var html = '';
+      for (var i = 0; i < PLANTILLAS_DEF.length; i++) {
+        var p = PLANTILLAS_DEF[i];
+        var actual = STATE.get().plantilla || 'clasica';
+        var activo = (actual === p.id) ? ' plantilla-btn--activa' : '';
+        html += '<button class="plantilla-btn' + activo + '" id="plt-' + p.id + '" onclick="seleccionarPlantilla(' + "'" + p.id + "'" + ')">';
+        html += '<div class="plantilla-btn__preview">';
+        html += '<div style="background:' + p.colores[0] + ';flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:6px">';
+        html += '<div style="font-size:8px;font-weight:700;color:' + p.colores[1] + ';margin-bottom:2px">' + p.nombre + '</div>';
+        html += '<div style="width:100%;height:1px;background:' + p.colores[1] + ';opacity:.4"></div>';
+        html += '<div style="font-size:7px;color:' + p.colores[2] + ';margin-top:2px;opacity:.6">' + p.desc + '</div>';
+        html += '</div>';
+        html += '</div>';
+        html += '</button>';
+      }
+      grid.innerHTML = html;
+    }
+
+    function seleccionarPlantilla(id) {
+      STATE.set('plantilla', id);
+      // Marcar activa
+      document.querySelectorAll('.plantilla-btn').forEach(function(b) {
+        b.classList.remove('plantilla-btn--activa');
+      });
+      var btn = document.getElementById('plt-' + id);
+      if (btn) btn.classList.add('plantilla-btn--activa');
+      // Aplicar colores default de la plantilla si existe
+      var renderers = {
+        clasica:      typeof RENDERER_CLASICA      !== 'undefined' ? RENDERER_CLASICA      : null,
+        floral:       typeof RENDERER_FLORAL       !== 'undefined' ? RENDERER_FLORAL       : null,
+        moderna:      typeof RENDERER_MODERNA      !== 'undefined' ? RENDERER_MODERNA      : null,
+        mediterranea: typeof RENDERER_MEDITERRANEA !== 'undefined' ? RENDERER_MEDITERRANEA : null,
+      };
+      var r = renderers[id];
+      if (r && r.estilosDefault) {
+        var e = r.estilosDefault;
+        STATE.set('estilos.colorPrimario',    e.colorPrimario);
+        STATE.set('estilos.colorSecundario',  e.colorSecundario);
+        STATE.set('estilos.colorTexto',       e.colorTexto);
+        STATE.set('estilos.colorAccent',      e.colorAccent);
+        STATE.set('estilos.fuente',           e.fuente);
+        STATE.set('estilos.fuenteSecundaria', e.fuenteSecundaria);
+        // Sync inputs
+        var campos = [
+          ['inp-color-primario',   e.colorPrimario],
+          ['inp-color-secundario', e.colorSecundario],
+          ['inp-color-texto',      e.colorTexto],
+          ['inp-color-accent',     e.colorAccent],
+          ['inp-color-primario-picker',   e.colorPrimario],
+          ['inp-color-secundario-picker', e.colorSecundario],
+          ['inp-color-texto-picker',      e.colorTexto],
+          ['inp-color-accent-picker',     e.colorAccent],
+          ['sel-fuente', e.fuente],
+        ];
+        campos.forEach(function(par) {
+          var el = document.getElementById(par[0]);
+          if (el) el.value = par[1];
+        });
+      }
+    }
 
     // ── Sincronización color picker ↔ input texto ──
     function sincronizarColor(pickerId, textId, ruta) {
