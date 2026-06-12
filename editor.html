@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editor — Wedding Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/editor.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <div class="editor-cargando" id="editor-cargando">
+    <div class="editor-cargando__spinner"></div>
+    <span class="editor-cargando__texto">Cargando boda…</span>
+  </div>
+
+  <div class="indicador-guardado" id="indicador-guardado"></div>
+
+  <div class="editor-layout">
+
+    <header class="editor-topbar">
+      <a href="index.html" class="editor-topbar__logo">← Wedding Builder</a>
+      <div class="editor-topbar__actions">
+        <button class="btn btn--ghost" id="btn-nueva">Nueva boda</button>
+        <button class="btn btn--ghost" id="btn-abrir-invitacion">Abrir invitación ↗</button>
+        <button class="btn btn--ghost" id="btn-copiar-url">Copiar URL</button>
+        <button class="btn btn--primario" id="btn-guardar">Guardar</button>
+      </div>
+    </header>
+
+    <aside class="editor-panel">
+
+      <div class="url-panel" id="url-panel">
+        <span class="url-panel__label">URL del cliente</span>
+        <div class="url-panel__row">
+          <input type="text" class="url-panel__input" id="url-invitacion" readonly />
+          <button class="btn btn--secundario" onclick="
+            navigator.clipboard.writeText(document.getElementById('url-invitacion').value);
+            this.textContent='✓';
+            setTimeout(()=>this.textContent='Copiar',1500);
+          ">Copiar</button>
+        </div>
+      </div>
+
+      <!-- SECCIÓN: LA BODA -->
+      <div class="panel-seccion abierta">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">La boda</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="campo">
+            <label class="campo__label">Título interno</label>
+            <input type="text" class="campo__input" id="inp-titulo" placeholder="Ej: Boda García-López" />
+          </div>
+          <div class="campo">
+            <label class="campo__label">Nombre del novio</label>
+            <input type="text" class="campo__input" id="inp-novio" placeholder="Alejandro" />
+          </div>
+          <div class="campo">
+            <label class="campo__label">Nombre de la novia</label>
+            <input type="text" class="campo__input" id="inp-novia" placeholder="Sofía" />
+          </div>
+          <div class="campo">
+            <label class="campo__label">Fecha</label>
+            <div class="fecha-row">
+              <input type="text" class="campo__input" id="inp-dia" placeholder="Día" maxlength="2" />
+              <input type="text" class="campo__input" id="inp-mes" placeholder="Mes" maxlength="2" />
+              <input type="text" class="campo__input" id="inp-anio" placeholder="Año" maxlength="4" />
+            </div>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Hora</label>
+            <input type="time" class="campo__input" id="inp-hora" />
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORIA -->
+      <div class="panel-seccion">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">Historia</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="campo campo--horizontal">
+            <label class="campo__label">Mostrar sección</label>
+            <label class="campo__toggle"><input type="checkbox" id="chk-historia" checked /><span class="campo__toggle-slider"></span></label>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Texto</label>
+            <textarea class="campo__textarea" id="inp-historia" rows="5"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- GALERÍA -->
+      <div class="panel-seccion">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">Galería</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="campo campo--horizontal">
+            <label class="campo__label">Mostrar sección</label>
+            <label class="campo__toggle"><input type="checkbox" id="chk-galeria" checked /><span class="campo__toggle-slider"></span></label>
+          </div>
+          <div class="campo">
+            <label class="campo__label">URLs de fotos (una por línea)</label>
+            <textarea class="campo__textarea" id="inp-galeria" rows="6" placeholder="https://…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVENTO -->
+      <div class="panel-seccion">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">El evento</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="campo campo--horizontal">
+            <label class="campo__label">Mostrar sección</label>
+            <label class="campo__toggle"><input type="checkbox" id="chk-evento" checked /><span class="campo__toggle-slider"></span></label>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Nombre del lugar</label>
+            <input type="text" class="campo__input" id="inp-lugar" />
+          </div>
+          <div class="campo">
+            <label class="campo__label">Dirección</label>
+            <input type="text" class="campo__input" id="inp-direccion" />
+          </div>
+          <div class="campo">
+            <label class="campo__label">Enlace Google Maps</label>
+            <input type="url" class="campo__input" id="inp-maps-url" />
+          </div>
+        </div>
+      </div>
+
+      <!-- DRESS CODE -->
+      <div class="panel-seccion">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">Dress code</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="campo campo--horizontal">
+            <label class="campo__label">Mostrar sección</label>
+            <label class="campo__toggle"><input type="checkbox" id="chk-dresscode" checked /><span class="campo__toggle-slider"></span></label>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Indicaciones</label>
+            <textarea class="campo__textarea" id="inp-dresscode" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- RSVP -->
+      <div class="panel-seccion">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">RSVP</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="campo campo--horizontal">
+            <label class="campo__label">Mostrar sección</label>
+            <label class="campo__toggle"><input type="checkbox" id="chk-rsvp" checked /><span class="campo__toggle-slider"></span></label>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Fecha límite</label>
+            <input type="date" class="campo__input" id="inp-rsvp-fecha" />
+          </div>
+          <div class="campo">
+            <label class="campo__label">Email</label>
+            <input type="email" class="campo__input" id="inp-rsvp-email" />
+          </div>
+        </div>
+      </div>
+
+      <!-- MENSAJE FINAL -->
+      <div class="panel-seccion">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">Mensaje final</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="campo campo--horizontal">
+            <label class="campo__label">Mostrar sección</label>
+            <label class="campo__toggle"><input type="checkbox" id="chk-mensaje" checked /><span class="campo__toggle-slider"></span></label>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Texto</label>
+            <textarea class="campo__textarea" id="inp-mensaje" rows="4"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESTILO -->
+      <div class="panel-seccion">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">Estilo</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body">
+          <div class="campo">
+            <label class="campo__label">Color primario</label>
+            <div class="campo__color">
+              <label class="campo__color-swatch"><input type="color" id="inp-color-primario-picker" /></label>
+              <input type="text" class="campo__color-value" id="inp-color-primario" maxlength="7" placeholder="#b8860b" />
+            </div>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Color fondo</label>
+            <div class="campo__color">
+              <label class="campo__color-swatch"><input type="color" id="inp-color-secundario-picker" /></label>
+              <input type="text" class="campo__color-value" id="inp-color-secundario" maxlength="7" placeholder="#f5f0e8" />
+            </div>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Color texto</label>
+            <div class="campo__color">
+              <label class="campo__color-swatch"><input type="color" id="inp-color-texto-picker" /></label>
+              <input type="text" class="campo__color-value" id="inp-color-texto" maxlength="7" placeholder="#2c2c2c" />
+            </div>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Color acento</label>
+            <div class="campo__color">
+              <label class="campo__color-swatch"><input type="color" id="inp-color-accent-picker" /></label>
+              <input type="text" class="campo__color-value" id="inp-color-accent" maxlength="7" placeholder="#8b6914" />
+            </div>
+          </div>
+          <div class="campo">
+            <label class="campo__label">Tipografía</label>
+            <select class="campo__select" id="sel-fuente">
+              <option value="Cormorant Garamond">Cormorant Garamond</option>
+              <option value="Playfair Display">Playfair Display</option>
+              <option value="Great Vibes">Great Vibes</option>
+              <option value="Libre Baskerville">Libre Baskerville</option>
+              <option value="EB Garamond">EB Garamond</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <section class="editor-preview">
+      <div class="preview-phone">
+        <div class="preview-phone__notch"></div>
+        <div class="preview-phone__screen">
+          <div class="inv-root" id="preview-root"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/editor.js"></script>
+
+  <script>
+    function toggleSeccion(header) {
+      header.parentElement.classList.toggle('abierta');
+    }
+
+    function sincronizarColor(pickerId, textId, ruta) {
+      const picker = document.getElementById(pickerId);
+      const text = document.getElementById(textId);
+      if (!picker || !text) return;
+      text.addEventListener('input', () => {
+        if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) picker.value = text.value;
+      });
+      picker.addEventListener('input', () => {
+        text.value = picker.value;
+        STATE.set(ruta, picker.value);
+      });
+    }
+
+    sincronizarColor('inp-color-primario-picker',   'inp-color-primario',   'estilos.colorPrimario');
+    sincronizarColor('inp-color-secundario-picker', 'inp-color-secundario', 'estilos.colorSecundario');
+    sincronizarColor('inp-color-texto-picker',      'inp-color-texto',      'estilos.colorTexto');
+    sincronizarColor('inp-color-accent-picker',     'inp-color-accent',     'estilos.colorAccent');
+
+    STATE.suscribir((boda) => {
+      [
+        ['inp-color-primario-picker',   boda.estilos.colorPrimario],
+        ['inp-color-secundario-picker', boda.estilos.colorSecundario],
+        ['inp-color-texto-picker',      boda.estilos.colorTexto],
+        ['inp-color-accent-picker',     boda.estilos.colorAccent],
+      ].forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el && val) el.value = val;
+      });
+    });
+  </script>
+
+</body>
+</html>
