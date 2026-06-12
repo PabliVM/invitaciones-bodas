@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#b8860b" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Estás invitado a nuestra boda" />
+  <meta property="og:description" content="Abre para ver todos los detalles de nuestra celebración." />
+  <title>Invitación de boda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Great+Vibes&family=Libre+Baskerville:ital,wght@0,400;1,400&family=EB+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--color-secundario); min-height: 100vh; }
+    #pantalla-carga {
+      position: fixed; inset: 0; background: #f5f0e8;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 100; gap: 16px; transition: opacity 0.5s;
+    }
+    #pantalla-carga.oculto { opacity: 0; pointer-events: none; }
+    .carga-ornamento { font-size: 24px; color: #b8860b; letter-spacing: 8px; animation: pulso 1.5s ease-in-out infinite; }
+    .carga-texto { font-family: 'Lato', sans-serif; font-size: 11px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; color: #aaa; }
+    @keyframes pulso { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    #pantalla-error { display: none; min-height: 100vh; align-items: center; justify-content: center; flex-direction: column; gap: 16px; padding: 32px; text-align: center; font-family: 'Lato', sans-serif; }
+    .error-titulo { font-size: 28px; color: #b8860b; }
+    .error-texto { font-size: 14px; color: #888; line-height: 1.7; }
+  </style>
+</head>
+<body>
+
+  <div id="pantalla-carga">
+    <div class="carga-ornamento">✦</div>
+    <div class="carga-texto">Cargando invitación…</div>
+  </div>
+
+  <div id="pantalla-error">
+    <div class="error-titulo">✦</div>
+    <p class="error-texto">No hemos encontrado esta invitación.<br>Puede que el enlace sea incorrecto.</p>
+  </div>
+
+  <div class="inv-root" id="invitation-root"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/renderer.js"></script>
+
+  <script>
+    DB.init();
+
+    async function cargarInvitacion() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const pantallaCarga = document.getElementById('pantalla-carga');
+      const pantallaError = document.getElementById('pantalla-error');
+      const root = document.getElementById('invitation-root');
+
+      if (!id) {
+        pantallaCarga.classList.add('oculto');
+        pantallaError.style.display = 'flex';
+        return;
+      }
+
+      try {
+        const boda = await DB.cargarBoda(id);
+        if (!boda) {
+          pantallaCarga.classList.add('oculto');
+          pantallaError.style.display = 'flex';
+          return;
+        }
+
+        if (boda.pareja) {
+          document.title = 'Boda de ' + boda.pareja.novio + ' & ' + boda.pareja.novia;
+          document.querySelector('meta[property="og:title"]')
+            ?.setAttribute('content', 'Boda de ' + boda.pareja.novio + ' & ' + boda.pareja.novia);
+        }
+
+        RENDERER.render(boda, root);
+        setTimeout(() => pantallaCarga.classList.add('oculto'), 300);
+        _initRSVP(id, boda);
+
+      } catch (err) {
+        console.error('Error cargando invitación:', err);
+        pantallaCarga.classList.add('oculto');
+        pantallaError.style.display = 'flex';
+      }
+    }
+
+    function _initRSVP(bodaId, boda) {
+      const form = document.getElementById('rsvp-form');
+      if (!form) return;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('.inv-rsvp__btn');
+        btn.textContent = 'Enviando…';
+        btn.disabled = true;
+        try {
+          await firebase.firestore()
+            .collection('weddings').doc(bodaId)
+            .collection('rsvps').add({
+              nombre: form.nombre.value,
+              asistencia: form.asistencia.value,
+              mensaje: form.mensaje.value,
+              enviadoEn: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          form.style.display = 'none';
+          document.getElementById('rsvp-enviado').style.display = 'block';
+        } catch (err) {
+          console.error(err);
+          btn.textContent = 'Error. Inténtalo de nuevo.';
+          btn.disabled = false;
+        }
+      });
+    }
+
+    cargarInvitacion();
+  </script>
+
+</body>
+</html>
