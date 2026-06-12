@@ -254,12 +254,19 @@
       </div>
 
       <!-- SECCIÓN: ESTILO -->
-      <div class="panel-seccion">
+      <div class="panel-seccion abierta">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
           <span class="panel-seccion__titulo">Estilo</span>
           <span class="panel-seccion__chevron">▼</span>
         </div>
         <div class="panel-seccion__body">
+
+          <div class="campo">
+            <label class="campo__label">Plantilla de estilo</label>
+            <div class="presets-grid" id="presets-grid"></div>
+          </div>
+
+          <div class="panel-divisor"></div>
 
           <div class="campo">
             <label class="campo__label">Color primario (dorado)</label>
@@ -340,6 +347,7 @@
   <script src="js/db.js"></script>
   <script src="js/state.js"></script>
   <script src="js/renderer.js"></script>
+  <script src="js/presets.js"></script>
   <script src="js/editor.js"></script>
 
   <script>
@@ -347,6 +355,25 @@
     function toggleSeccion(header) {
       header.parentElement.classList.toggle('abierta');
     }
+
+    // ── Presets ──
+    function initPresets() {
+      var grid = document.getElementById('presets-grid');
+      if (!grid) return;
+      grid.innerHTML = PRESETS.map(function(p) {
+        return '<button class="preset-btn" onclick="aplicarPreset('' + p.id + '')" title="' + p.descripcion + '">' +
+          '<span class="preset-btn__muestra">' +
+            '<span class="preset-btn__color" style="background:' + p.muestra[0] + '"></span>' +
+            '<span class="preset-btn__color" style="background:' + p.muestra[1] + '"></span>' +
+          '</span>' +
+          '<span class="preset-btn__nombre">' + p.nombre + '</span>' +
+        '</button>';
+      }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initPresets();
+    });
 
     // ── Sincronización color picker ↔ input texto ──
     function sincronizarColor(pickerId, textId, ruta) {
