@@ -360,15 +360,18 @@
     function initPresets() {
       var grid = document.getElementById('presets-grid');
       if (!grid) return;
-      grid.innerHTML = PRESETS.map(function(p) {
-        return '<button class="preset-btn" onclick="aplicarPreset('' + p.id + '')" title="' + p.descripcion + '">' +
-          '<span class="preset-btn__muestra">' +
-            '<span class="preset-btn__color" style="background:' + p.muestra[0] + '"></span>' +
-            '<span class="preset-btn__color" style="background:' + p.muestra[1] + '"></span>' +
-          '</span>' +
-          '<span class="preset-btn__nombre">' + p.nombre + '</span>' +
-        '</button>';
-      }).join('');
+      var html = '';
+      for (var i = 0; i < PRESETS.length; i++) {
+        var p = PRESETS[i];
+        html += '<button class="preset-btn" onclick="aplicarPreset(' + "'" + p.id + "'" + ')" title="' + p.descripcion + '">';
+        html += '<span class="preset-btn__muestra">';
+        html += '<span class="preset-btn__color" style="background:' + p.muestra[0] + '"></span>';
+        html += '<span class="preset-btn__color" style="background:' + p.muestra[1] + '"></span>';
+        html += '</span>';
+        html += '<span class="preset-btn__nombre">' + p.nombre + '</span>';
+        html += '</button>';
+      }
+      grid.innerHTML = html;
     }
 
     document.addEventListener('DOMContentLoaded', function() {
