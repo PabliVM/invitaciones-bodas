@@ -34,11 +34,11 @@ const RENDERER_MODERNA = {
     s.push(this._portada(boda));
     s.push(this._countdown(boda.fecha));
     // Música: botón flotante global, no inline
-    if(boda.historia&&boda.historia.activa)s.push(this._historia(boda.historia));
-    if(boda.galeria&&boda.galeria.activa&&boda.galeria.fotos.length>0)s.push(this._galeria(boda.galeria));
-    if(boda.evento&&boda.evento.activo)s.push(this._evento(boda.evento,boda.fecha));
-    if(boda.dresscode&&boda.dresscode.activo)s.push(this._dresscode(boda.dresscode));
-    if(boda.rsvp&&boda.rsvp.activo)s.push(this._rsvp(boda.rsvp,boda.pareja));
+    if(boda.historia&&boda.historia.activa){s.push(this._separador());s.push(this._historia(boda.historia));}
+    if(boda.galeria&&boda.galeria.activa&&boda.galeria.fotos.length>0){s.push(this._separador());s.push(this._galeria(boda.galeria));}
+    if(boda.evento&&boda.evento.activo){s.push(this._separador());s.push(this._evento(boda.evento,boda.fecha));}
+    if(boda.dresscode&&boda.dresscode.activo){s.push(this._separador());s.push(this._dresscode(boda.dresscode));}
+    if(boda.rsvp&&boda.rsvp.activo){s.push(this._separador());s.push(this._rsvp(boda.rsvp,boda.pareja));}
     if(boda.mensaje&&boda.mensaje.activo)s.push(this._mensajeFinal(boda.mensaje,boda.pareja));
     return s.join('');
   },
@@ -47,7 +47,7 @@ const RENDERER_MODERNA = {
     var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     var mes=meses[parseInt(boda.fecha.mes)-1]||boda.fecha.mes;
     return '<section style="background:#fff;min-height:100vh;padding:48px 36px;display:flex;flex-direction:column;justify-content:space-between">'+
-      (boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
+      (boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
       // Top
       '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
         '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:#ccc">boda</p>' +
@@ -164,6 +164,22 @@ const RENDERER_MODERNA = {
       '<div style="height:1px;background:rgba(255,255,255,.15);margin-bottom:24px"></div>' +
       '<p style="font-family:\'Great Vibes\',cursive;font-size:28px;color:rgba(255,255,255,.8)">'+pareja.novio+' &amp; '+pareja.novia+'</p>' +
     '</section>';
+  },
+
+
+  _separador: function() {
+    return '<div style="padding:0;overflow:hidden;background:var(--color-secundario)">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 32" style="width:100%;height:32px;display:block">' +
+        // Línea principal
+        '<line x1="0" y1="16" x2="375" y2="16" stroke="var(--color-texto)" stroke-width="0.5" opacity=".12"/>' +
+        // Forma geométrica central
+        '<rect x="175" y="10" width="12" height="12" fill="none" stroke="var(--color-texto)" stroke-width="1" opacity=".25" transform="rotate(45,181,16)"/>' +
+        '<rect x="178" y="13" width="6" height="6" fill="var(--color-texto)" opacity=".15" transform="rotate(45,181,16)"/>' +
+        // Guiones laterales
+        '<line x1="120" y1="16" x2="155" y2="16" stroke="var(--color-texto)" stroke-width="1" opacity=".2"/>' +
+        '<line x1="207" y1="16" x2="242" y2="16" stroke="var(--color-texto)" stroke-width="1" opacity=".2"/>' +
+      '</svg>' +
+    '</div>';
   },
 
   _initCountdown: function(fecha, contenedor) {
