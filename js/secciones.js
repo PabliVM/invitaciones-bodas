@@ -14,9 +14,15 @@ const SECCIONES = (() => {
     { id: 'mensaje',     label: 'Mensaje final',       icono: '💌' },
   ];
 
+  var _renderTimer = null;
+
   function init() {
     _renderPanel();
-    STATE.suscribir(_renderPanel);
+    // Debounce: no re-renderizar mientras el usuario escribe
+    STATE.suscribir(function() {
+      clearTimeout(_renderTimer);
+      _renderTimer = setTimeout(_renderPanel, 400);
+    });
   }
 
   function _renderPanel() {
@@ -144,14 +150,21 @@ const SECCIONES = (() => {
     var boda = STATE.get();
     var subs = (boda[secId].subsecciones || []).slice();
     subs[i] = Object.assign({}, subs[i], { titulo: val });
-    STATE.set(secId + '.subsecciones', subs);
+    // Actualizar sin notificar para no perder el foco
+    var partes = (secId + '.subsecciones').split('.');
+    var obj = boda;
+    for (var p = 0; p < partes.length - 1; p++) obj = obj[partes[p]];
+    obj[partes[partes.length-1]] = subs;
   }
 
   function updateSubTexto(secId, i, val) {
     var boda = STATE.get();
     var subs = (boda[secId].subsecciones || []).slice();
     subs[i] = Object.assign({}, subs[i], { texto: val });
-    STATE.set(secId + '.subsecciones', subs);
+    var partes = (secId + '.subsecciones').split('.');
+    var obj = boda;
+    for (var p = 0; p < partes.length - 1; p++) obj = obj[partes[p]];
+    obj[partes[partes.length-1]] = subs;
   }
 
   // Secciones extra
@@ -174,14 +187,14 @@ const SECCIONES = (() => {
     var boda = STATE.get();
     var extras = (boda.secciones_extra || []).slice();
     extras[i] = Object.assign({}, extras[i], { titulo: val });
-    STATE.set('secciones_extra', extras);
+    boda.secciones_extra = extras;
   }
 
   function updateExtraTexto(i, val) {
     var boda = STATE.get();
     var extras = (boda.secciones_extra || []).slice();
     extras[i] = Object.assign({}, extras[i], { texto: val });
-    STATE.set('secciones_extra', extras);
+    boda.secciones_extra = extras;
   }
 
   function añadirExtraSub(i) {
@@ -208,7 +221,7 @@ const SECCIONES = (() => {
     var subs = (extras[i].subsecciones || []).slice();
     subs[j] = Object.assign({}, subs[j], { titulo: val });
     extras[i] = Object.assign({}, extras[i], { subsecciones: subs });
-    STATE.set('secciones_extra', extras);
+    boda.secciones_extra = extras;
   }
 
   function updateExtraSubTexto(i, j, val) {
@@ -217,7 +230,7 @@ const SECCIONES = (() => {
     var subs = (extras[i].subsecciones || []).slice();
     subs[j] = Object.assign({}, subs[j], { texto: val });
     extras[i] = Object.assign({}, extras[i], { subsecciones: subs });
-    STATE.set('secciones_extra', extras);
+    boda.secciones_extra = extras;
   }
 
   return {
