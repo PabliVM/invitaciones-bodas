@@ -101,9 +101,8 @@ const RENDERER_FLORAL = {
     var dias = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
     var fechaObj = new Date(parseInt(boda.fecha.anio), parseInt(boda.fecha.mes)-1, parseInt(boda.fecha.dia));
     var diaSemana = dias[fechaObj.getDay()] || '';
-    return '<section style="background:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 32px;position:relative;overflow:hidden">''+
+    return '<section style="background:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 32px;position:relative;overflow:hidden">'+
       (boda.fotoCabecera ? '<div style="position:relative;width:100%;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
-      ' +
       // Eucalipto esquina superior izquierda
       '<div style="position:absolute;top:0;left:0">'+this._eucalipto(false,false)+'</div>' +
       // Eucalipto esquina superior derecha (espejado)
