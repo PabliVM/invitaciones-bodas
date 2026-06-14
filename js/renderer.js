@@ -27,6 +27,15 @@ const RENDERER = (() => {
     }
     r.render(boda, contenedor);
 
+    // Renderizar formulario personalizado
+    if (boda.formulario && boda.formulario.activo && boda.formulario.preguntas && boda.formulario.preguntas.length > 0) {
+      var formEl = document.createElement('section');
+      formEl.style.cssText = 'padding:56px 32px;background:var(--color-secundario)';
+      formEl.innerHTML = _renderFormulario(boda.formulario, boda.id || STATE.getId());
+      contenedor.appendChild(formEl);
+      _initFormulario(formEl, boda.formulario, boda.id || STATE.getId());
+    }
+
     // Renderizar secciones extra al final
     _renderSeccionesExtra(boda, contenedor);
 
@@ -183,6 +192,98 @@ const RENDERER = (() => {
       div.innerHTML += item;
     });
     secEl.appendChild(div);
+  }
+
+  function _renderFormulario(form, bodaId) {
+    var html = '';
+    html += '<div style="text-align:center;margin-bottom:28px">';
+    html += '<h2 style="font-family:var(--fuente-display);font-size:clamp(24px,6vw,32px);font-weight:300;color:var(--color-texto);margin:0 0 12px">' + (form.titulo || 'Formulario') + '</h2>';
+    if (form.descripcion) html += '<p style="font-family:var(--fuente-body);font-size:14px;color:#888;line-height:1.6">' + form.descripcion + '</p>';
+    html += '<div style="width:40px;height:1px;background:var(--color-primario);margin:16px auto 0;opacity:.5"></div>';
+    html += '</div>';
+
+    html += '<form id="formulario-custom" style="display:flex;flex-direction:column;gap:20px">';
+
+    (form.preguntas || []).forEach(function(preg, i) {
+      html += '<div class="form-pregunta" data-id="' + preg.id + '">';
+      html += '<p style="font-family:var(--fuente-body);font-size:13px;font-weight:700;color:var(--color-texto);margin-bottom:10px">';
+      html += (i+1) + '. ' + (preg.texto || '') + (preg.obligatoria ? ' <span style="color:var(--color-primario)">*</span>' : '');
+      html += '</p>';
+
+      if (preg.tipo === 'texto') {
+        html += '<input type="text" name="preg_' + preg.id + '" ' + (preg.obligatoria ? 'required' : '') + ' class="inv-rsvp__input" placeholder="Tu respuesta..." />';
+      } else if (preg.tipo === 'numero') {
+        html += '<input type="number" name="preg_' + preg.id + '" ' + (preg.obligatoria ? 'required' : '') + ' class="inv-rsvp__input" placeholder="0" style="width:120px" />';
+      } else if (preg.tipo === 'opcion_unica') {
+        (preg.opciones || []).forEach(function(op) {
+          if (!op) return;
+          html += '<label style="display:flex;align-items:center;gap:10px;font-family:var(--fuente-body);font-size:14px;color:var(--color-texto);margin-bottom:8px;cursor:pointer">';
+          html += '<input type="radio" name="preg_' + preg.id + '" value="' + op + '" ' + (preg.obligatoria ? 'required' : '') + ' />';
+          html += op + '</label>';
+        });
+      } else if (preg.tipo === 'opcion_multiple') {
+        (preg.opciones || []).forEach(function(op) {
+          if (!op) return;
+          html += '<label style="display:flex;align-items:center;gap:10px;font-family:var(--fuente-body);font-size:14px;color:var(--color-texto);margin-bottom:8px;cursor:pointer">';
+          html += '<input type="checkbox" name="preg_' + preg.id + '" value="' + op + '" />';
+          html += op + '</label>';
+        });
+      }
+
+      html += '</div>';
+    });
+
+    html += '<button type="submit" class="inv-rsvp__btn" style="margin-top:8px">' + (form.textoBtnEnviar || 'Enviar') + '</button>';
+    html += '</form>';
+    html += '<div id="formulario-confirmacion" style="display:none;text-align:center;font-family:var(--fuente-display);font-size:18px;font-style:italic;color:var(--color-accent);padding:24px 0">' + (form.mensajeConfirmacion || '¡Gracias!') + '</div>';
+
+    return html;
+  }
+
+  function _initFormulario(secEl, form, bodaId) {
+    var formEl = secEl.querySelector('#formulario-custom');
+    var confirmEl = secEl.querySelector('#formulario-confirmacion');
+    if (!formEl) return;
+
+    formEl.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = formEl.querySelector('button[type="submit"]');
+      btn.textContent = 'Enviando…';
+      btn.disabled = true;
+
+      var respuestas = {};
+      (form.preguntas || []).forEach(function(preg) {
+        if (preg.tipo === 'opcion_multiple') {
+          var checks = formEl.querySelectorAll('input[name="preg_' + preg.id + '"]:checked');
+          respuestas[preg.texto] = Array.from(checks).map(function(c) { return c.value; }).join(', ');
+        } else {
+          var el = formEl.querySelector('[name="preg_' + preg.id + '"]');
+          if (el) respuestas[preg.texto] = el.type === 'radio'
+            ? (formEl.querySelector('input[name="preg_' + preg.id + '"]:checked') || {}).value || ''
+            : el.value;
+        }
+      });
+
+      // Guardar en Firebase
+      try {
+        var db = firebase.firestore();
+        db.collection('weddings').doc(bodaId).collection('formularios').add({
+          respuestas: respuestas,
+          enviadoEn: firebase.firestore.FieldValue.serverTimestamp(),
+        }).then(function() {
+          formEl.style.display = 'none';
+          if (confirmEl) confirmEl.style.display = 'block';
+        }).catch(function(err) {
+          console.error(err);
+          btn.textContent = 'Error. Inténtalo de nuevo.';
+          btn.disabled = false;
+        });
+      } catch(err) {
+        console.error(err);
+        btn.textContent = 'Error.';
+        btn.disabled = false;
+      }
+    });
   }
 
   return { render };
