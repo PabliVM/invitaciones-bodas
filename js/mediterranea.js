@@ -101,7 +101,7 @@ const RENDERER_MEDITERRANEA = {
       '</svg></div>';
     });
 
-    var fotoCab = boda.fotoCabecera ? '<div style="position:relative;width:100%;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,#fff,transparent)"></div></div>' : '';
+    var fotoCab = boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,#fff,transparent)"></div></div>' : '';
 
     return '<section style="background:#fff;min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 60px">' +
       // Borde azulejos (solo visual con div de borde)
