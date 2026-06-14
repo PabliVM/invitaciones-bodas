@@ -55,7 +55,7 @@ const SECCIONES = (() => {
     html += '<div class="sec-item__header">';
     html += '<span class="sec-item__icono">' + def.icono + '</span>';
     html += '<span class="sec-item__label">' + def.label + '</span>';
-    html += '<label class="campo__toggle sec-item__toggle">';
+    html += '<label class="campo__toggle" style="flex-shrink:0;margin-left:8px">';
     html += '<input type="checkbox" ' + (activa ? 'checked' : '') + ' onchange="SECCIONES.toggleSeccion(\'' + def.id + '\', this.checked)" />';
     html += '<span class="campo__toggle-slider"></span>';
     html += '</label>';
