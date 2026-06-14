@@ -54,8 +54,10 @@ const EDITOR = (() => {
     _setVal('inp-mes', boda.fecha.mes);
     _setVal('inp-anio', boda.fecha.anio);
     _setVal('inp-hora', boda.fecha.hora);
+    _setVal('inp-titulo-historia', boda.historia.titulo || 'Nuestra historia');
     _setVal('inp-historia', boda.historia.texto);
     _setCheck('chk-historia', boda.historia.activa);
+    _setVal('inp-titulo-galeria', boda.galeria.titulo || 'Nuestra galería');
     _setVal('inp-galeria', boda.galeria.fotos.join('\n'));
     _setCheck('chk-galeria', boda.galeria.activa);
     _setVal('inp-musica-titulo', boda.musica ? boda.musica.titulo : '');
@@ -64,15 +66,19 @@ const EDITOR = (() => {
     _setVal('sel-musica-texto', boda.musica ? (boda.musica.mostrarTexto || 'titulo') : 'titulo');
     _setVal('inp-musica-texto-flotante', boda.musica ? boda.musica.textoFlotante : '');
     _toggleCampoPersonalizado(boda.musica ? boda.musica.mostrarTexto : 'titulo');
+    _setVal('inp-titulo-evento', boda.evento.titulo || 'La celebración');
     _setVal('inp-lugar', boda.evento.lugar);
     _setVal('inp-direccion', boda.evento.direccion);
     _setVal('inp-maps-url', boda.evento.googleMapsUrl);
     _setCheck('chk-evento', boda.evento.activo);
+    _setVal('inp-titulo-dresscode', boda.dresscode.titulo || 'Dress code');
     _setVal('inp-dresscode', boda.dresscode.texto);
     _setCheck('chk-dresscode', boda.dresscode.activo);
+    _setVal('inp-titulo-rsvp', boda.rsvp.titulo || 'Confirma tu asistencia');
     _setVal('inp-rsvp-fecha', boda.rsvp.fechaLimite);
     _setVal('inp-rsvp-email', boda.rsvp.email);
     _setCheck('chk-rsvp', boda.rsvp.activo);
+    _setVal('inp-titulo-mensaje', boda.mensaje.titulo || 'Mensaje final');
     _setVal('inp-mensaje', boda.mensaje.texto);
     _setCheck('chk-mensaje', boda.mensaje.activo);
     _setVal('inp-color-primario', boda.estilos.colorPrimario);
@@ -124,8 +130,9 @@ const EDITOR = (() => {
     on('inp-direccion', 'evento.direccion');
     on('inp-maps-url', 'evento.googleMapsUrl');
     on('chk-evento', 'evento.activo');
-    on('inp-dresscode', 'dresscode.texto');
-    on('chk-dresscode', 'dresscode.activo');
+    on('inp-titulo-dresscode', 'dresscode.titulo');
+    on('inp-dresscode',        'dresscode.texto');
+    on('chk-dresscode',        'dresscode.activo');
     on('inp-rsvp-fecha', 'rsvp.fechaLimite');
     on('inp-rsvp-email', 'rsvp.email');
     on('chk-rsvp', 'rsvp.activo');
@@ -148,6 +155,7 @@ const EDITOR = (() => {
         STATE.set('galeria.fotos', fotos);
       });
     }
+    on('inp-titulo-galeria', 'galeria.titulo');
     document.getElementById('chk-galeria')?.addEventListener('change', (e) => {
       STATE.set('galeria.activa', e.target.checked);
     });
