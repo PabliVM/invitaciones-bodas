@@ -31,25 +31,17 @@ const SECCIONES = (() => {
     var boda = STATE.get();
     var html = '';
 
-    // Secciones predefinidas
-    html += '<div class="sec-grupo">';
-    html += '<p class="sec-grupo__titulo">Secciones predefinidas</p>';
-    PREDEFINIDAS.forEach(function(def) {
-      var sec = boda[def.id] || {};
-      var activa = sec.activo !== false && sec.activa !== false;
-      var subsecciones = sec.subsecciones || [];
-      html += _renderSeccion(def, activa, subsecciones, false);
-    });
-    html += '</div>';
-
-    // Secciones libres
-    html += '<div class="sec-grupo">';
-    html += '<p class="sec-grupo__titulo">Secciones personalizadas</p>';
+    // Solo secciones personalizadas
     var extras = boda.secciones_extra || [];
-    extras.forEach(function(sec, i) {
-      html += _renderSeccionExtra(sec, i);
-    });
-    html += '<button class="sec-btn-nueva" onclick="SECCIONES.añadirExtra()">+ Añadir sección</button>';
+    if (extras.length > 0) {
+      html += '<div class="sec-grupo">';
+      extras.forEach(function(sec, i) {
+        html += _renderSeccionExtra(sec, i);
+      });
+      html += '</div>';
+    }
+    html += '<div style="padding:8px 12px">';
+    html += '<button class="sec-btn-nueva" onclick="SECCIONES.añadirExtra()">+ Añadir sección personalizada</button>';
     html += '</div>';
 
     contenedor.innerHTML = html;
@@ -68,6 +60,20 @@ const SECCIONES = (() => {
     html += '</div>';
 
     if (activa) {
+      // Texto principal de la sección (si lo tiene)
+      var camposTexto = { historia: 'historia.texto', dresscode: 'dresscode.texto', mensaje: 'mensaje.texto', alojamiento: 'alojamiento.texto', transporte: 'transporte.texto' };
+      if (camposTexto[def.id]) {
+        var boda2 = STATE.get();
+        var textoActual = '';
+        if (def.id === 'historia') textoActual = (boda2.historia && boda2.historia.texto) || '';
+        if (def.id === 'dresscode') textoActual = (boda2.dresscode && boda2.dresscode.texto) || '';
+        if (def.id === 'mensaje') textoActual = (boda2.mensaje && boda2.mensaje.texto) || '';
+        if (def.id === 'alojamiento') textoActual = (boda2.alojamiento && boda2.alojamiento.texto) || '';
+        if (def.id === 'transporte') textoActual = (boda2.transporte && boda2.transporte.texto) || '';
+        html += '<div style="padding:0 10px 8px">';
+        html += '<textarea class="sec-sub__texto" style="min-height:72px" placeholder="Texto principal..." oninput="SECCIONES.updateTexto('' + def.id + '',this.value)">' + textoActual + '</textarea>';
+        html += '</div>';
+      }
       // Subsecciones existentes
       if (subsecciones.length > 0) {
         html += '<div class="sec-subsecciones">';
@@ -120,6 +126,15 @@ const SECCIONES = (() => {
   }
 
   // ── API pública ──
+
+  function updateTexto(secId, val) {
+    // Update text directly without re-rendering panel
+    var boda = STATE.get();
+    if (boda[secId]) {
+      var campo = ('texto' in boda[secId]) ? 'texto' : null;
+      if (campo) boda[secId][campo] = val;
+    }
+  }
 
   function toggleSeccion(id, activo) {
     // Las secciones usan 'activo' o 'activa' dependiendo del campo
@@ -234,7 +249,7 @@ const SECCIONES = (() => {
   }
 
   return {
-    init, toggleSeccion,
+    init, toggleSeccion, updateTexto,
     añadirSub, eliminarSub, updateSubTitulo, updateSubTexto,
     añadirExtra, eliminarExtra, updateExtraTitulo, updateExtraTexto,
     añadirExtraSub, eliminarExtraSub, updateExtraSubTitulo, updateExtraSubTexto,
