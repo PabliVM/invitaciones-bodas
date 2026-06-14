@@ -47,7 +47,7 @@ const RENDERER_MODERNA = {
     var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     var mes=meses[parseInt(boda.fecha.mes)-1]||boda.fecha.mes;
     return '<section style="background:#fff;min-height:100vh;padding:48px 36px;display:flex;flex-direction:column;justify-content:space-between">'+
-      (boda.fotoCabecera ? '<div style="position:relative;width:100%;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
+      (boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
       // Top
       '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
         '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:#ccc">boda</p>' +
