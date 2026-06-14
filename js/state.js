@@ -9,11 +9,13 @@ const STATE = (() => {
     fecha: { dia: '14', mes: '09', anio: '2025', hora: '12:30' },
     historia: {
       activa: true,
+      titulo: 'Nuestra historia',
       texto: 'Nos conocimos en un momento inesperado y desde entonces supimos que nuestros caminos estaban unidos para siempre.',
       subsecciones: []
     },
     galeria: {
       activa: true,
+      titulo: 'Nuestra galería',
       fotos: [
         'https://images.unsplash.com/photo-1519741497674-611481863552?w=800',
         'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800',
@@ -23,6 +25,7 @@ const STATE = (() => {
     },
     musica: {
       activa: true,
+      titulo: 'Nuestra canción',
       url: '',
       titulo: 'Nuestra canción',
       textoFlotante: '',
@@ -30,20 +33,23 @@ const STATE = (() => {
     },
     evento: {
       activo: true,
+      titulo: 'La celebración',
       lugar: 'Finca La Alameda',
       direccion: 'Ctra. de Burgos, km 24, Madrid',
       googleMapsUrl: 'https://maps.google.com',
       subsecciones: []
     },
-    dresscode: { activo: true, texto: 'Elegante. Tonos claros bienvenidos.' ,
+    dresscode: { activo: true, titulo: 'Dress code', texto: 'Elegante. Tonos claros bienvenidos.' ,
       subsecciones: []},
     alojamiento: {
       activo: false,
+      titulo: 'Alojamiento',
       texto: '',
       subsecciones: [],
     },
     transporte: {
       activo: false,
+      titulo: 'Transporte',
       texto: '',
       subsecciones: [],
     },
@@ -58,9 +64,9 @@ const STATE = (() => {
       // Estructura de cada pregunta:
       // { id, texto, tipo: 'texto'|'opcion_unica'|'opcion_multiple'|'numero', opciones: [], obligatoria: true }
     },
-    rsvp: { activo: true, fechaLimite: '2025-08-01', email: 'boda@ejemplo.com' ,
+    rsvp: { activo: true, titulo: 'Confirma tu asistencia', fechaLimite: '2025-08-01', email: 'boda@ejemplo.com' ,
       subsecciones: []},
-    mensaje: { activo: true, texto: 'Vuestra presencia es el mejor regalo.' ,
+    mensaje: { activo: true, titulo: 'Mensaje final', texto: 'Vuestra presencia es el mejor regalo.' ,
       subsecciones: []},
     estilos: {
       colorPrimario: '#b8860b',
