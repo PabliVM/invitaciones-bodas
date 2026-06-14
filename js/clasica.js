@@ -33,7 +33,7 @@ const RENDERER_CLASICA = {
     var s = [];
     s.push(this._portada(boda));
     s.push(this._countdown(boda.fecha));
-    if (boda.musica && boda.musica.activa && boda.musica.url) s.push(this._musica(boda.musica));
+    // Música: botón flotante global, no inline
     if (boda.historia.activa) s.push(this._historia(boda.historia));
     if (boda.galeria.activa && boda.galeria.fotos.length > 0) s.push(this._galeria(boda.galeria));
     if (boda.evento.activo) s.push(this._evento(boda.evento, boda.fecha));
@@ -46,7 +46,9 @@ const RENDERER_CLASICA = {
   _portada: function(boda) {
     var meses = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
     var mes = meses[parseInt(boda.fecha.mes) - 1] || boda.fecha.mes;
-    return '<section class="inv-portada" style="background:var(--color-secundario);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 32px;">' +
+    return '<section class="inv-portada" style="background:var(--color-secundario);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 32px;">''+
+      (boda.fotoCabecera ? '<div style="position:relative;width:100%;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
+      ' +
       '<div style="font-size:20px;color:var(--color-primario);letter-spacing:8px;margin-bottom:24px">✦</div>' +
       '<p style="font-family:var(--fuente-body);font-size:11px;font-weight:300;letter-spacing:4px;text-transform:uppercase;color:var(--color-accent);margin-bottom:24px">Nos casamos</p>' +
       '<h1 style="font-family:var(--fuente-display);font-weight:300;display:flex;flex-direction:column;align-items:center;gap:4px;line-height:1.1;margin:0">' +
