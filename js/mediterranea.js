@@ -76,7 +76,7 @@ const RENDERER_MEDITERRANEA = {
     var s=[];
     s.push(this._portada(boda));
     s.push(this._countdown(boda.fecha));
-    if(boda.musica&&boda.musica.activa&&boda.musica.url)s.push(this._musica(boda.musica));
+    // Música: botón flotante global, no inline
     if(boda.historia&&boda.historia.activa)s.push(this._historia(boda.historia));
     if(boda.galeria&&boda.galeria.activa&&boda.galeria.fotos.length>0)s.push(this._galeria(boda.galeria));
     if(boda.evento&&boda.evento.activo)s.push(this._evento(boda.evento,boda.fecha));
@@ -101,6 +101,8 @@ const RENDERER_MEDITERRANEA = {
       '</svg></div>';
     });
 
+    var fotoCab = boda.fotoCabecera ? '<div style="position:relative;width:100%;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,#fff,transparent)"></div></div>' : '';
+
     return '<section style="background:#fff;min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 60px">' +
       // Borde azulejos (solo visual con div de borde)
       '<div style="position:absolute;inset:0;border:'+(s)+'px solid transparent;background:linear-gradient(white,white) padding-box, repeating-linear-gradient(90deg,#1a56a0 0px,'+(s)+'px,#1e6ab0 '+(s)+'px,'+(s*2)+'px) border-box;pointer-events:none"></div>' +
@@ -111,6 +113,8 @@ const RENDERER_MEDITERRANEA = {
       '<div style="position:absolute;top:0;right:0;bottom:0;width:'+s+'px;background:var(--color-primario)"></div>' +
       // Limones
       limones +
+      // Foto cabecera
+      fotoCab +
       // Contenido
       '<div style="position:relative;z-index:2;max-width:260px">' +
         '<p style="font-family:var(--fuente-body);font-size:10px;font-weight:300;letter-spacing:4px;text-transform:uppercase;color:var(--color-primario);margin-bottom:20px;opacity:.7">— juntos para siempre —</p>' +
