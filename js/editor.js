@@ -98,7 +98,8 @@ const EDITOR = (() => {
       });
     };
 
-    on('inp-titulo', 'meta.titulo');
+    on('inp-titulo',        'meta.titulo');
+    on('inp-foto-cabecera', 'fotoCabecera');
     on('inp-novio', 'pareja.novio');
     on('inp-novia', 'pareja.novia');
     on('inp-dia', 'fecha.dia');
