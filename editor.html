@@ -270,6 +270,17 @@
         </div>
       </div>
 
+      <!-- SECCIÓN: SECCIONES -->
+      <div class="panel-seccion abierta">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">Secciones</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body" style="padding:0">
+          <div id="secciones-panel"></div>
+        </div>
+      </div>
+
       <!-- SECCIÓN: PLANTILLA -->
       <div class="panel-seccion abierta">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
@@ -379,6 +390,7 @@
   <script src="js/floral.js"></script>
   <script src="js/moderna.js"></script>
   <script src="js/mediterranea.js"></script>
+  <script src="js/secciones.js"></script>
   <script src="js/presets.js"></script>
   <script src="js/editor.js"></script>
 
@@ -409,6 +421,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       initPresets();
       initPlantillas();
+      SECCIONES.init();
     });
 
     // ── Selector de plantillas ──
