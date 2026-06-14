@@ -77,11 +77,11 @@ const RENDERER_MEDITERRANEA = {
     s.push(this._portada(boda));
     s.push(this._countdown(boda.fecha));
     // Música: botón flotante global, no inline
-    if(boda.historia&&boda.historia.activa)s.push(this._historia(boda.historia));
-    if(boda.galeria&&boda.galeria.activa&&boda.galeria.fotos.length>0)s.push(this._galeria(boda.galeria));
-    if(boda.evento&&boda.evento.activo)s.push(this._evento(boda.evento,boda.fecha));
-    if(boda.dresscode&&boda.dresscode.activo)s.push(this._dresscode(boda.dresscode));
-    if(boda.rsvp&&boda.rsvp.activo)s.push(this._rsvp(boda.rsvp,boda.pareja));
+    if(boda.historia&&boda.historia.activa){s.push(this._separador());s.push(this._historia(boda.historia));s.push(this._separador());}
+    if(boda.galeria&&boda.galeria.activa&&boda.galeria.fotos.length>0){s.push(this._galeria(boda.galeria));s.push(this._separador());}
+    if(boda.evento&&boda.evento.activo){s.push(this._evento(boda.evento,boda.fecha));s.push(this._separador());}
+    if(boda.dresscode&&boda.dresscode.activo){s.push(this._separador());s.push(this._dresscode(boda.dresscode));s.push(this._separador());}
+    if(boda.rsvp&&boda.rsvp.activo){s.push(this._rsvp(boda.rsvp,boda.pareja));s.push(this._separador());}
     if(boda.mensaje&&boda.mensaje.activo)s.push(this._mensajeFinal(boda.mensaje,boda.pareja));
     return s.join('');
   },
@@ -101,7 +101,7 @@ const RENDERER_MEDITERRANEA = {
       '</svg></div>';
     });
 
-    var fotoCab = boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,#fff,transparent)"></div></div>' : '';
+    var fotoCab = boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,#fff,transparent)"></div></div>' : '';
 
     return '<section style="background:#fff;min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 60px">' +
       // Borde azulejos (solo visual con div de borde)
@@ -224,6 +224,32 @@ const RENDERER_MEDITERRANEA = {
       '<div style="width:40px;height:2px;background:var(--color-accent);margin:0 auto 20px"></div>' +
       '<p style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:#fff;font-weight:300">'+pareja.novio+' &amp; '+pareja.novia+'</p>' +
     '</section>';
+  },
+
+
+  _separador: function() {
+    var b = '#1a56a0'; var g = '#e8b84b'; var w = '#ffffff';
+    var azulejo = function(x) {
+      return '<g transform="translate('+x+',0)">' +
+        '<rect width="24" height="24" fill="'+b+'"/>' +
+        '<rect x="2" y="2" width="20" height="20" fill="none" stroke="'+w+'" stroke-width="0.6" opacity=".5"/>' +
+        '<circle cx="12" cy="12" r="3" fill="'+w+'" opacity=".6"/>' +
+        '<circle cx="4" cy="4" r="1.5" fill="'+g+'" opacity=".7"/>' +
+        '<circle cx="20" cy="4" r="1.5" fill="'+g+'" opacity=".7"/>' +
+        '<circle cx="4" cy="20" r="1.5" fill="'+g+'" opacity=".7"/>' +
+        '<circle cx="20" cy="20" r="1.5" fill="'+g+'" opacity=".7"/>' +
+        '<line x1="4" y1="12" x2="20" y2="12" stroke="'+w+'" stroke-width="0.4" opacity=".3"/>' +
+        '<line x1="12" y1="4" x2="12" y2="20" stroke="'+w+'" stroke-width="0.4" opacity=".3"/>' +
+      '</g>';
+    };
+    var cols = 16;
+    var azulejos = '';
+    for (var i = 0; i < cols; i++) azulejos += azulejo(i * 24);
+    return '<div style="overflow:hidden;line-height:0">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + (cols*24) + ' 24" style="width:100%;height:24px;display:block">' +
+        azulejos +
+      '</svg>' +
+    '</div>';
   },
 
   _initCountdown: function(fecha, contenedor) {
