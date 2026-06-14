@@ -94,7 +94,7 @@ const RENDERER_CLASICA = {
     return '<section style="padding:0;background:var(--color-secundario)">' + this._separador() +
       '<div style="text-align:center;margin-bottom:36px">' +
         '<span style="display:block;font-size:14px;color:var(--color-primario);letter-spacing:6px;margin-bottom:12px">✦</span>' +
-        '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">Nuestra historia</h2>' +
+        '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">'+(historia.titulo||'Nuestra historia')+'</h2>' +
         '<div style="width:40px;height:1px;background:var(--color-primario);margin:0 auto;opacity:.5"></div>' +
       '</div>' +
       '<p style="font-family:var(--fuente-display);font-size:18px;font-weight:300;font-style:italic;line-height:1.8;text-align:center;color:var(--color-texto);max-width:360px;margin:0 auto">' + historia.texto + '</p>' +
@@ -108,7 +108,7 @@ const RENDERER_CLASICA = {
     return '<section style="padding:64px 32px;background:var(--color-secundario)">' +
       '<div style="text-align:center;margin-bottom:36px">' +
         '<span style="display:block;font-size:14px;color:var(--color-primario);letter-spacing:6px;margin-bottom:12px">✦</span>' +
-        '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">Nuestra galería</h2>' +
+        '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">'+(galeria.titulo||'Nuestra galería')+'</h2>' +
         '<div style="width:40px;height:1px;background:var(--color-primario);margin:0 auto;opacity:.5"></div>' +
       '</div>' +
       '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">' + imgs + '</div>' +
@@ -121,7 +121,7 @@ const RENDERER_CLASICA = {
     return '<section style="padding:64px 32px;background:var(--color-secundario)">' +
       '<div style="text-align:center;margin-bottom:36px">' +
         '<span style="display:block;font-size:14px;color:var(--color-primario);letter-spacing:6px;margin-bottom:12px">✦</span>' +
-        '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">La celebración</h2>' +
+        '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">'+(evento.titulo||'La celebración')+'</h2>' +
         '<div style="width:40px;height:1px;background:var(--color-primario);margin:0 auto;opacity:.5"></div>' +
       '</div>' +
       '<div style="background:#fff;border:1px solid rgba(184,134,11,.2);padding:32px 24px;text-align:center">' +
@@ -138,7 +138,7 @@ const RENDERER_CLASICA = {
   _dresscode: function(dresscode) {
     return '<section style="padding:0;background:#fff;text-align:center">' + this._separador() +
       '<span style="display:block;font-size:14px;color:var(--color-primario);letter-spacing:6px;margin-bottom:12px">✦</span>' +
-      '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">Dress code</h2>' +
+      '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">'+(dresscode.titulo||'Dress code')+'</h2>' +
       '<div style="width:40px;height:1px;background:var(--color-primario);margin:0 auto 32px;opacity:.5"></div>' +
       '<p style="font-family:var(--fuente-display);font-size:18px;font-weight:300;font-style:italic;color:var(--color-texto);line-height:1.7">' + dresscode.texto + '</p>' +
     '</section>';
@@ -153,7 +153,7 @@ const RENDERER_CLASICA = {
     return '<section style="padding:64px 32px;background:var(--color-secundario)">' +
       '<div style="text-align:center;margin-bottom:36px">' +
         '<span style="display:block;font-size:14px;color:var(--color-primario);letter-spacing:6px;margin-bottom:12px">✦</span>' +
-        '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">Confirma tu asistencia</h2>' +
+        '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">'+(rsvp.titulo||'Confirma tu asistencia')+'</h2>' +
         '<div style="width:40px;height:1px;background:var(--color-primario);margin:0 auto;opacity:.5"></div>' +
       '</div>' +
       fechaStr +
