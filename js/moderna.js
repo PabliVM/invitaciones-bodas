@@ -33,7 +33,7 @@ const RENDERER_MODERNA = {
     var s=[];
     s.push(this._portada(boda));
     s.push(this._countdown(boda.fecha));
-    if(boda.musica&&boda.musica.activa&&boda.musica.url)s.push(this._musica(boda.musica));
+    // Música: botón flotante global, no inline
     if(boda.historia&&boda.historia.activa)s.push(this._historia(boda.historia));
     if(boda.galeria&&boda.galeria.activa&&boda.galeria.fotos.length>0)s.push(this._galeria(boda.galeria));
     if(boda.evento&&boda.evento.activo)s.push(this._evento(boda.evento,boda.fecha));
@@ -46,7 +46,9 @@ const RENDERER_MODERNA = {
   _portada: function(boda) {
     var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     var mes=meses[parseInt(boda.fecha.mes)-1]||boda.fecha.mes;
-    return '<section style="background:#fff;min-height:100vh;padding:48px 36px;display:flex;flex-direction:column;justify-content:space-between">' +
+    return '<section style="background:#fff;min-height:100vh;padding:48px 36px;display:flex;flex-direction:column;justify-content:space-between">''+
+      (boda.fotoCabecera ? '<div style="position:relative;width:100%;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
+      ' +
       // Top
       '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
         '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:#ccc">boda</p>' +
