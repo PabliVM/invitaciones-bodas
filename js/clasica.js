@@ -33,14 +33,71 @@ const RENDERER_CLASICA = {
     var s = [];
     s.push(this._portada(boda));
     s.push(this._countdown(boda.fecha));
-    // Música: botón flotante global, no inline
-    if (boda.historia.activa) s.push(this._historia(boda.historia));
-    if (boda.galeria.activa && boda.galeria.fotos.length > 0) s.push(this._galeria(boda.galeria));
-    if (boda.evento.activo) s.push(this._evento(boda.evento, boda.fecha));
-    if (boda.dresscode.activo) s.push(this._dresscode(boda.dresscode));
-    if (boda.rsvp.activo) { s.push(this._separador()); s.push(this._rsvp(boda.rsvp, boda.pareja)); }
-    if (boda.mensaje.activo) s.push(this._mensajeFinal(boda.mensaje, boda.pareja));
+
+    var orden = boda._ordenEfectivo || ['historia','galeria','evento','dresscode','rsvp','mensaje'];
+    var self = this;
+
+    orden.forEach(function(id) {
+      if (id.indexOf('extra_') === 0) {
+        var idx = parseInt(id.replace('extra_', ''));
+        var extras = boda.secciones_extra || [];
+        if (extras[idx]) s.push(self._seccionExtra(extras[idx]));
+        return;
+      }
+      var sec = boda[id];
+      if (!sec) return;
+      var activa = sec.activo !== false && sec.activa !== false;
+      if (!activa) return;
+
+      if (id === 'historia' && self._historia) {
+        if (self._separador) s.push(self._separador());
+        s.push(self._historia(sec));
+        if (self._separador) s.push(self._separador());
+      } else if (id === 'galeria' && self._galeria && sec.fotos && sec.fotos.length > 0) {
+        s.push(self._galeria(sec));
+        if (self._separador) s.push(self._separador());
+      } else if (id === 'evento' && self._evento) {
+        s.push(self._evento(sec, boda.fecha));
+        if (self._separador) s.push(self._separador());
+      } else if (id === 'dresscode' && self._dresscode) {
+        if (self._separador) s.push(self._separador());
+        s.push(self._dresscode(sec));
+        if (self._separador) s.push(self._separador());
+      } else if (id === 'alojamiento' && self._seccionSimple) {
+        s.push(self._seccionSimple(sec));
+      } else if (id === 'transporte' && self._seccionSimple) {
+        s.push(self._seccionSimple(sec));
+      } else if (id === 'rsvp' && self._rsvp) {
+        if (self._separador) s.push(self._separador());
+        s.push(self._rsvp(sec, boda.pareja));
+      } else if (id === 'mensaje' && self._mensajeFinal) {
+        s.push(self._mensajeFinal(sec, boda.pareja));
+      }
+    });
+
     return s.join('');
+  },
+
+  _seccionExtra: function(sec) {
+    var html = '<section style="padding:56px 32px;background:var(--color-secundario)">';
+    html += '<div style="text-align:center;margin-bottom:28px">';
+    html += '<h2 style="font-family:var(--fuente-display);font-size:clamp(24px,6vw,32px);font-weight:300;color:var(--color-texto);margin:0 0 12px">' + (sec.titulo || '') + '</h2>';
+    html += '<div style="width:40px;height:1px;background:var(--color-primario);margin:0 auto;opacity:.5"></div>';
+    html += '</div>';
+    if (sec.texto) html += '<p style="font-family:var(--fuente-display);font-size:17px;font-style:italic;line-height:1.8;text-align:center;color:var(--color-texto);max-width:340px;margin:0 auto">' + sec.texto + '</p>';
+    var subs = sec.subsecciones || [];
+    if (subs.length > 0) {
+      html += '<div style="display:flex;flex-direction:column;gap:16px;margin-top:24px">';
+      subs.forEach(function(sub) {
+        html += '<div style="border-left:2px solid var(--color-primario);padding-left:16px">';
+        if (sub.titulo) html += '<p style="font-family:var(--fuente-body);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);margin-bottom:6px">' + sub.titulo + '</p>';
+        if (sub.texto) html += '<p style="font-family:var(--fuente-body);font-size:14px;font-weight:300;color:var(--color-texto);line-height:1.7">' + sub.texto + '</p>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+    html += '</section>';
+    return html;
   },
 
   _portada: function(boda) {
