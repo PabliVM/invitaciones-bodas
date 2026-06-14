@@ -10,7 +10,8 @@ const STATE = (() => {
     historia: {
       activa: true,
       texto: 'Nos conocimos en un momento inesperado y desde entonces supimos que nuestros caminos estaban unidos para siempre.',
-    },
+    ,
+      subsecciones: []},
     galeria: {
       activa: true,
       fotos: [
@@ -18,7 +19,8 @@ const STATE = (() => {
         'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800',
         'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800',
       ],
-    },
+    ,
+      subsecciones: []},
     musica: {
       activa: true,
       url: '',
@@ -31,10 +33,35 @@ const STATE = (() => {
       lugar: 'Finca La Alameda',
       direccion: 'Ctra. de Burgos, km 24, Madrid',
       googleMapsUrl: 'https://maps.google.com',
+    ,
+      subsecciones: []},
+    dresscode: { activo: true, texto: 'Elegante. Tonos claros bienvenidos.' ,
+      subsecciones: []},
+    alojamiento: {
+      activo: false,
+      texto: '',
+      subsecciones: [],
     },
-    dresscode: { activo: true, texto: 'Elegante. Tonos claros bienvenidos.' },
-    rsvp: { activo: true, fechaLimite: '2025-08-01', email: 'boda@ejemplo.com' },
-    mensaje: { activo: true, texto: 'Vuestra presencia es el mejor regalo.' },
+    transporte: {
+      activo: false,
+      texto: '',
+      subsecciones: [],
+    },
+    secciones_extra: [], // secciones completamente libres
+    formulario: {
+      activo: false,
+      titulo: 'Formulario',
+      descripcion: '',
+      textoBtnEnviar: 'Enviar',
+      mensajeConfirmacion: '¡Gracias! Hemos recibido tus respuestas.',
+      preguntas: [],
+      // Estructura de cada pregunta:
+      // { id, texto, tipo: 'texto'|'opcion_unica'|'opcion_multiple'|'numero', opciones: [], obligatoria: true }
+    },
+    rsvp: { activo: true, fechaLimite: '2025-08-01', email: 'boda@ejemplo.com' ,
+      subsecciones: []},
+    mensaje: { activo: true, texto: 'Vuestra presencia es el mejor regalo.' ,
+      subsecciones: []},
     estilos: {
       colorPrimario: '#b8860b',
       colorSecundario: '#f5f0e8',
