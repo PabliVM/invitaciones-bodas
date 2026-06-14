@@ -62,6 +62,11 @@
             <input type="text" class="campo__input" id="inp-titulo" placeholder="Ej: Boda García-López" />
           </div>
           <div class="campo">
+            <label class="campo__label">Foto de cabecera (URL)</label>
+            <input type="url" class="campo__input" id="inp-foto-cabecera" placeholder="https://…/foto.jpg" />
+            <span style="font-size:10px;color:#555;margin-top:4px;display:block">Aparece en la portada a pantalla completa</span>
+          </div>
+          <div class="campo">
             <label class="campo__label" for="inp-novio">Nombre del novio</label>
             <input type="text" class="campo__input" id="inp-novio" placeholder="Alejandro" />
           </div>
@@ -151,8 +156,20 @@
             <label class="campo__label">URL del MP3</label>
             <input type="url" class="campo__input" id="inp-musica-url" placeholder="https://…/cancion.mp3" />
           </div>
+          <div class="campo">
+            <label class="campo__label">Mostrar junto al botón</label>
+            <select class="campo__select" id="sel-musica-texto">
+              <option value="ninguno">Solo el icono ▶</option>
+              <option value="titulo">Título de la canción</option>
+              <option value="personalizado">Texto personalizado</option>
+            </select>
+          </div>
+          <div class="campo" id="campo-musica-personalizado" style="display:none">
+            <label class="campo__label">Texto personalizado</label>
+            <input type="text" class="campo__input" id="inp-musica-texto-flotante" placeholder="Ej: Nuestra canción favorita" />
+          </div>
           <p style="font-size:11px;color:#555;line-height:1.6">
-            Sube el MP3 a Google Drive, hazlo público y pega el enlace directo. O usa cualquier URL directa a un archivo .mp3.
+            El botón de música aparece fijo en la esquina inferior derecha de la invitación.
           </p>
         </div>
       </div>
