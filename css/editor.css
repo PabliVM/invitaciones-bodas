@@ -908,3 +908,42 @@ html, body {
 .sec-btn-nueva:hover {
   background: rgba(184,134,11,0.08);
 }
+
+/* ─── Panel formulario ─── */
+.preg-item {
+  background: var(--editor-input-bg);
+  border: 1px solid var(--editor-border);
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.preg-item__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.preg-item__num {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--editor-accent);
+  flex-shrink: 0;
+  width: 16px;
+}
+
+.preg-item__titulo {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--editor-border);
+  color: var(--editor-text);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 3px 4px;
+  outline: none;
+}
+
+.preg-item__titulo:focus {
+  border-bottom-color: var(--editor-accent);
+}
