@@ -107,6 +107,20 @@ const RENDERER = (() => {
     });
   }
 
+  function _calcularOrden(boda) {
+    var ordenBase = boda.orden_secciones || ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje'];
+    // Filtrar solo las activas
+    var activas = ordenBase.filter(function(id) {
+      var sec = boda[id];
+      if (!sec) return false;
+      return sec.activo !== false && sec.activa !== false;
+    });
+    // Añadir extras al final
+    var extras = boda.secciones_extra || [];
+    extras.forEach(function(_, i) { activas.push('extra_' + i); });
+    return activas;
+  }
+
   function _renderSubseccionesPredefinidas(boda, contenedor) {
     var mapa = {
       historia:    1,  // índice de sección en el DOM (0=portada, 1=countdown, 2=historia...)
