@@ -267,6 +267,26 @@
         </div>
       </div>
 
+      <!-- SECCIÓN: FORMULARIO -->
+      <div class="panel-seccion">
+        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
+          <span class="panel-seccion__titulo">Formulario</span>
+          <span class="panel-seccion__chevron">▼</span>
+        </div>
+        <div class="panel-seccion__body" style="padding:0">
+          <div style="padding:10px 12px 4px;border-bottom:1px solid var(--editor-border)">
+            <div class="campo campo--horizontal">
+              <label class="campo__label">Activar formulario</label>
+              <label class="campo__toggle">
+                <input type="checkbox" id="chk-formulario" onchange="STATE.set('formulario.activo',this.checked)" />
+                <span class="campo__toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div id="formulario-panel"></div>
+        </div>
+      </div>
+
       <!-- SECCIÓN: SECCIONES EXTRA -->
       <div class="panel-seccion">
         <div class="panel-seccion__header" onclick="toggleSeccion(this)">
@@ -387,6 +407,7 @@
   <script src="js/floral.js"></script>
   <script src="js/moderna.js"></script>
   <script src="js/mediterranea.js"></script>
+  <script src="js/formulario.js"></script>
   <script src="js/secciones.js"></script>
   <script src="js/presets.js"></script>
   <script src="js/editor.js"></script>
@@ -419,6 +440,13 @@
       initPresets();
       initPlantillas();
       SECCIONES.init();
+      FORMULARIO.init();
+
+      // Sync formulario toggle
+      STATE.suscribir(function(boda) {
+        var chk = document.getElementById('chk-formulario');
+        if (chk) chk.checked = !!(boda.formulario && boda.formulario.activo);
+      });
     });
 
     // ── Selector de plantillas ──
