@@ -10,8 +10,8 @@ const STATE = (() => {
     historia: {
       activa: true,
       texto: 'Nos conocimos en un momento inesperado y desde entonces supimos que nuestros caminos estaban unidos para siempre.',
-    ,
-      subsecciones: []},
+      subsecciones: []
+    },
     galeria: {
       activa: true,
       fotos: [
@@ -19,22 +19,22 @@ const STATE = (() => {
         'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800',
         'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800',
       ],
-    ,
-      subsecciones: []},
+      subsecciones: []
+    },
     musica: {
       activa: true,
       url: '',
       titulo: 'Nuestra canción',
-      textoFlotante: '',       // texto libre junto al botón (vacío = solo icono)
-      mostrarTexto: 'titulo', // 'ninguno' | 'titulo' | 'personalizado'
+      textoFlotante: '',
+      mostrarTexto: 'titulo',
     },
     evento: {
       activo: true,
       lugar: 'Finca La Alameda',
       direccion: 'Ctra. de Burgos, km 24, Madrid',
       googleMapsUrl: 'https://maps.google.com',
-    ,
-      subsecciones: []},
+      subsecciones: []
+    },
     dresscode: { activo: true, texto: 'Elegante. Tonos claros bienvenidos.' ,
       subsecciones: []},
     alojamiento: {
