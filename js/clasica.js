@@ -38,7 +38,7 @@ const RENDERER_CLASICA = {
     if (boda.galeria.activa && boda.galeria.fotos.length > 0) s.push(this._galeria(boda.galeria));
     if (boda.evento.activo) s.push(this._evento(boda.evento, boda.fecha));
     if (boda.dresscode.activo) s.push(this._dresscode(boda.dresscode));
-    if (boda.rsvp.activo) s.push(this._rsvp(boda.rsvp, boda.pareja));
+    if (boda.rsvp.activo) { s.push(this._separador()); s.push(this._rsvp(boda.rsvp, boda.pareja)); }
     if (boda.mensaje.activo) s.push(this._mensajeFinal(boda.mensaje, boda.pareja));
     return s.join('');
   },
@@ -47,7 +47,7 @@ const RENDERER_CLASICA = {
     var meses = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
     var mes = meses[parseInt(boda.fecha.mes) - 1] || boda.fecha.mes;
     return '<section class="inv-portada" style="background:var(--color-secundario);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 32px;">' +
-      (boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
+      (boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
       '<div style="font-size:20px;color:var(--color-primario);letter-spacing:8px;margin-bottom:24px">✦</div>' +
       '<p style="font-family:var(--fuente-body);font-size:11px;font-weight:300;letter-spacing:4px;text-transform:uppercase;color:var(--color-accent);margin-bottom:24px">Nos casamos</p>' +
       '<h1 style="font-family:var(--fuente-display);font-weight:300;display:flex;flex-direction:column;align-items:center;gap:4px;line-height:1.1;margin:0">' +
@@ -91,7 +91,7 @@ const RENDERER_CLASICA = {
   },
 
   _historia: function(historia) {
-    return '<section style="padding:64px 32px;background:var(--color-secundario)">' +
+    return '<section style="padding:0;background:var(--color-secundario)">' + this._separador() +
       '<div style="text-align:center;margin-bottom:36px">' +
         '<span style="display:block;font-size:14px;color:var(--color-primario);letter-spacing:6px;margin-bottom:12px">✦</span>' +
         '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">Nuestra historia</h2>' +
@@ -136,7 +136,7 @@ const RENDERER_CLASICA = {
   },
 
   _dresscode: function(dresscode) {
-    return '<section style="padding:64px 32px;background:#fff;text-align:center">' +
+    return '<section style="padding:0;background:#fff;text-align:center">' + this._separador() +
       '<span style="display:block;font-size:14px;color:var(--color-primario);letter-spacing:6px;margin-bottom:12px">✦</span>' +
       '<h2 style="font-family:var(--fuente-display);font-size:clamp(26px,6vw,34px);font-weight:300;color:var(--color-texto);margin:0 0 16px">Dress code</h2>' +
       '<div style="width:40px;height:1px;background:var(--color-primario);margin:0 auto 32px;opacity:.5"></div>' +
@@ -177,6 +177,32 @@ const RENDERER_CLASICA = {
       '<p style="font-family:var(--fuente-display);font-size:22px;font-weight:300;color:#fff;letter-spacing:2px">' + pareja.novio + ' &amp; ' + pareja.novia + '</p>' +
       '<div style="font-size:16px;color:rgba(255,255,255,.4);margin-top:32px;letter-spacing:4px">✦</div>' +
     '</section>';
+  },
+
+
+  _marco: function(contenido, fondo) {
+    return '<div style="background:' + (fondo||'var(--color-secundario)') + ';padding:48px 32px;position:relative">' +
+      // Marco exterior
+      '<div style="position:absolute;top:16px;left:16px;right:16px;bottom:16px;border:1px solid var(--color-primario);opacity:.2;pointer-events:none"></div>' +
+      // Esquinas decorativas
+      '<div style="position:absolute;top:12px;left:12px;width:16px;height:16px;border-top:2px solid var(--color-primario);border-left:2px solid var(--color-primario);opacity:.5"></div>' +
+      '<div style="position:absolute;top:12px;right:12px;width:16px;height:16px;border-top:2px solid var(--color-primario);border-right:2px solid var(--color-primario);opacity:.5"></div>' +
+      '<div style="position:absolute;bottom:12px;left:12px;width:16px;height:16px;border-bottom:2px solid var(--color-primario);border-left:2px solid var(--color-primario);opacity:.5"></div>' +
+      '<div style="position:absolute;bottom:12px;right:12px;width:16px;height:16px;border-bottom:2px solid var(--color-primario);border-right:2px solid var(--color-primario);opacity:.5"></div>' +
+      contenido +
+    '</div>';
+  },
+
+  _separador: function() {
+    return '<div style="text-align:center;padding:4px 0;background:var(--color-secundario)">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 20" style="width:160px;height:20px;display:inline-block;opacity:.6">' +
+        '<line x1="0" y1="10" x2="80" y2="10" stroke="var(--color-primario)" stroke-width="0.8"/>' +
+        '<polygon points="90,5 95,10 90,15 85,10" fill="var(--color-primario)" opacity=".8"/>' +
+        '<polygon points="110,5 115,10 110,15 105,10" fill="var(--color-primario)" opacity=".8"/>' +
+        '<line x1="120" y1="10" x2="200" y2="10" stroke="var(--color-primario)" stroke-width="0.8"/>' +
+        '<circle cx="100" cy="10" r="2.5" fill="var(--color-primario)"/>' +
+      '</svg>' +
+    '</div>';
   },
 
   _initCountdown: function(fecha, contenedor) {
