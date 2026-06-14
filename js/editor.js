@@ -47,6 +47,7 @@ const EDITOR = (() => {
   // --- Poblar panel con valores del estado ---
   function _poblarPanel(boda) {
     _setVal('inp-titulo', boda.meta.titulo);
+    _setVal('inp-foto-cabecera', boda.fotoCabecera || '');
     _setVal('inp-novio', boda.pareja.novio);
     _setVal('inp-novia', boda.pareja.novia);
     _setVal('inp-dia', boda.fecha.dia);
@@ -60,6 +61,9 @@ const EDITOR = (() => {
     _setVal('inp-musica-titulo', boda.musica ? boda.musica.titulo : '');
     _setVal('inp-musica-url', boda.musica ? boda.musica.url : '');
     _setCheck('chk-musica', boda.musica ? boda.musica.activa : true);
+    _setVal('sel-musica-texto', boda.musica ? (boda.musica.mostrarTexto || 'titulo') : 'titulo');
+    _setVal('inp-musica-texto-flotante', boda.musica ? boda.musica.textoFlotante : '');
+    _toggleCampoPersonalizado(boda.musica ? boda.musica.mostrarTexto : 'titulo');
     _setVal('inp-lugar', boda.evento.lugar);
     _setVal('inp-direccion', boda.evento.direccion);
     _setVal('inp-maps-url', boda.evento.googleMapsUrl);
@@ -106,6 +110,15 @@ const EDITOR = (() => {
     on('chk-musica',        'musica.activa');
     on('inp-musica-titulo', 'musica.titulo');
     on('inp-musica-url',    'musica.url');
+    on('inp-musica-texto-flotante', 'musica.textoFlotante');
+
+    var selMusica = document.getElementById('sel-musica-texto');
+    if (selMusica) {
+      selMusica.addEventListener('change', function() {
+        STATE.set('musica.mostrarTexto', selMusica.value);
+        _toggleCampoPersonalizado(selMusica.value);
+      });
+    }
     on('inp-lugar', 'evento.lugar');
     on('inp-direccion', 'evento.direccion');
     on('inp-maps-url', 'evento.googleMapsUrl');
