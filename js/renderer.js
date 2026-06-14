@@ -27,6 +27,12 @@ const RENDERER = (() => {
     }
     r.render(boda, contenedor);
 
+    // Renderizar secciones extra al final
+    _renderSeccionesExtra(boda, contenedor);
+
+    // Renderizar subsecciones de secciones predefinidas
+    _renderSubseccionesPredefinidas(boda, contenedor);
+
     // Añadir IDs de navegación a las secciones
     var secciones = contenedor.querySelectorAll('section');
     var ids = ['sec-portada', 'sec-countdown', 'sec-historia', 'sec-galeria', 'sec-evento', 'sec-dresscode', 'sec-rsvp', 'sec-mensaje'];
@@ -41,12 +47,21 @@ const RENDERER = (() => {
   }
 
   function _initMusicaFlotante(musica) {
+    // Determinar texto a mostrar
+    var texto = '';
+    if (musica.mostrarTexto === 'titulo') {
+      texto = musica.titulo || 'Nuestra canción';
+    } else if (musica.mostrarTexto === 'personalizado') {
+      texto = musica.textoFlotante || '';
+    }
+    // ninguno = sin texto
+
     // Crear elemento flotante
     var flotante = document.createElement('div');
     flotante.id = 'musica-flotante-global';
     flotante.className = 'musica-flotante';
     flotante.innerHTML =
-      '<span class="musica-flotante__titulo">' + (musica.titulo || 'Nuestra canción') + '</span>' +
+      (texto ? '<span class="musica-flotante__titulo">' + texto + '</span>' : '') +
       '<button class="musica-flotante__btn" id="musica-flotante-btn" aria-label="Reproducir música">' +
         '<span id="musica-flotante-icon">▶</span>' +
       '</button>' +
@@ -81,6 +96,93 @@ const RENDERER = (() => {
       icon.textContent = '▶';
       btn.classList.remove('playing');
     });
+  }
+
+  function _renderSubseccionesPredefinidas(boda, contenedor) {
+    var mapa = {
+      historia:    1,  // índice de sección en el DOM (0=portada, 1=countdown, 2=historia...)
+      galeria:     2,
+      evento:      3,
+      dresscode:   4,
+      rsvp:        5,
+      mensaje:     6,
+    };
+
+    // Reconstruir mapa dinámico basado en qué secciones están activas
+    var secciones = contenedor.querySelectorAll('section');
+    var predefinidas = ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje'];
+    var seccionesActivas = ['portada','countdown'];
+    predefinidas.forEach(function(id) {
+      var sec = boda[id];
+      if (!sec) return;
+      var activa = sec.activo !== false && sec.activa !== false;
+      if (activa) seccionesActivas.push(id);
+    });
+
+    seccionesActivas.forEach(function(id, idx) {
+      var sec = boda[id];
+      if (!sec || !sec.subsecciones || sec.subsecciones.length === 0) return;
+      var secEl = secciones[idx];
+      if (!secEl) return;
+      _appendSubsecciones(secEl, sec.subsecciones);
+    });
+  }
+
+  function _renderSeccionesExtra(boda, contenedor) {
+    // Subsecciones en secciones predefinidas
+    var predefinidas = ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje'];
+    predefinidas.forEach(function(id) {
+      var sec = boda[id];
+      if (!sec || !sec.subsecciones || sec.subsecciones.length === 0) return;
+      // Encontrar la sección en el DOM y añadir subsecciones
+      var secEls = contenedor.querySelectorAll('section');
+      // Añadir bloque de subsecciones al final de la sección correspondiente
+    });
+
+    // Secciones completamente nuevas
+    var extras = boda.secciones_extra || [];
+    if (extras.length === 0) return;
+
+    extras.forEach(function(sec) {
+      if (!sec.titulo && !sec.texto && (!sec.subsecciones || sec.subsecciones.length === 0)) return;
+      var el = document.createElement('section');
+      el.style.cssText = 'padding:56px 32px;background:var(--color-secundario)';
+      var html = '<div style="text-align:center;margin-bottom:28px">' +
+        '<h2 style="font-family:var(--fuente-display);font-size:clamp(24px,6vw,32px);font-weight:300;color:var(--color-texto);margin:0 0 12px">' + (sec.titulo || '') + '</h2>' +
+        '<div style="width:40px;height:1px;background:var(--color-primario);margin:0 auto;opacity:.5"></div>' +
+        '</div>';
+      if (sec.texto) {
+        html += '<p style="font-family:var(--fuente-display);font-size:17px;font-style:italic;line-height:1.8;text-align:center;color:var(--color-texto);max-width:340px;margin:0 auto 24px">' + sec.texto + '</p>';
+      }
+      var subs = sec.subsecciones || [];
+      if (subs.length > 0) {
+        html += '<div style="display:flex;flex-direction:column;gap:20px;margin-top:24px">';
+        subs.forEach(function(sub) {
+          html += '<div style="border-left:2px solid var(--color-primario);padding-left:16px">';
+          if (sub.titulo) html += '<p style="font-family:var(--fuente-body);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);margin-bottom:6px">' + sub.titulo + '</p>';
+          if (sub.texto) html += '<p style="font-family:var(--fuente-body);font-size:14px;font-weight:300;color:var(--color-texto);line-height:1.7">' + sub.texto + '</p>';
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+      el.innerHTML = html;
+      contenedor.appendChild(el);
+    });
+  }
+
+  // Render subsecciones dentro de una sección existente
+  function _appendSubsecciones(secEl, subsecciones) {
+    if (!subsecciones || subsecciones.length === 0) return;
+    var div = document.createElement('div');
+    div.style.cssText = 'display:flex;flex-direction:column;gap:16px;margin-top:24px;padding:0 32px 32px';
+    subsecciones.forEach(function(sub) {
+      var item = '<div style="border-left:2px solid var(--color-primario);padding-left:16px">';
+      if (sub.titulo) item += '<p style="font-family:var(--fuente-body);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);margin-bottom:6px">' + sub.titulo + '</p>';
+      if (sub.texto) item += '<p style="font-family:var(--fuente-body);font-size:14px;font-weight:300;color:var(--color-texto);line-height:1.7">' + sub.texto + '</p>';
+      item += '</div>';
+      div.innerHTML += item;
+    });
+    secEl.appendChild(div);
   }
 
   return { render };
