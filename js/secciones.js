@@ -71,7 +71,7 @@ const SECCIONES = (() => {
         if (def.id === 'alojamiento') textoActual = (boda2.alojamiento && boda2.alojamiento.texto) || '';
         if (def.id === 'transporte') textoActual = (boda2.transporte && boda2.transporte.texto) || '';
         html += '<div style="padding:0 10px 8px">';
-        html += '<textarea class="sec-sub__texto" style="min-height:72px" placeholder="Texto principal..." oninput="SECCIONES.updateTexto('' + def.id + '',this.value)">' + textoActual + '</textarea>';
+        html += '<textarea class="sec-sub__texto" style="min-height:72px" placeholder="Texto principal..." oninput="SECCIONES.updateTexto(\'' + def.id + '\',this.value)">' + textoActual + '</textarea>';
         html += '</div>';
       }
       // Subsecciones existentes
