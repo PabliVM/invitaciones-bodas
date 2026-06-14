@@ -86,10 +86,11 @@ const RENDERER_FLORAL = {
     s.push(this._portada(boda));
     s.push(this._countdown(boda.fecha));
     // Música: botón flotante global, no inline
-    if (boda.historia && boda.historia.activa) s.push(this._historia(boda.historia));
-    if (boda.galeria && boda.galeria.activa && boda.galeria.fotos.length > 0) s.push(this._galeria(boda.galeria));
-    if (boda.evento && boda.evento.activo) s.push(this._evento(boda.evento, boda.fecha));
-    if (boda.dresscode && boda.dresscode.activo) s.push(this._dresscode(boda.dresscode));
+    s.push(this._separador());
+    if (boda.historia && boda.historia.activa) { s.push(this._historia(boda.historia)); s.push(this._separador()); }
+    if (boda.galeria && boda.galeria.activa && boda.galeria.fotos.length > 0) { s.push(this._galeria(boda.galeria)); s.push(this._separador()); }
+    if (boda.evento && boda.evento.activo) { s.push(this._evento(boda.evento, boda.fecha)); s.push(this._separador()); }
+    if (boda.dresscode && boda.dresscode.activo) { s.push(this._dresscode(boda.dresscode)); s.push(this._separador()); }
     if (boda.rsvp && boda.rsvp.activo) s.push(this._rsvp(boda.rsvp, boda.pareja));
     if (boda.mensaje && boda.mensaje.activo) s.push(this._mensajeFinal(boda.mensaje, boda.pareja));
     return s.join('');
@@ -102,7 +103,7 @@ const RENDERER_FLORAL = {
     var fechaObj = new Date(parseInt(boda.fecha.anio), parseInt(boda.fecha.mes)-1, parseInt(boda.fecha.dia));
     var diaSemana = dias[fechaObj.getDay()] || '';
     return '<section style="background:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 32px;position:relative;overflow:hidden">'+
-      (boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
+      (boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
       // Eucalipto esquina superior izquierda
       '<div style="position:absolute;top:0;left:0">'+this._eucalipto(false,false)+'</div>' +
       // Eucalipto esquina superior derecha (espejado)
@@ -220,6 +221,38 @@ const RENDERER_FLORAL = {
         '<div style="width:40px;height:1px;background:var(--color-accent);margin:24px auto 0;opacity:.5"></div>' +
       '</div>' +
     '</section>';
+  },
+
+
+  _separador: function() {
+    var c = 'var(--color-primario)';
+    var g = 'var(--color-accent)';
+    return '<div style="text-align:center;padding:8px 0;overflow:hidden">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" style="width:100%;max-width:320px;height:40px;display:inline-block">' +
+        // Rama central
+        '<line x1="20" y1="20" x2="300" y2="20" stroke="#c8b89a" stroke-width="0.8" opacity=".4"/>' +
+        // Flor central
+        '<circle cx="160" cy="20" r="4" fill="#d4788a" opacity=".7"/>' +
+        '<circle cx="160" cy="20" r="2" fill="#fff" opacity=".9"/>' +
+        '<ellipse cx="160" cy="13" rx="2.5" ry="4" fill="#d4788a" opacity=".5"/>' +
+        '<ellipse cx="160" cy="27" rx="2.5" ry="4" fill="#d4788a" opacity=".5"/>' +
+        '<ellipse cx="153" cy="20" rx="4" ry="2.5" fill="#d4788a" opacity=".5"/>' +
+        '<ellipse cx="167" cy="20" rx="4" ry="2.5" fill="#d4788a" opacity=".5"/>' +
+        // Hojas izquierda
+        '<ellipse cx="130" cy="18" rx="8" ry="4" fill="#7ab893" opacity=".5" transform="rotate(-20,130,18)"/>' +
+        '<ellipse cx="110" cy="19" rx="7" ry="3.5" fill="#5a9470" opacity=".45" transform="rotate(-15,110,19)"/>' +
+        '<ellipse cx="90" cy="20" rx="6" ry="3" fill="#7ab893" opacity=".4" transform="rotate(-10,90,20)"/>' +
+        // Hojas derecha
+        '<ellipse cx="190" cy="18" rx="8" ry="4" fill="#7ab893" opacity=".5" transform="rotate(20,190,18)"/>' +
+        '<ellipse cx="210" cy="19" rx="7" ry="3.5" fill="#5a9470" opacity=".45" transform="rotate(15,210,19)"/>' +
+        '<ellipse cx="230" cy="20" rx="6" ry="3" fill="#7ab893" opacity=".4" transform="rotate(10,230,20)"/>' +
+        // Bayas doradas
+        '<circle cx="145" cy="16" r="2" fill="#d4af5a" opacity=".6"/>' +
+        '<circle cx="175" cy="16" r="2" fill="#d4af5a" opacity=".6"/>' +
+        '<circle cx="140" cy="22" r="1.5" fill="#d4af5a" opacity=".5"/>' +
+        '<circle cx="180" cy="22" r="1.5" fill="#d4af5a" opacity=".5"/>' +
+      '</svg>' +
+    '</div>';
   },
 
   _initCountdown: function(fecha, contenedor) {
