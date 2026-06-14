@@ -7,8 +7,14 @@
 
   <!-- OG / WhatsApp preview -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Estás invitado a nuestra boda" />
-  <meta property="og:description" content="Abre para ver todos los detalles de nuestra celebración." />
+  <meta property="og:title" content="Estás invitado a nuestra boda" id="og-title" />
+  <meta property="og:description" content="Abre para ver todos los detalles de nuestra celebración." id="og-description" />
+  <meta property="og:image" content="" id="og-image" />
+  <meta property="og:url" content="" id="og-url" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="" id="tw-title" />
+  <meta name="twitter:description" content="" id="tw-description" />
+  <meta name="twitter:image" content="" id="tw-image" />
 
   <title>Invitación de boda</title>
 
@@ -106,7 +112,16 @@
   </div>
 
   <!-- Invitación -->
-  <div class="inv-root" id="invitation-root"></div>
+  <!-- Navegación flotante -->
+  <nav class="nav-invitacion oculta" id="nav-invitacion">
+    <a class="nav-invitacion__item activo" href="#sec-portada">Inicio</a>
+    <a class="nav-invitacion__item" href="#sec-historia">Historia</a>
+    <a class="nav-invitacion__item" href="#sec-galeria">Galería</a>
+    <a class="nav-invitacion__item" href="#sec-evento">Evento</a>
+    <a class="nav-invitacion__item" href="#sec-rsvp">RSVP</a>
+  </nav>
+
+  <div class="inv-root inv-root--con-nav" id="invitation-root"></div>
 
   <!-- Firebase SDKs (compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -123,6 +138,45 @@
 
   <script>
     DB.init();
+
+    function _actualizarOGTags(boda) {
+      var novio  = boda.pareja ? boda.pareja.novio  : '';
+      var novia  = boda.pareja ? boda.pareja.novia  : '';
+      var dia    = boda.fecha  ? boda.fecha.dia     : '';
+      var mes    = boda.fecha  ? boda.fecha.mes     : '';
+      var anio   = boda.fecha  ? boda.fecha.anio    : '';
+      var lugar  = boda.evento ? boda.evento.lugar  : '';
+
+      var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      var mesNombre = meses[parseInt(mes)-1] || mes;
+
+      var titulo = 'Boda de ' + novio + ' & ' + novia;
+      var desc   = 'El ' + dia + ' de ' + mesNombre + ' de ' + anio + ' en ' + lugar + '. ¡Estás invitado!';
+      var url    = window.location.href;
+
+      // Foto de portada: primera foto de galería o imagen por defecto
+      var foto = '';
+      if (boda.galeria && boda.galeria.fotos && boda.galeria.fotos.length > 0) {
+        foto = boda.galeria.fotos[0];
+      }
+
+      // Actualizar <title>
+      document.title = titulo;
+
+      // Actualizar meta OG
+      var set = function(id, val) {
+        var el = document.getElementById(id);
+        if (el && val) el.setAttribute('content', val);
+      };
+
+      set('og-title',      titulo);
+      set('og-description', desc);
+      set('og-image',      foto);
+      set('og-url',        url);
+      set('tw-title',      titulo);
+      set('tw-description', desc);
+      set('tw-image',      foto);
+    }
 
     async function cargarInvitacion() {
       const params = new URLSearchParams(window.location.search);
@@ -154,6 +208,9 @@
         }
 
         // Renderizar
+        // ── OG tags dinámicos ──
+        _actualizarOGTags(boda);
+
         RENDERER.render(boda, root);
 
         // Ocultar carga con fade
@@ -205,6 +262,51 @@
     }
 
     cargarInvitacion();
+
+    // ── Navegación flotante ──
+    function initNav() {
+      var nav = document.getElementById('nav-invitacion');
+      if (!nav) return;
+
+      // Mostrar nav después de hacer scroll pasada la portada
+      var mostrado = false;
+      window.addEventListener('scroll', function() {
+        var scrollY = window.scrollY || window.pageYOffset;
+        var altoPantalla = window.innerHeight;
+
+        if (scrollY > altoPantalla * 0.6 && !mostrado) {
+          nav.classList.remove('oculta');
+          mostrado = true;
+        } else if (scrollY < altoPantalla * 0.3 && mostrado) {
+          nav.classList.add('oculta');
+          mostrado = false;
+        }
+
+        // Resaltar sección activa
+        var secciones = [
+          { id: 'sec-portada',  link: 'Inicio' },
+          { id: 'sec-historia', link: 'Historia' },
+          { id: 'sec-galeria',  link: 'Galería' },
+          { id: 'sec-evento',   link: 'Evento' },
+          { id: 'sec-rsvp',     link: 'RSVP' },
+        ];
+
+        var activa = 'sec-portada';
+        secciones.forEach(function(s) {
+          var el = document.getElementById(s.id);
+          if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) {
+            activa = s.id;
+          }
+        });
+
+        nav.querySelectorAll('.nav-invitacion__item').forEach(function(a) {
+          a.classList.toggle('activo', a.getAttribute('href') === '#' + activa);
+        });
+      }, { passive: true });
+    }
+
+    // Esperar a que el renderer pinte las secciones
+    setTimeout(initNav, 800);
   </script>
 
 </body>
