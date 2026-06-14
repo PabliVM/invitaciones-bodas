@@ -4,6 +4,7 @@ const STATE = (() => {
   const defaultBoda = () => ({
     meta: { titulo: 'Nueva boda' },
     plantilla: 'clasica',
+    fotoCabecera: '',  // URL de la foto principal de portada
     pareja: { novio: 'Alejandro', novia: 'Sofía' },
     fecha: { dia: '14', mes: '09', anio: '2025', hora: '12:30' },
     historia: {
@@ -22,6 +23,8 @@ const STATE = (() => {
       activa: true,
       url: '',
       titulo: 'Nuestra canción',
+      textoFlotante: '',       // texto libre junto al botón (vacío = solo icono)
+      mostrarTexto: 'titulo', // 'ninguno' | 'titulo' | 'personalizado'
     },
     evento: {
       activo: true,
