@@ -138,7 +138,13 @@ const FORMULARIO = (() => {
     if (campo === 'tipo' && (valor === 'opcion_unica' || valor === 'opcion_multiple') && (!preguntas[i].opciones || preguntas[i].opciones.length === 0)) {
       preguntas[i].opciones = ['', ''];
     }
-    STATE.set('formulario.preguntas', preguntas);
+    // Para texto: actualizar sin re-renderizar panel (evita perder foco)
+    if (campo === 'texto') {
+      boda.formulario.preguntas = preguntas;
+    } else {
+      // Para tipo y obligatoria: sí re-renderizar para mostrar/ocultar opciones
+      STATE.set('formulario.preguntas', preguntas);
+    }
   }
 
   function añadirOpcion(pregIdx) {
