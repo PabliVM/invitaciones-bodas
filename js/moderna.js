@@ -100,7 +100,7 @@ const RENDERER_MODERNA = {
 
   _historia: function(h) {
     return '<section style="padding:60px 36px;background:#fff">' +
-      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">nuestra historia</p>' +
+      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(historia.titulo||'Nuestra historia')+'</p>' +
       '<div style="width:24px;height:2px;background:var(--color-texto);margin-bottom:24px"></div>' +
       '<p style="font-family:\'Libre Baskerville\',serif;font-size:16px;font-weight:400;line-height:1.9;color:var(--color-texto)">'+h.texto+'</p>' +
     '</section>';
@@ -109,7 +109,7 @@ const RENDERER_MODERNA = {
   _galeria: function(g) {
     var imgs=g.fotos.map(function(url,i){return '<div style="'+(i===0?'grid-column:1/-1;aspect-ratio:16/9':'aspect-ratio:1/1')+';overflow:hidden"><img src="'+url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div>';}).join('');
     return '<section style="background:#f9f9f9">' +
-      '<div style="padding:48px 36px 20px"><p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:12px">galería</p><div style="width:24px;height:2px;background:var(--color-texto)"></div></div>' +
+      '<div style="padding:48px 36px 20px"><p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:12px">'+(g.titulo||'Nuestra galería')+'</p><div style="width:24px;height:2px;background:var(--color-texto)"></div></div>' +
       '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px">'+imgs+'</div>' +
       '<div style="height:40px"></div>' +
     '</section>';
@@ -119,7 +119,7 @@ const RENDERER_MODERNA = {
     var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     var mes=meses[parseInt(fecha.mes)-1]||fecha.mes;
     return '<section style="padding:60px 36px;background:#fff">' +
-      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">la celebración</p>' +
+      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(evento.titulo||'La celebración')+'</p>' +
       '<div style="width:24px;height:2px;background:var(--color-texto);margin-bottom:28px"></div>' +
       '<p style="font-family:\'Libre Baskerville\',serif;font-size:26px;font-weight:400;color:var(--color-texto);line-height:1.2;margin-bottom:6px">'+fecha.dia+' de '+mes+'</p>' +
       '<p style="font-family:\'Libre Baskerville\',serif;font-size:26px;font-weight:400;color:var(--color-texto);line-height:1.2;margin-bottom:20px">'+fecha.anio+'</p>' +
@@ -133,7 +133,7 @@ const RENDERER_MODERNA = {
 
   _dresscode: function(d) {
     return '<section style="padding:52px 36px;background:#f9f9f9">' +
-      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">dress code</p>' +
+      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(dresscode.titulo||'Dress code')+'</p>' +
       '<div style="width:24px;height:2px;background:var(--color-texto);margin-bottom:24px"></div>' +
       '<p style="font-family:\'Libre Baskerville\',serif;font-size:17px;font-weight:400;color:var(--color-texto);line-height:1.8">'+d.texto+'</p>' +
     '</section>';
@@ -142,7 +142,7 @@ const RENDERER_MODERNA = {
   _rsvp: function(rsvp, pareja) {
     var fStr='';if(rsvp.fechaLimite){var d=new Date(rsvp.fechaLimite);fStr='<p style="font-family:var(--fuente-body);font-size:11px;color:#aaa;margin-bottom:20px">Confirmar antes del '+d.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'})+'</p>';}
     return '<section style="padding:60px 36px;background:#fff">' +
-      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">confirmar asistencia</p>' +
+      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(rsvp.titulo||'Confirma tu asistencia')+'</p>' +
       '<div style="width:24px;height:2px;background:var(--color-texto);margin-bottom:28px"></div>' +
       fStr +
       '<form id="rsvp-form" style="display:flex;flex-direction:column;gap:12px">' +
