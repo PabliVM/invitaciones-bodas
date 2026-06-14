@@ -268,6 +268,11 @@ const EDITOR = (() => {
     setTimeout(() => el.classList.remove('visible'), 2500);
   }
 
+  function _toggleCampoPersonalizado(valor) {
+    var campo = document.getElementById('campo-musica-personalizado');
+    if (campo) campo.style.display = (valor === 'personalizado') ? 'flex' : 'none';
+  }
+
   return { init };
 })();
 
