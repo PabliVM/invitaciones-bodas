@@ -54,7 +54,7 @@ const STATE = (() => {
       subsecciones: [],
     },
     secciones_extra: [], // secciones completamente libres
-    orden_secciones: ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje'], // orden editable
+    orden_secciones: ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje'], // orden unificado — incluye IDs predefinidos y 'extra_0', 'extra_1'...
     formulario: {
       activo: false,
       titulo: 'Formulario',
