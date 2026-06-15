@@ -1,4 +1,5 @@
-// orden.js — Gestor del orden de secciones
+// orden.js — Gestor del orden unificado de secciones
+// Un solo array que mezcla predefinidas y extras
 
 const ORDEN = (() => {
 
@@ -23,81 +24,97 @@ const ORDEN = (() => {
     });
   }
 
+  // Asegurar que el orden incluye todas las secciones existentes
+  function _ordenCompleto(boda) {
+    var orden = (boda.orden_secciones || []).slice();
+    var predefinidas = ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje'];
+    var extras = boda.secciones_extra || [];
+
+    // Añadir predefinidas que no estén en el orden
+    predefinidas.forEach(function(id) {
+      if (orden.indexOf(id) === -1) orden.push(id);
+    });
+
+    // Sincronizar extras: añadir nuevas, eliminar las que ya no existen
+    var extrasEnOrden = orden.filter(function(id) { return id.indexOf('extra_') === 0; });
+    
+    // Añadir extras nuevas que no estén en el orden
+    extras.forEach(function(_, i) {
+      if (orden.indexOf('extra_' + i) === -1) orden.push('extra_' + i);
+    });
+
+    // Eliminar extras que ya no existen
+    orden = orden.filter(function(id) {
+      if (id.indexOf('extra_') !== 0) return true;
+      var idx = parseInt(id.replace('extra_', ''));
+      return idx < extras.length;
+    });
+
+    return orden;
+  }
+
   function _renderPanel() {
     var contenedor = document.getElementById('orden-panel');
     if (!contenedor) return;
     var boda = STATE.get();
-    var orden = (boda.orden_secciones || ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje']).slice();
+    var orden = _ordenCompleto(boda);
     var extras = boda.secciones_extra || [];
 
     var html = '<div style="padding:8px 12px;display:flex;flex-direction:column;gap:4px">';
 
-    // Secciones predefinidas
     orden.forEach(function(id, i) {
-      var sec = boda[id] || {};
-      var activa = sec.activo !== false && sec.activa !== false;
-      var label = LABELS[id] || id;
+      var esExtra = id.indexOf('extra_') === 0;
+      var label, activa;
 
-      html += '<div style="display:flex;align-items:center;gap:6px;background:var(--editor-input-bg);border:1px solid var(--editor-border);padding:8px 10px;opacity:' + (activa ? '1' : '0.4') + '">';
-      html += '<span style="flex:1;font-size:12px;color:var(--editor-text)">' + label + '</span>';
-      html += '<button onclick="ORDEN.subir(' + i + ')" style="background:transparent;border:1px solid var(--editor-border);color:var(--editor-text-muted);cursor:pointer;padding:2px 7px;font-size:12px;line-height:1" ' + (i === 0 ? 'disabled' : '') + '>↑</button>';
-      html += '<button onclick="ORDEN.bajar(' + i + ')" style="background:transparent;border:1px solid var(--editor-border);color:var(--editor-text-muted);cursor:pointer;padding:2px 7px;font-size:12px;line-height:1" ' + (i === orden.length - 1 && extras.length === 0 ? 'disabled' : '') + '>↓</button>';
-      html += '</div>';
-    });
+      if (esExtra) {
+        var idx = parseInt(id.replace('extra_', ''));
+        var sec = extras[idx] || {};
+        label = '✦ ' + (sec.titulo || 'Sección personalizada');
+        activa = true;
+      } else {
+        var sec = boda[id] || {};
+        label = LABELS[id] || id;
+        activa = sec.activo !== false && sec.activa !== false;
+      }
 
-    // Secciones extra
-    extras.forEach(function(sec, i) {
-      var idxGlobal = orden.length + i;
-      html += '<div style="display:flex;align-items:center;gap:6px;background:var(--editor-input-bg);border:1px solid rgba(184,134,11,.3);padding:8px 10px">';
-      html += '<span style="flex:1;font-size:12px;color:var(--editor-text)">✦ ' + (sec.titulo || 'Sección personalizada') + '</span>';
-      html += '<button onclick="ORDEN.subirExtra(' + i + ')" style="background:transparent;border:1px solid var(--editor-border);color:var(--editor-text-muted);cursor:pointer;padding:2px 7px;font-size:12px;line-height:1" ' + (idxGlobal === 0 ? 'disabled' : '') + '>↑</button>';
-      html += '<button onclick="ORDEN.bajarExtra(' + i + ')" style="background:transparent;border:1px solid var(--editor-border);color:var(--editor-text-muted);cursor:pointer;padding:2px 7px;font-size:12px;line-height:1" ' + (i === extras.length - 1 ? 'disabled' : '') + '>↓</button>';
+      var bordeColor = esExtra ? 'rgba(184,134,11,.3)' : 'var(--editor-border)';
+
+      html += '<div style="display:flex;align-items:center;gap:6px;background:var(--editor-input-bg);border:1px solid ' + bordeColor + ';padding:8px 10px;opacity:' + (activa ? '1' : '0.4') + '">';
+      html += '<span style="flex:1;font-size:12px;color:var(--editor-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + label + '</span>';
+      html += '<button onclick="ORDEN.mover(' + i + ',-1)" style="background:transparent;border:1px solid var(--editor-border);color:var(--editor-text-muted);cursor:pointer;padding:2px 7px;font-size:12px;line-height:1" ' + (i === 0 ? 'disabled' : '') + '>↑</button>';
+      html += '<button onclick="ORDEN.mover(' + i + ',1)" style="background:transparent;border:1px solid var(--editor-border);color:var(--editor-text-muted);cursor:pointer;padding:2px 7px;font-size:12px;line-height:1" ' + (i === orden.length - 1 ? 'disabled' : '') + '>↓</button>';
       html += '</div>';
     });
 
     html += '</div>';
     contenedor.innerHTML = html;
+
+    // Guardar orden actualizado en state si cambió
+    var ordenActual = JSON.stringify(boda.orden_secciones || []);
+    var ordenNuevo = JSON.stringify(orden);
+    if (ordenActual !== ordenNuevo) {
+      boda.orden_secciones = orden; // actualizar sin notificar para evitar loop
+    }
   }
 
-  function subir(i) {
+  function mover(i, direccion) {
     var boda = STATE.get();
-    var orden = (boda.orden_secciones || []).slice();
-    if (i <= 0) return;
-    var tmp = orden[i - 1];
-    orden[i - 1] = orden[i];
+    var orden = _ordenCompleto(boda).slice();
+    var j = i + direccion;
+    if (j < 0 || j >= orden.length) return;
+    var tmp = orden[j];
+    orden[j] = orden[i];
     orden[i] = tmp;
     STATE.set('orden_secciones', orden);
   }
 
-  function bajar(i) {
+  // Llamar cuando se añade una sección extra nueva
+  function sincronizar() {
     var boda = STATE.get();
-    var orden = (boda.orden_secciones || []).slice();
-    if (i >= orden.length - 1) return;
-    var tmp = orden[i + 1];
-    orden[i + 1] = orden[i];
-    orden[i] = tmp;
+    var orden = _ordenCompleto(boda);
+    boda.orden_secciones = orden;
     STATE.set('orden_secciones', orden);
   }
 
-  function subirExtra(i) {
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    if (i <= 0) return;
-    var tmp = extras[i - 1];
-    extras[i - 1] = extras[i];
-    extras[i] = tmp;
-    STATE.set('secciones_extra', extras);
-  }
-
-  function bajarExtra(i) {
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    if (i >= extras.length - 1) return;
-    var tmp = extras[i + 1];
-    extras[i + 1] = extras[i];
-    extras[i] = tmp;
-    STATE.set('secciones_extra', extras);
-  }
-
-  return { init, subir, bajar, subirExtra, bajarExtra };
+  return { init, mover, sincronizar };
 })();
