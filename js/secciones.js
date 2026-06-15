@@ -188,6 +188,10 @@ const SECCIONES = (() => {
     var extras = (boda.secciones_extra || []).slice();
     extras.push({ titulo: '', texto: '', subsecciones: [] });
     STATE.set('secciones_extra', extras);
+    // Sincronizar orden para incluir la nueva extra
+    setTimeout(function() {
+      if (typeof ORDEN !== 'undefined') ORDEN.sincronizar();
+    }, 100);
   }
 
   function eliminarExtra(i) {
