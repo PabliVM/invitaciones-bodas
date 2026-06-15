@@ -108,17 +108,28 @@ const RENDERER = (() => {
   }
 
   function _calcularOrden(boda) {
-    var ordenBase = boda.orden_secciones || ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje'];
-    // Filtrar solo las activas
-    var activas = ordenBase.filter(function(id) {
+    var orden = (boda.orden_secciones || ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje']).slice();
+    var extras = boda.secciones_extra || [];
+
+    // Añadir extras que no estén en el orden
+    extras.forEach(function(_, i) {
+      if (orden.indexOf('extra_' + i) === -1) orden.push('extra_' + i);
+    });
+
+    // Eliminar extras que ya no existen
+    orden = orden.filter(function(id) {
+      if (id.indexOf('extra_') !== 0) return true;
+      var idx = parseInt(id.replace('extra_', ''));
+      return idx < extras.length;
+    });
+
+    // Filtrar predefinidas inactivas
+    return orden.filter(function(id) {
+      if (id.indexOf('extra_') === 0) return true;
       var sec = boda[id];
       if (!sec) return false;
       return sec.activo !== false && sec.activa !== false;
     });
-    // Añadir extras al final
-    var extras = boda.secciones_extra || [];
-    extras.forEach(function(_, i) { activas.push('extra_' + i); });
-    return activas;
   }
 
   function _renderSubseccionesPredefinidas(boda, contenedor) {
