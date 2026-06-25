@@ -6,7 +6,7 @@
   <title>Editor — Wedding Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Great+Vibes&family=Libre+Baskerville:ital,wght@0,400;1,400&family=EB+Garamond:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Great+Vibes&family=Dancing+Script:wght@400;700&family=Parisienne&family=Pinyon+Script&family=Libre+Baskerville:ital,wght@0,400;1,400&family=EB+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400&family=Josefin+Sans:wght@300;400&family=Montserrat:wght@300;400&family=Raleway:wght@300;400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/editor.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
@@ -402,11 +402,24 @@
           <div class="campo">
             <label class="campo__label" for="sel-fuente">Tipografía principal</label>
             <select class="campo__select" id="sel-fuente">
-              <option value="Cormorant Garamond">Cormorant Garamond (elegante)</option>
-              <option value="Playfair Display">Playfair Display (clásica)</option>
-              <option value="Great Vibes">Great Vibes (caligráfica)</option>
-              <option value="Libre Baskerville">Libre Baskerville (editorial)</option>
-              <option value="EB Garamond">EB Garamond (literaria)</option>
+              <optgroup label="— Serif elegante —">
+                <option value="Cormorant Garamond">Cormorant Garamond</option>
+                <option value="Playfair Display">Playfair Display</option>
+                <option value="EB Garamond">EB Garamond</option>
+                <option value="Libre Baskerville">Libre Baskerville</option>
+                <option value="Lora">Lora</option>
+              </optgroup>
+              <optgroup label="— Caligráfica —">
+                <option value="Great Vibes">Great Vibes</option>
+                <option value="Dancing Script">Dancing Script</option>
+                <option value="Parisienne">Parisienne</option>
+                <option value="Pinyon Script">Pinyon Script</option>
+              </optgroup>
+              <optgroup label="— Moderna —">
+                <option value="Josefin Sans">Josefin Sans</option>
+                <option value="Montserrat">Montserrat</option>
+                <option value="Raleway">Raleway</option>
+              </optgroup>
             </select>
           </div>
 
@@ -523,39 +536,7 @@
       });
       var btn = document.getElementById('plt-' + id);
       if (btn) btn.classList.add('plantilla-btn--activa');
-      // Aplicar colores default de la plantilla si existe
-      var renderers = {
-        clasica:      typeof RENDERER_CLASICA      !== 'undefined' ? RENDERER_CLASICA      : null,
-        floral:       typeof RENDERER_FLORAL       !== 'undefined' ? RENDERER_FLORAL       : null,
-        moderna:      typeof RENDERER_MODERNA      !== 'undefined' ? RENDERER_MODERNA      : null,
-        mediterranea: typeof RENDERER_MEDITERRANEA !== 'undefined' ? RENDERER_MEDITERRANEA : null,
-      };
-      var r = renderers[id];
-      if (r && r.estilosDefault) {
-        var e = r.estilosDefault;
-        STATE.set('estilos.colorPrimario',    e.colorPrimario);
-        STATE.set('estilos.colorSecundario',  e.colorSecundario);
-        STATE.set('estilos.colorTexto',       e.colorTexto);
-        STATE.set('estilos.colorAccent',      e.colorAccent);
-        STATE.set('estilos.fuente',           e.fuente);
-        STATE.set('estilos.fuenteSecundaria', e.fuenteSecundaria);
-        // Sync inputs
-        var campos = [
-          ['inp-color-primario',   e.colorPrimario],
-          ['inp-color-secundario', e.colorSecundario],
-          ['inp-color-texto',      e.colorTexto],
-          ['inp-color-accent',     e.colorAccent],
-          ['inp-color-primario-picker',   e.colorPrimario],
-          ['inp-color-secundario-picker', e.colorSecundario],
-          ['inp-color-texto-picker',      e.colorTexto],
-          ['inp-color-accent-picker',     e.colorAccent],
-          ['sel-fuente', e.fuente],
-        ];
-        campos.forEach(function(par) {
-          var el = document.getElementById(par[0]);
-          if (el) el.value = par[1];
-        });
-      }
+      // Plantilla cambia solo el diseño visual, NO los colores ni tipografía
     }
 
     // ── Sincronización color picker ↔ input texto ──
