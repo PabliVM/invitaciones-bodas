@@ -86,11 +86,15 @@ const ORDEN = (() => {
         label = '✦ ' + (sec.titulo || 'Sección personalizada');
         activa = true;
       } else if (id === 'formulario') {
-        label = '📋 Formulario';
-        activa = !!(boda.formulario && boda.formulario.activo && boda.formulario.preguntas && boda.formulario.preguntas.length > 0);
+        var formTitulo = (boda.formulario && boda.formulario.titulo) || 'Formulario';
+        label = '📋 ' + formTitulo;
+        activa = !!(boda.formulario && boda.formulario.activo);
       } else {
         var sec = boda[id] || {};
-        label = LABELS[id] || id;
+        // Usar título personalizado si existe, si no el label por defecto
+        var tituloPersonalizado = sec.titulo;
+        var iconos = { historia:'📖', galeria:'📷', evento:'📍', dresscode:'👔', alojamiento:'🏨', transporte:'🚌', rsvp:'✉️', mensaje:'💌' };
+        label = (iconos[id] || '') + ' ' + (tituloPersonalizado || LABELS[id] || id);
         activa = sec.activo !== false && sec.activa !== false;
       }
 
