@@ -30,14 +30,7 @@ const RENDERER = (() => {
     }
     r.render(boda, contenedor);
 
-    // Renderizar formulario personalizado
-    if (boda.formulario && boda.formulario.activo && boda.formulario.preguntas && boda.formulario.preguntas.length > 0) {
-      var formEl = document.createElement('section');
-      formEl.style.cssText = 'padding:56px 32px;background:var(--color-secundario)';
-      formEl.innerHTML = _renderFormulario(boda.formulario, boda.id || STATE.getId());
-      contenedor.appendChild(formEl);
-      _initFormulario(formEl, boda.formulario, boda.id || STATE.getId());
-    }
+    // Formulario se renderiza ahora a través del orden en _build de cada renderer
 
     // Renderizar secciones extra al final
     _renderSeccionesExtra(boda, contenedor);
@@ -111,7 +104,11 @@ const RENDERER = (() => {
   }
 
   function _calcularOrden(boda) {
-    var orden = (boda.orden_secciones || ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje']).slice();
+    var orden = (boda.orden_secciones || ['historia','galeria','evento','dresscode','rsvp','mensaje']).slice();
+    // Añadir formulario si está activo y no está en el orden
+    if (boda.formulario && boda.formulario.activo && orden.indexOf('formulario') === -1) {
+      orden.push('formulario');
+    }
     var extras = boda.secciones_extra || [];
 
     // Añadir extras que no estén en el orden
@@ -222,6 +219,20 @@ const RENDERER = (() => {
     secEl.appendChild(div);
   }
 
+  // Exponer para que los renderers individuales puedan llamarlo
+  function renderFormularioSeccion(boda) {
+    var bodaId = boda.id || (typeof STATE !== 'undefined' ? STATE.getId() : '');
+    var html = '<section style="padding:56px 32px;background:var(--color-secundario)" id="formulario-section">';
+    html += _renderFormulario(boda.formulario, bodaId);
+    html += '</section>';
+    // Init after DOM is ready
+    setTimeout(function() {
+      var secEl = document.getElementById('formulario-section');
+      if (secEl) _initFormulario(secEl, boda.formulario, bodaId);
+    }, 50);
+    return html;
+  }
+
   function _renderFormulario(form, bodaId) {
     var html = '';
     html += '<div style="text-align:center;margin-bottom:28px">';
@@ -314,5 +325,5 @@ const RENDERER = (() => {
     });
   }
 
-  return { render };
+  return { render, renderFormularioSeccion };
 })();
