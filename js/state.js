@@ -42,21 +42,21 @@ const STATE = (() => {
     dresscode: { activo: true, titulo: 'Dress code', texto: 'Elegante. Tonos claros bienvenidos.' ,
       subsecciones: []},
     alojamiento: {
-      activo: false,
+      activo: true,
       titulo: 'Alojamiento',
       texto: '',
       subsecciones: [],
     },
     transporte: {
-      activo: false,
+      activo: true,
       titulo: 'Transporte',
       texto: '',
       subsecciones: [],
     },
     secciones_extra: [], // secciones completamente libres
-    orden_secciones: ['historia','galeria','evento','dresscode','rsvp','mensaje'], // orden unificado — incluye IDs predefinidos y 'extra_0', 'extra_1'...
+    orden_secciones: ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje','formulario'], // orden unificado — incluye IDs predefinidos y 'extra_0', 'extra_1'...
     formulario: {
-      activo: false,
+      activo: true,
       titulo: 'Formulario',
       descripcion: '',
       textoBtnEnviar: 'Enviar',
