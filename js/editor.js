@@ -143,10 +143,18 @@ const EDITOR = (() => {
     on('inp-titulo-dresscode', 'dresscode.titulo');
     on('inp-titulo-alojamiento', 'alojamiento.titulo');
     on('inp-alojamiento',        'alojamiento.texto');
-    on('chk-alojamiento', 'alojamiento.activo', function() { if(typeof ORDEN!=='undefined') setTimeout(ORDEN.sincronizar,100); });
+    on('chk-alojamiento', 'alojamiento.activo');
     on('inp-titulo-transporte',  'transporte.titulo');
     on('inp-transporte',         'transporte.texto');
-    on('chk-transporte', 'transporte.activo', function() { if(typeof ORDEN!=='undefined') setTimeout(ORDEN.sincronizar,100); });
+    on('chk-transporte', 'transporte.activo');
+
+    // Sync orden cuando cambia activo de alojamiento/transporte
+    ['chk-alojamiento','chk-transporte'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('change', function() {
+        if (typeof ORDEN !== 'undefined') setTimeout(ORDEN.sincronizar, 100);
+      });
+    });
     on('inp-dresscode',        'dresscode.texto');
     on('chk-dresscode',        'dresscode.activo');
     on('inp-rsvp-fecha', 'rsvp.fechaLimite');
