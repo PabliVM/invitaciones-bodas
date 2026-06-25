@@ -72,6 +72,10 @@ const RENDERER_CLASICA = {
         s.push(self._rsvp(sec, boda.pareja));
       } else if (id === 'mensaje' && self._mensajeFinal) {
         s.push(self._mensajeFinal(sec, boda.pareja));
+      } else if (id === 'formulario') {
+        if (boda.formulario && boda.formulario.activo && boda.formulario.preguntas && boda.formulario.preguntas.length > 0) {
+          s.push(typeof RENDERER !== 'undefined' && RENDERER.renderFormularioSeccion ? RENDERER.renderFormularioSeccion(boda) : '');
+        }
       }
     });
 
