@@ -1663,3 +1663,121 @@ html, body {
   background: #2a1f00;
   color: #d4a820;
 }
+
+/* ═══════════════════════════════════════
+   ACORDEÓN JERÁRQUICO — eb-bloque / eb-sub
+   ═══════════════════════════════════════ */
+
+/* BLOQUE nivel 1 — fondo blanco, letra negra */
+.eb-bloque {
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.eb-bloque__cab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 16px;
+  cursor: pointer;
+  user-select: none;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background 0.15s;
+}
+
+.eb-bloque__cab:hover { background: #f5f5f5; }
+
+.eb-bloque__titulo {
+  flex: 1;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #111111;
+}
+
+.eb-bloque__body {
+  display: none;
+  background: #f9f9f9;
+}
+
+.eb-bloque--abierto > .eb-bloque__body { display: block; }
+.eb-bloque--abierto > .eb-bloque__cab .eb-chevron { transform: rotate(180deg); }
+
+/* Variante azul (Plantilla) */
+.eb-bloque__cab--azul { background: #0d2444; border-bottom-color: #1a3a66; }
+.eb-bloque__cab--azul:hover { background: #102d55; }
+.eb-bloque__cab--azul .eb-bloque__titulo { color: #7eb8f7; }
+.eb-bloque__cab--azul .eb-chevron { color: #4a7abf; }
+
+/* Variante dorada (Colores, Tipografía) */
+.eb-bloque__cab--dorado { background: #2a1f00; border-bottom-color: #3d2d00; }
+.eb-bloque__cab--dorado:hover { background: #332600; }
+.eb-bloque__cab--dorado .eb-bloque__titulo { color: #d4a820; }
+.eb-bloque__cab--dorado .eb-chevron { color: #8a6d10; }
+
+/* SUBSECCIÓN nivel 2 — gris claro, letra oscura */
+.eb-sub {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.eb-sub:last-child { border-bottom: none; }
+
+.eb-sub__cab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px 9px 20px;
+  cursor: pointer;
+  user-select: none;
+  background: #f0f0f0;
+  border-left: 3px solid #d0d0d0;
+  transition: background 0.15s;
+}
+
+.eb-sub__cab:hover { background: #e8e8e8; }
+.eb-sub--abierto > .eb-sub__cab { background: #e4e4e4; border-left-color: #2563eb; }
+.eb-sub--abierto > .eb-sub__cab .eb-chevron { transform: rotate(180deg); }
+
+.eb-sub__icono { font-size: 13px; flex-shrink: 0; }
+
+.eb-sub__titulo {
+  flex: 1;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #333333;
+}
+
+.eb-sub__toggle { flex-shrink: 0; }
+
+.eb-sub__body {
+  display: none;
+  padding: 14px 16px 14px 20px;
+  background: #ffffff;
+  border-left: 3px solid #e0e0e0;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eb-sub--abierto > .eb-sub__body { display: flex; }
+
+/* Campos dentro de subsección */
+.eb-sub__body .campo__label { color: #555; font-size: 10px; }
+.eb-sub__body .campo__input,
+.eb-sub__body .campo__textarea,
+.eb-sub__body .campo__select {
+  background: #fafafa;
+  border: 1px solid #d5d5d5;
+  color: #111;
+}
+.eb-sub__body .campo__input:focus,
+.eb-sub__body .campo__textarea:focus { border-color: #2563eb; outline: none; }
+
+/* Chevron genérico */
+.eb-chevron {
+  font-size: 9px;
+  color: #999;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
