@@ -115,6 +115,10 @@ const RENDERER_MEDITERRANEA = {
         s.push(self._rsvp(sec, boda.pareja));
       } else if (id === 'mensaje' && self._mensajeFinal) {
         s.push(self._mensajeFinal(sec, boda.pareja));
+      } else if (id === 'formulario') {
+        if (boda.formulario && boda.formulario.activo && boda.formulario.preguntas && boda.formulario.preguntas.length > 0) {
+          s.push(typeof RENDERER !== 'undefined' && RENDERER.renderFormularioSeccion ? RENDERER.renderFormularioSeccion(boda) : '');
+        }
       }
     });
 
@@ -221,7 +225,7 @@ const RENDERER_MEDITERRANEA = {
 
   _historia: function(h) {
     return '<section style="padding:56px 36px;background:#fff;text-align:center">' +
-      this._seccionHeader(historia.titulo||'Nuestra historia') +
+      this._seccionHeader(h.titulo||'Nuestra historia') +
       '<p style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-style:italic;line-height:1.9;color:var(--color-texto);max-width:300px;margin:0 auto">'+h.texto+'</p>' +
     '</section>';
   },
@@ -229,7 +233,7 @@ const RENDERER_MEDITERRANEA = {
   _galeria: function(g) {
     var imgs=g.fotos.map(function(url,i){return '<div style="'+(i===0?'grid-column:1/-1;aspect-ratio:4/3':'aspect-ratio:3/4')+';overflow:hidden"><img src="'+url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div>';}).join('');
     return '<section style="background:#fffdf5">' +
-      '<div style="padding:48px 36px 20px">'+this._seccionHeader(galeria.titulo||'Nuestra galería')+'</div>' +
+      '<div style="padding:48px 36px 20px">'+this._seccionHeader(g.titulo||'Nuestra galería')+'</div>' +
       '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;padding:0 16px 40px">'+imgs+'</div>' +
     '</section>';
   },
@@ -238,7 +242,7 @@ const RENDERER_MEDITERRANEA = {
     var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     var mes=meses[parseInt(fecha.mes)-1]||fecha.mes;
     return '<section style="padding:56px 36px;background:var(--color-primario);text-align:center">' +
-      this._seccionHeader(evento.titulo||'La celebración') +
+      this._seccionHeader(ev.titulo||'La celebración') +
       '<p style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:#fff;margin-bottom:6px">'+fecha.dia+' de '+mes+' de '+fecha.anio+'</p>' +
       '<p style="font-family:var(--fuente-body);font-size:11px;letter-spacing:3px;color:var(--color-accent);text-transform:uppercase;margin-bottom:24px">'+fecha.hora+' h</p>' +
       '<div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:20px 24px">' +
@@ -251,7 +255,7 @@ const RENDERER_MEDITERRANEA = {
 
   _dresscode: function(d) {
     return '<section style="padding:52px 36px;background:#fff;text-align:center">' +
-      this._seccionHeader(dresscode.titulo||'Dress code') +
+      this._seccionHeader(d.titulo||'Dress code') +
       '<p style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-style:italic;color:var(--color-texto);line-height:1.8">'+d.texto+'</p>' +
     '</section>';
   },
