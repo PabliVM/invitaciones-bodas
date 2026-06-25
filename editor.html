@@ -451,7 +451,7 @@
       var html = '';
       for (var i = 0; i < PRESETS.length; i++) {
         var p = PRESETS[i];
-        html += '<button class="preset-btn" onclick="aplicarPreset('' + p.id + '')" title="' + p.descripcion + '">';
+        html += '<button class="preset-btn" onclick="aplicarPreset(\'' + p.id + '\')" title="' + p.descripcion + '">';
         html += '<span class="preset-btn__muestra"><span class="preset-btn__color" style="background:' + p.muestra[0] + '"></span><span class="preset-btn__color" style="background:' + p.muestra[1] + '"></span></span>';
         html += '<span class="preset-btn__nombre">' + p.nombre + '</span>';
         html += '</button>';
@@ -472,7 +472,7 @@
       var actual = STATE.get().plantilla || 'clasica';
       grid.innerHTML = PLANTILLAS_DEF.map(function(p) {
         var activo = (actual === p.id) ? ' plantilla-btn--activa' : '';
-        return '<button class="plantilla-btn' + activo + '" id="plt-' + p.id + '" onclick="seleccionarPlantilla('' + p.id + '')">' +
+        return '<button class="plantilla-btn' + activo + '" id="plt-' + p.id + '" onclick="seleccionarPlantilla(\'' + p.id + '\')">' +
           '<div class="plantilla-btn__preview"><div style="background:' + p.colores[0] + ';flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:6px">' +
           '<div style="font-size:8px;font-weight:700;color:' + p.colores[1] + ';margin-bottom:2px">' + p.nombre + '</div>' +
           '<div style="width:100%;height:1px;background:' + p.colores[1] + ';opacity:.4"></div>' +
