@@ -10,11 +10,12 @@ const ORDEN = (() => {
     galeria:     '📷 Galería',
     evento:      '📍 El evento',
     dresscode:   '👔 Dress code',
-    alojamiento: '🏨 Alojamiento',
-    transporte:  '🚌 Transporte',
     rsvp:        '✉️ RSVP',
     mensaje:     '💌 Mensaje final',
+    formulario:  '📋 Formulario',
   };
+
+  var PREDEFINIDAS_VALIDAS = ['historia','galeria','evento','dresscode','rsvp','mensaje','formulario'];
 
   function init() {
     _renderPanel();
@@ -27,7 +28,7 @@ const ORDEN = (() => {
   // Asegurar que el orden incluye todas las secciones existentes
   function _ordenCompleto(boda) {
     var orden = (boda.orden_secciones || []).slice();
-    var predefinidas = ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje'];
+    var predefinidas = PREDEFINIDAS_VALIDAS;
     var extras = boda.secciones_extra || [];
 
     // Añadir predefinidas que no estén en el orden
@@ -71,6 +72,9 @@ const ORDEN = (() => {
         var sec = extras[idx] || {};
         label = '✦ ' + (sec.titulo || 'Sección personalizada');
         activa = true;
+      } else if (id === 'formulario') {
+        label = '📋 Formulario';
+        activa = !!(boda.formulario && boda.formulario.activo && boda.formulario.preguntas && boda.formulario.preguntas.length > 0);
       } else {
         var sec = boda[id] || {};
         label = LABELS[id] || id;
