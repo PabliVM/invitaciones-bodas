@@ -34,6 +34,26 @@ html, body {
   overflow: hidden;
 }
 
+.editor-layout > header {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.editor-layout > aside {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.editor-panel-right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.editor-preview {
+  grid-column: 2;
+  grid-row: 2;
+}
+
 /* ─── Topbar ─── */
 .editor-topbar {
   grid-column: 1 / -1;
