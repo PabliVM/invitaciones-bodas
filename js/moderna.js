@@ -72,6 +72,10 @@ const RENDERER_MODERNA = {
         s.push(self._rsvp(sec, boda.pareja));
       } else if (id === 'mensaje' && self._mensajeFinal) {
         s.push(self._mensajeFinal(sec, boda.pareja));
+      } else if (id === 'formulario') {
+        if (boda.formulario && boda.formulario.activo && boda.formulario.preguntas && boda.formulario.preguntas.length > 0) {
+          s.push(typeof RENDERER !== 'undefined' && RENDERER.renderFormularioSeccion ? RENDERER.renderFormularioSeccion(boda) : '');
+        }
       }
     });
 
@@ -157,7 +161,7 @@ const RENDERER_MODERNA = {
 
   _historia: function(h) {
     return '<section style="padding:60px 36px;background:#fff">' +
-      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(historia.titulo||'Nuestra historia')+'</p>' +
+      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(h.titulo||'Nuestra historia')+'</p>' +
       '<div style="width:24px;height:2px;background:var(--color-texto);margin-bottom:24px"></div>' +
       '<p style="font-family:\'Libre Baskerville\',serif;font-size:16px;font-weight:400;line-height:1.9;color:var(--color-texto)">'+h.texto+'</p>' +
     '</section>';
@@ -176,7 +180,7 @@ const RENDERER_MODERNA = {
     var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     var mes=meses[parseInt(fecha.mes)-1]||fecha.mes;
     return '<section style="padding:60px 36px;background:#fff">' +
-      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(evento.titulo||'La celebración')+'</p>' +
+      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(ev.titulo||'La celebración')+'</p>' +
       '<div style="width:24px;height:2px;background:var(--color-texto);margin-bottom:28px"></div>' +
       '<p style="font-family:\'Libre Baskerville\',serif;font-size:26px;font-weight:400;color:var(--color-texto);line-height:1.2;margin-bottom:6px">'+fecha.dia+' de '+mes+'</p>' +
       '<p style="font-family:\'Libre Baskerville\',serif;font-size:26px;font-weight:400;color:var(--color-texto);line-height:1.2;margin-bottom:20px">'+fecha.anio+'</p>' +
@@ -190,7 +194,7 @@ const RENDERER_MODERNA = {
 
   _dresscode: function(d) {
     return '<section style="padding:52px 36px;background:#f9f9f9">' +
-      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(dresscode.titulo||'Dress code')+'</p>' +
+      '<p style="font-family:var(--fuente-body);font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#bbb;margin-bottom:16px">'+(d.titulo||'Dress code')+'</p>' +
       '<div style="width:24px;height:2px;background:var(--color-texto);margin-bottom:24px"></div>' +
       '<p style="font-family:\'Libre Baskerville\',serif;font-size:17px;font-weight:400;color:var(--color-texto);line-height:1.8">'+d.texto+'</p>' +
     '</section>';
