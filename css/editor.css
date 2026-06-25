@@ -1820,3 +1820,54 @@ html, body {
 .eb-chevron { color: #888 !important; }
 .eb-bloque__cab--azul .eb-chevron { color: #4a7abf !important; }
 .eb-bloque__cab--dorado .eb-chevron { color: #8a6d10 !important; }
+
+/* ══ IGUALAR IZQUIERDA A DERECHA ══ */
+
+/* Bloques nivel 1 — igual que --azul */
+.eb-bloque__cab {
+  background: #0d2444 !important;
+  border-bottom: 1px solid #1a3a66 !important;
+}
+.eb-bloque__cab:hover { background: #102d55 !important; }
+.eb-bloque__titulo { color: #7eb8f7 !important; }
+.eb-chevron { color: #4a7abf !important; }
+.eb-bloque--abierto > .eb-bloque__body { background: #0a1628 !important; }
+
+/* Subapartados — tono dorado más oscuro que --dorado */
+.eb-sub__cab {
+  background: #1e1500 !important;
+  border-left: 3px solid #3d2d00 !important;
+}
+.eb-sub__cab:hover { background: #251a00 !important; }
+.eb-sub__titulo { color: #c49a10 !important; }
+.eb-sub--abierto > .eb-sub__cab {
+  background: #2a1f00 !important;
+  border-left: 3px solid #d4a820 !important;
+}
+.eb-sub--abierto > .eb-sub__cab .eb-sub__titulo { color: #d4a820 !important; }
+.eb-sub--abierto > .eb-sub__cab .eb-chevron { color: #d4a820 !important; }
+
+/* Cuerpo subapartado — fondo ligeramente distinto al bloque */
+.eb-sub__body {
+  background: #111000 !important;
+  border-left: 3px solid #2a1f00 !important;
+}
+
+/* Campos dentro — mantener legibles */
+.eb-sub__body .campo__label { color: #a89060 !important; }
+.eb-sub__body .campo__input,
+.eb-sub__body .campo__textarea,
+.eb-sub__body .campo__select {
+  background: #1a1500 !important;
+  border: 1px solid #3d2d00 !important;
+  color: #f0e0b0 !important;
+}
+.eb-sub__body .campo__input:focus,
+.eb-sub__body .campo__textarea:focus {
+  border-color: #d4a820 !important;
+}
+
+/* URL panel — mismo tono */
+.url-panel { background: #0a1628 !important; border-bottom: 2px solid #1a3a66 !important; }
+.url-panel__label { color: #7eb8f7 !important; }
+.url-panel__input { background: #0d2444 !important; color: #c8d8f0 !important; border-color: #1a3a66 !important; }
