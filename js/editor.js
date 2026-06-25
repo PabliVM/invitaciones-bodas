@@ -72,6 +72,16 @@ const EDITOR = (() => {
     _setVal('inp-maps-url', boda.evento.googleMapsUrl);
     _setCheck('chk-evento', boda.evento.activo);
     _setVal('inp-titulo-dresscode', boda.dresscode.titulo || 'Dress code');
+    if (boda.alojamiento) {
+      _setVal('inp-titulo-alojamiento', boda.alojamiento.titulo || 'Alojamiento');
+      _setVal('inp-alojamiento', boda.alojamiento.texto || '');
+      _setCheck('chk-alojamiento', boda.alojamiento.activo);
+    }
+    if (boda.transporte) {
+      _setVal('inp-titulo-transporte', boda.transporte.titulo || 'Transporte');
+      _setVal('inp-transporte', boda.transporte.texto || '');
+      _setCheck('chk-transporte', boda.transporte.activo);
+    }
     _setVal('inp-dresscode', boda.dresscode.texto);
     _setCheck('chk-dresscode', boda.dresscode.activo);
     _setVal('inp-titulo-rsvp', boda.rsvp.titulo || 'Confirma tu asistencia');
@@ -131,6 +141,12 @@ const EDITOR = (() => {
     on('inp-maps-url', 'evento.googleMapsUrl');
     on('chk-evento', 'evento.activo');
     on('inp-titulo-dresscode', 'dresscode.titulo');
+    on('inp-titulo-alojamiento', 'alojamiento.titulo');
+    on('inp-alojamiento',        'alojamiento.texto');
+    on('chk-alojamiento', 'alojamiento.activo', function() { if(typeof ORDEN!=='undefined') setTimeout(ORDEN.sincronizar,100); });
+    on('inp-titulo-transporte',  'transporte.titulo');
+    on('inp-transporte',         'transporte.texto');
+    on('chk-transporte', 'transporte.activo', function() { if(typeof ORDEN!=='undefined') setTimeout(ORDEN.sincronizar,100); });
     on('inp-dresscode',        'dresscode.texto');
     on('chk-dresscode',        'dresscode.activo');
     on('inp-rsvp-fecha', 'rsvp.fechaLimite');
