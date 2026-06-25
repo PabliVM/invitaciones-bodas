@@ -217,7 +217,7 @@ const RENDERER_FLORAL = {
 
   _historia: function(h) {
     return '<section style="padding:60px 36px;background:#fff;text-align:center">' +
-      this._seccionHeader(historia.titulo||'Nuestra historia') +
+      this._seccionHeader(h.titulo||'Nuestra historia') +
       '<p style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-style:italic;line-height:1.9;color:var(--color-texto);max-width:320px;margin:0 auto">'+h.texto+'</p>' +
     '</section>';
   },
@@ -225,7 +225,7 @@ const RENDERER_FLORAL = {
   _galeria: function(g) {
     var imgs = g.fotos.map(function(url,i){ return '<div style="'+(i===0?'grid-column:1/-1;aspect-ratio:4/3':'aspect-ratio:3/4')+';overflow:hidden"><img src="'+url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy"/></div>'; }).join('');
     return '<section style="padding:0;background:#fff">' +
-      '<div style="text-align:center;padding:48px 32px 24px">'+this._seccionHeader(galeria.titulo||'Nuestra galería')+'</div>' +
+      '<div style="text-align:center;padding:48px 32px 24px">'+this._seccionHeader(g.titulo||'Nuestra galería')+'</div>' +
       '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px">'+imgs+'</div>' +
     '</section>';
   },
@@ -234,7 +234,7 @@ const RENDERER_FLORAL = {
     var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     var mes = meses[parseInt(fecha.mes)-1]||fecha.mes;
     return '<section style="padding:60px 36px;background:#fafafa;text-align:center">' +
-      this._seccionHeader(evento.titulo||'La celebración') +
+      this._seccionHeader(ev.titulo||'La celebración') +
       '<p style="font-family:\'Cormorant Garamond\',serif;font-size:22px;color:var(--color-texto);margin-bottom:6px">'+fecha.dia+' de '+mes+' de '+fecha.anio+'</p>' +
       '<p style="font-family:var(--fuente-body);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--color-accent);margin-bottom:24px">'+fecha.hora+' h</p>' +
       '<div style="width:32px;height:1px;background:var(--color-accent);margin:0 auto 24px;opacity:.4"></div>' +
@@ -246,7 +246,7 @@ const RENDERER_FLORAL = {
 
   _dresscode: function(d) {
     return '<section style="padding:52px 36px;background:#fff;text-align:center">' +
-      this._seccionHeader(dresscode.titulo||'Dress code') +
+      this._seccionHeader(d.titulo||'Dress code') +
       '<p style="font-family:\'Cormorant Garamond\',serif;font-size:18px;font-style:italic;color:var(--color-texto);line-height:1.8">'+d.texto+'</p>' +
     '</section>';
   },
