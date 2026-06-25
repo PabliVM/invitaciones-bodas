@@ -965,12 +965,27 @@ html, body {
   padding: 12px 16px;
   cursor: pointer;
   user-select: none;
-  background: #ffffff;
-  border-bottom: 1px solid #e8e8e8;
+  background: #e8e8e8;
+  border-bottom: 1px solid #d0d0d0;
 }
 
 .panel-grupo__cabecera:hover {
-  background: #f5f5f5;
+  background: #e0e0e0;
+}
+
+/* Plantilla y Estilo — gris más oscuro para distinguir */
+.panel-grupo--destacado .panel-grupo__cabecera {
+  background: #c8c8c8;
+  border-bottom: 1px solid #b0b0b0;
+}
+
+.panel-grupo--destacado .panel-grupo__cabecera:hover {
+  background: #bfbfbf;
+}
+
+.panel-grupo--destacado .panel-grupo__titulo {
+  color: #111;
+  font-size: 12px;
 }
 
 .panel-grupo__titulo {
