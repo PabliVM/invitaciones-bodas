@@ -300,30 +300,24 @@
         </div>
       </div>
 
-      <!-- ══ PLANTILLA ══ -->
-      <div class="panel-grupo panel-bloque--plantilla">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">🎨</span>
-          <span class="panel-grupo__titulo">Plantilla</span>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
+
+    </aside>
+
+    <!-- ── PANEL DERECHO ── -->
+    <div class="editor-panel-right">
+
+      <div class="panel-bloque-label panel-bloque-label--plantilla">🎨 Plantilla</div>
+      <div class="panel-grupo panel-bloque--plantilla abierto">
         <div class="panel-grupo__body">
           <div class="plantillas-grid" id="plantillas-grid"></div>
         </div>
       </div>
 
-      <!-- ══ ESTILO ══ -->
-      <div class="panel-grupo panel-bloque--estilo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">✏️</span>
-          <span class="panel-grupo__titulo">Estilo</span>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
+      <div class="panel-bloque-label panel-bloque-label--estilo" style="margin-top:8px">✏️ Estilo</div>
+      <div class="panel-grupo panel-bloque--estilo abierto">
         <div class="panel-grupo__body">
-          <div class="campo">
-            <label class="campo__label">Plantilla de estilo rápido</label>
-            <div class="presets-grid" id="presets-grid"></div>
-          </div>
+          <p class="estilo-subtitulo">Presets rápidos</p>
+          <div class="presets-grid" id="presets-grid"></div>
           <div class="panel-sep"></div>
           <p class="estilo-subtitulo">Colores</p>
           <div class="campo">
@@ -382,7 +376,7 @@
         </div>
       </div>
 
-    </aside>
+    </div>
 
     <!-- ── ZONA DE PREVIEW ── -->
     <section class="editor-preview">
