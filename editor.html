@@ -34,25 +34,36 @@
     <!-- COLUMNA IZQUIERDA -->
     <aside class="editor-panel">
 
-      <div class="url-panel" id="url-panel">
-        <span class="url-panel__label">URL del cliente</span>
-        <div class="url-panel__row">
-          <input type="text" class="url-panel__input" id="url-invitacion" readonly />
-          <button class="btn btn--secundario" onclick="navigator.clipboard.writeText(document.getElementById('url-invitacion').value);this.textContent='✓';setTimeout(()=>this.textContent='Copiar',1500)">Copiar</button>
-        </div>
-      </div>
-
       <!-- BLOQUE: LA BODA -->
-      <div class="eb-bloque">
+      <div class="eb-bloque eb-bloque--abierto">
         <div class="eb-bloque__cab" onclick="toggleBloque(this)">
           <span class="eb-bloque__titulo">La boda</span>
           <span class="eb-chevron">▼</span>
         </div>
         <div class="eb-bloque__body">
-          <div class="campo">
-            <label class="campo__label">Título interno</label>
-            <input type="text" class="campo__input" id="inp-titulo" placeholder="Ej: Boda García-López" />
+
+          <!-- SUB: TÍTULO Y URL -->
+          <div class="eb-sub eb-sub--abierto">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">💍</span>
+              <span class="eb-sub__titulo">Identificación</span>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título interno (como aparece en tu lista de bodas)</label>
+                <input type="text" class="campo__input" id="inp-titulo" placeholder="Ej: Boda García-López" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">URL del cliente</label>
+                <div style="display:flex;gap:6px">
+                  <input type="text" class="campo__input" id="url-invitacion" readonly style="flex:1;font-size:11px" />
+                  <button class="btn btn--secundario" style="flex-shrink:0;font-size:11px;padding:0 10px" onclick="navigator.clipboard.writeText(document.getElementById('url-invitacion').value);this.textContent='✓';setTimeout(()=>this.textContent='Copiar',1500)">Copiar</button>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
 
@@ -259,6 +270,46 @@
               <div class="campo">
                 <label class="campo__label">Texto</label>
                 <textarea class="campo__textarea" id="inp-mensaje" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB: ALOJAMIENTO -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">🏨</span>
+              <span class="eb-sub__titulo">Alojamiento</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-alojamiento" /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título</label>
+                <input type="text" class="campo__input" id="inp-titulo-alojamiento" placeholder="Alojamiento" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Texto</label>
+                <textarea class="campo__textarea" id="inp-alojamiento" rows="3" placeholder="Hotel recomendado…"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB: TRANSPORTE -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">🚌</span>
+              <span class="eb-sub__titulo">Transporte</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-transporte" /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título</label>
+                <input type="text" class="campo__input" id="inp-titulo-transporte" placeholder="Transporte" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Texto</label>
+                <textarea class="campo__textarea" id="inp-transporte" rows="3" placeholder="Bus desde la ciudad…"></textarea>
               </div>
             </div>
           </div>
