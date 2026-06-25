@@ -1,7 +1,8 @@
 /* editor.css — Estilos del panel de edición y layout del editor */
 
 :root {
-  --editor-panel-width: 320px;
+  --editor-panel-width: 240px;
+  --editor-panel-right-width: 260px;
   --editor-bg: #0f0f0f;
   --editor-panel-bg: #1a1a1a;
   --editor-border: #2a2a2a;
@@ -27,7 +28,7 @@ html, body {
 /* ─── Layout principal ─── */
 .editor-layout {
   display: grid;
-  grid-template-columns: var(--editor-panel-width) 1fr;
+  grid-template-columns: var(--editor-panel-width) 1fr var(--editor-panel-right-width);
   grid-template-rows: 48px 1fr;
   height: 100vh;
   overflow: hidden;
@@ -97,7 +98,7 @@ html, body {
 }
 .btn--ghost:hover { color: var(--editor-text); }
 
-/* ─── Panel lateral ─── */
+/* ─── Panel lateral izquierdo ─── */
 .editor-panel {
   background: var(--editor-panel-bg);
   border-right: 1px solid var(--editor-border);
@@ -344,6 +345,8 @@ html, body {
   justify-content: center;
   overflow-y: auto;
   padding: 32px 24px;
+  grid-column: 2;
+  grid-row: 2;
 }
 
 .preview-phone {
@@ -1602,4 +1605,41 @@ html, body {
   height: 1px;
   background: #242424;
   margin: 4px -16px;
+}
+
+
+/* ─── Panel derecho (Plantilla + Estilo) ─── */
+.editor-panel-right {
+  background: #0f0f0f;
+  border-left: 1px solid var(--editor-border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #333 transparent;
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.editor-panel-right::-webkit-scrollbar { width: 4px; }
+.editor-panel-right::-webkit-scrollbar-track { background: transparent; }
+.editor-panel-right::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+/* Labels de bloque en panel derecho */
+.panel-bloque-label {
+  padding: 10px 14px 8px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--editor-border);
+}
+
+.panel-bloque-label--plantilla {
+  background: #0d2444;
+  color: #7eb8f7;
+}
+
+.panel-bloque-label--estilo {
+  background: #2a1f00;
+  color: #d4a820;
 }
