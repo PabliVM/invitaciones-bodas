@@ -124,6 +124,10 @@ const RENDERER_FLORAL = {
         s.push(self._rsvp(sec, boda.pareja));
       } else if (id === 'mensaje' && self._mensajeFinal) {
         s.push(self._mensajeFinal(sec, boda.pareja));
+      } else if (id === 'formulario') {
+        if (boda.formulario && boda.formulario.activo && boda.formulario.preguntas && boda.formulario.preguntas.length > 0) {
+          s.push(typeof RENDERER !== 'undefined' && RENDERER.renderFormularioSeccion ? RENDERER.renderFormularioSeccion(boda) : '');
+        }
       }
     });
 
@@ -161,13 +165,13 @@ const RENDERER_FLORAL = {
     return '<section style="background:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 32px;position:relative;overflow:hidden">'+
       (boda.fotoCabecera ? '<div style="position:relative;width:calc(100% + 64px);margin-left:-32px;height:60vw;max-height:340px;overflow:hidden"><img src="'+boda.fotoCabecera+'" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block"/><div style="position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--color-secundario),transparent)"></div></div>' : '') +
       // Eucalipto esquina superior izquierda
-      '<div style="position:absolute;top:0;left:0">'+this._eucalipto(false,false)+'</div>' +
+      '<div style="position:absolute;top:0;left:0;width:200px;height:200px;pointer-events:none;z-index:1;overflow:hidden"><img src="https://images.unsplash.com/photo-1564419320461-6870880221ad?w=500&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;opacity:.55;filter:sepia(30%) saturate(80%)" /></div>' +
       // Eucalipto esquina superior derecha (espejado)
-      '<div style="position:absolute;top:0;right:0">'+this._eucalipto(true,false)+'</div>' +
+      '<div style="position:absolute;top:0;right:0;width:200px;height:200px;pointer-events:none;z-index:1;overflow:hidden;transform:scaleX(-1)"><img src="https://images.unsplash.com/photo-1564419320461-6870880221ad?w=500&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;opacity:.55;filter:sepia(30%) saturate(80%)" /></div>' +
       // Eucalipto esquina inferior izquierda
-      '<div style="position:absolute;bottom:0;left:0">'+this._eucalipto(false,true)+'</div>' +
+      '<div style="position:absolute;bottom:0;left:0;width:180px;height:180px;pointer-events:none;z-index:1;overflow:hidden;transform:scaleY(-1)"><img src="https://images.unsplash.com/photo-1585320806297-9794b3e4aaae?w=500&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;opacity:.5;filter:sepia(20%) saturate(90%)" /></div>' +
       // Eucalipto esquina inferior derecha
-      '<div style="position:absolute;bottom:0;right:0">'+this._eucalipto(true,true)+'</div>' +
+      '<div style="position:absolute;bottom:0;right:0;width:180px;height:180px;pointer-events:none;z-index:1;overflow:hidden;transform:scale(-1,-1)"><img src="https://images.unsplash.com/photo-1585320806297-9794b3e4aaae?w=500&auto=format&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;opacity:.5;filter:sepia(20%) saturate(90%)" /></div>' +
       // Contenido
       '<div style="position:relative;z-index:1;max-width:300px">' +
         '<p style="font-family:var(--fuente-body);font-size:10px;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:#aaa;margin-bottom:24px">— os invitamos a nuestra boda —</p>' +
@@ -281,9 +285,16 @@ const RENDERER_FLORAL = {
 
 
   _separador: function() {
-    var c = 'var(--color-primario)';
-    var g = 'var(--color-accent)';
-    return '<div style="text-align:center;padding:8px 0;overflow:hidden">' +
+    return '<div style="text-align:center;padding:0;overflow:hidden;height:80px;position:relative;background:var(--color-secundario)">' +
+      '<img src="https://images.unsplash.com/photo-1564419320461-6870880221ad?w=600&auto=format&fit=crop&q=70" style="width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;opacity:.35;filter:sepia(20%) saturate(60%)" />' +
+      '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">' +
+        '<div style="height:1px;width:80px;background:var(--color-primario);opacity:.4"></div>' +
+        '<span style="margin:0 12px;color:var(--color-primario);font-size:10px;opacity:.7">✦</span>' +
+        '<div style="height:1px;width:80px;background:var(--color-primario);opacity:.4"></div>' +
+      '</div>' +
+    '</div>';
+    // dead code below kept for reference
+    return '<div style="display:none">' +
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" style="width:100%;max-width:320px;height:40px;display:inline-block">' +
         // Rama central
         '<line x1="20" y1="20" x2="300" y2="20" stroke="#c8b89a" stroke-width="0.8" opacity=".4"/>' +
