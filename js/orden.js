@@ -34,19 +34,11 @@ const ORDEN = (() => {
     var extras = boda.secciones_extra || [];
 
     // Añadir predefinidas que no estén en el orden
-    // Para alojamiento/transporte/formulario: solo añadir si están activos
     predefinidas.forEach(function(id) {
       if (orden.indexOf(id) !== -1) return; // ya está
       var sec = boda[id];
       if (!sec) return;
-      // Secciones opcionales: solo añadir al orden si están activas
-      var opcionales = ['alojamiento', 'transporte', 'formulario'];
-      if (opcionales.indexOf(id) !== -1) {
-        var activa = sec.activo !== false && sec.activa !== false;
-        if (activa) orden.push(id);
-      } else {
-        orden.push(id);
-      }
+      orden.push(id);
     });
 
     // Sincronizar extras: añadir nuevas, eliminar las que ya no existen
