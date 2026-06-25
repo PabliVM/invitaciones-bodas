@@ -437,10 +437,12 @@
 
   <script>
     function toggleBloque(cab) {
-      cab.parentElement.classList.toggle('eb-bloque--abierto');
+      var bloque = cab.parentElement;
+      bloque.classList.toggle('eb-bloque--abierto');
     }
     function toggleSub(cab) {
-      cab.parentElement.classList.toggle('eb-sub--abierto');
+      var sub = cab.parentElement;
+      sub.classList.toggle('eb-sub--abierto');
     }
 
     function initPresets() {
