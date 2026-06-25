@@ -87,7 +87,7 @@
         var html = '<div class="bodas-grid">';
         for (var i = 0; i < bodas.length; i++) {
           var b = bodas[i];
-          var nombre = (b.pareja) ? ((b.pareja.novio || '—') + ' & ' + (b.pareja.novia || '—')) : (b.meta && b.meta.titulo ? b.meta.titulo : 'Sin nombre');
+          var nombre = (b.meta && b.meta.titulo) ? b.meta.titulo : ((b.pareja) ? ((b.pareja.novio || '—') + ' & ' + (b.pareja.novia || '—')) : 'Sin nombre');
           var fechaMes = (b.fecha && b.fecha.mes) ? meses[parseInt(b.fecha.mes) - 1] : '—';
           var fechaStr = b.fecha ? (b.fecha.dia + ' ' + fechaMes + ' ' + b.fecha.anio) : '—';
           var creadoEn = (b.creadoEn && b.creadoEn.toDate) ? b.creadoEn.toDate().toLocaleDateString('es-ES') : '—';
@@ -118,4 +118,4 @@
   </script>
 
 </body>
-</html>>
+</html>
