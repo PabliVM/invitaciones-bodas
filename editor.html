@@ -37,43 +37,45 @@
     <!-- ── PANEL LATERAL ── -->
     <aside class="editor-panel">
 
-      <!-- URL de la invitación -->
+      <!-- URL cliente -->
       <div class="url-panel" id="url-panel">
         <span class="url-panel__label">URL del cliente</span>
         <div class="url-panel__row">
           <input type="text" class="url-panel__input" id="url-invitacion" readonly />
-          <button class="btn btn--secundario" id="btn-copiar-url-panel" onclick="
+          <button class="btn btn--secundario" onclick="
             navigator.clipboard.writeText(document.getElementById('url-invitacion').value);
-            this.textContent = '✓';
-            setTimeout(() => this.textContent = 'Copiar', 1500);
+            this.textContent='✓';
+            setTimeout(()=>this.textContent='Copiar',1500);
           ">Copiar</button>
         </div>
       </div>
 
-      <!-- SECCIÓN: BODA -->
-      <div class="panel-seccion abierta">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">La boda</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ LA BODA ══ -->
+      <div class="panel-grupo abierto">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">💍</span>
+          <span class="panel-grupo__titulo">La boda</span>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
+        <div class="panel-grupo__body">
           <div class="campo">
-            <label class="campo__label" for="inp-titulo">Título interno</label>
+            <label class="campo__label">Título interno (solo para ti)</label>
             <input type="text" class="campo__input" id="inp-titulo" placeholder="Ej: Boda García-López" />
           </div>
           <div class="campo">
-            <label class="campo__label">Foto de cabecera (URL)</label>
+            <label class="campo__label">Foto de cabecera</label>
             <input type="url" class="campo__input" id="inp-foto-cabecera" placeholder="https://…/foto.jpg" />
-            <span style="font-size:10px;color:#555;margin-top:4px;display:block">Aparece en la portada a pantalla completa</span>
           </div>
+          <div class="panel-sep"></div>
           <div class="campo">
-            <label class="campo__label" for="inp-novio">Nombre del novio</label>
+            <label class="campo__label">Nombre del novio</label>
             <input type="text" class="campo__input" id="inp-novio" placeholder="Alejandro" />
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-novia">Nombre de la novia</label>
+            <label class="campo__label">Nombre de la novia</label>
             <input type="text" class="campo__input" id="inp-novia" placeholder="Sofía" />
           </div>
+          <div class="panel-sep"></div>
           <div class="campo">
             <label class="campo__label">Fecha</label>
             <div class="fecha-row">
@@ -83,76 +85,61 @@
             </div>
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-hora">Hora</label>
+            <label class="campo__label">Hora</label>
             <input type="time" class="campo__input" id="inp-hora" />
           </div>
         </div>
       </div>
 
-      <!-- SECCIÓN: HISTORIA -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Historia</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ HISTORIA ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">📖</span>
+          <span class="panel-grupo__titulo">Historia</span>
+          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-historia" checked /><span class="campo__toggle-slider"></span></div>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
-          <div class="campo campo--horizontal">
-            <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle"><input type="checkbox" id="chk-historia" checked /><span class="campo__toggle-slider"></span></label>
-          </div>
+        <div class="panel-grupo__body">
           <div class="campo">
             <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-historia" placeholder="Ej: Nuestra historia" />
+            <input type="text" class="campo__input" id="inp-titulo-historia" placeholder="Nuestra historia" />
           </div>
           <div class="campo">
             <label class="campo__label">Texto</label>
-            <textarea class="campo__textarea" id="inp-historia" rows="5"></textarea>
+            <textarea class="campo__textarea" id="inp-historia" rows="5" placeholder="Vuestra historia…"></textarea>
           </div>
         </div>
       </div>
 
-      <!-- SECCIÓN: GALERÍA -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Galería</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ GALERÍA ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">📷</span>
+          <span class="panel-grupo__titulo">Galería</span>
+          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-galeria" checked /><span class="campo__toggle-slider"></span></div>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
-          <div class="campo campo--horizontal">
-            <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle">
-              <input type="checkbox" id="chk-galeria" checked />
-              <span class="campo__toggle-slider"></span>
-            </label>
-          </div>
+        <div class="panel-grupo__body">
           <div class="campo">
             <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-galeria" placeholder="Título..." />
+            <input type="text" class="campo__input" id="inp-titulo-galeria" placeholder="Nuestra galería" />
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-galeria">URLs de fotos (una por línea)</label>
-            <textarea class="campo__textarea" id="inp-galeria" rows="6" placeholder="https://…&#10;https://…&#10;https://…"></textarea>
+            <label class="campo__label">URLs de fotos (una por línea)</label>
+            <textarea class="campo__textarea" id="inp-galeria" rows="6" placeholder="https://…&#10;https://…"></textarea>
           </div>
-          <p style="font-size:11px;color:#555;line-height:1.5">
-            Sube las fotos a cualquier servicio (Google Drive, Imgur, Cloudinary) y pega las URLs directas aquí.
-          </p>
         </div>
       </div>
 
-      <!-- SECCIÓN: MÚSICA -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Música</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ MÚSICA ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">🎵</span>
+          <span class="panel-grupo__titulo">Música</span>
+          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-musica" checked /><span class="campo__toggle-slider"></span></div>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
-          <div class="campo campo--horizontal">
-            <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle">
-              <input type="checkbox" id="chk-musica" checked />
-              <span class="campo__toggle-slider"></span>
-            </label>
-          </div>
+        <div class="panel-grupo__body">
           <div class="campo">
             <label class="campo__label">Título de la canción</label>
             <input type="text" class="campo__input" id="inp-musica-titulo" placeholder="Ej: Perfect – Ed Sheeran" />
@@ -162,7 +149,7 @@
             <input type="url" class="campo__input" id="inp-musica-url" placeholder="https://…/cancion.mp3" />
           </div>
           <div class="campo">
-            <label class="campo__label">Mostrar junto al botón</label>
+            <label class="campo__label">Mostrar junto al botón flotante</label>
             <select class="campo__select" id="sel-musica-texto">
               <option value="ninguno">Solo el icono ▶</option>
               <option value="titulo">Título de la canción</option>
@@ -171,134 +158,112 @@
           </div>
           <div class="campo" id="campo-musica-personalizado" style="display:none">
             <label class="campo__label">Texto personalizado</label>
-            <input type="text" class="campo__input" id="inp-musica-texto-flotante" placeholder="Ej: Nuestra canción favorita" />
+            <input type="text" class="campo__input" id="inp-musica-texto-flotante" placeholder="Nuestra canción favorita" />
           </div>
-          <p style="font-size:11px;color:#555;line-height:1.6">
-            El botón de música aparece fijo en la esquina inferior derecha de la invitación.
-          </p>
         </div>
       </div>
 
-      <!-- SECCIÓN: EVENTO -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">El evento</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ EVENTO ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">📍</span>
+          <span class="panel-grupo__titulo">El evento</span>
+          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-evento" checked /><span class="campo__toggle-slider"></span></div>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
-          <div class="campo campo--horizontal">
-            <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle">
-              <input type="checkbox" id="chk-evento" checked />
-              <span class="campo__toggle-slider"></span>
-            </label>
-          </div>
+        <div class="panel-grupo__body">
           <div class="campo">
             <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-evento" placeholder="Título..." />
+            <input type="text" class="campo__input" id="inp-titulo-evento" placeholder="La celebración" />
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-lugar">Nombre del lugar</label>
+            <label class="campo__label">Nombre del lugar</label>
             <input type="text" class="campo__input" id="inp-lugar" placeholder="Finca La Alameda" />
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-direccion">Dirección</label>
+            <label class="campo__label">Dirección</label>
             <input type="text" class="campo__input" id="inp-direccion" placeholder="Ctra. de Burgos, km 24" />
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-maps-url">Enlace Google Maps</label>
+            <label class="campo__label">Enlace Google Maps</label>
             <input type="url" class="campo__input" id="inp-maps-url" placeholder="https://maps.google.com/…" />
           </div>
         </div>
       </div>
 
-      <!-- SECCIÓN: DRESS CODE -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Dress code</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ DRESS CODE ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">👔</span>
+          <span class="panel-grupo__titulo">Dress code</span>
+          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-dresscode" checked /><span class="campo__toggle-slider"></span></div>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
-          <div class="campo campo--horizontal">
-            <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle">
-              <input type="checkbox" id="chk-dresscode" checked />
-              <span class="campo__toggle-slider"></span>
-            </label>
-          </div>
+        <div class="panel-grupo__body">
           <div class="campo">
             <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-dresscode" placeholder="Título..." />
+            <input type="text" class="campo__input" id="inp-titulo-dresscode" placeholder="Dress code" />
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-dresscode">Indicaciones</label>
+            <label class="campo__label">Indicaciones</label>
             <textarea class="campo__textarea" id="inp-dresscode" rows="3" placeholder="Elegante. Tonos claros bienvenidos."></textarea>
           </div>
         </div>
       </div>
 
-      <!-- SECCIÓN: RSVP -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">RSVP</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ RSVP ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">✉️</span>
+          <span class="panel-grupo__titulo">RSVP</span>
+          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-rsvp" checked /><span class="campo__toggle-slider"></span></div>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
-          <div class="campo campo--horizontal">
-            <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle">
-              <input type="checkbox" id="chk-rsvp" checked />
-              <span class="campo__toggle-slider"></span>
-            </label>
-          </div>
+        <div class="panel-grupo__body">
           <div class="campo">
             <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-rsvp" placeholder="Título..." />
+            <input type="text" class="campo__input" id="inp-titulo-rsvp" placeholder="Confirma tu asistencia" />
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-rsvp-fecha">Fecha límite</label>
+            <label class="campo__label">Fecha límite</label>
             <input type="date" class="campo__input" id="inp-rsvp-fecha" />
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-rsvp-email">Email de confirmaciones</label>
+            <label class="campo__label">Email</label>
             <input type="email" class="campo__input" id="inp-rsvp-email" placeholder="boda@ejemplo.com" />
           </div>
         </div>
       </div>
 
-      <!-- SECCIÓN: MENSAJE FINAL -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Mensaje final</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ MENSAJE FINAL ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">💌</span>
+          <span class="panel-grupo__titulo">Mensaje final</span>
+          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-mensaje" checked /><span class="campo__toggle-slider"></span></div>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
-          <div class="campo campo--horizontal">
-            <label class="campo__label">Mostrar sección</label>
-            <label class="campo__toggle">
-              <input type="checkbox" id="chk-mensaje" checked />
-              <span class="campo__toggle-slider"></span>
-            </label>
-          </div>
+        <div class="panel-grupo__body">
           <div class="campo">
             <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-mensaje" placeholder="Título..." />
+            <input type="text" class="campo__input" id="inp-titulo-mensaje" placeholder="Mensaje final" />
           </div>
           <div class="campo">
-            <label class="campo__label" for="inp-mensaje">Texto</label>
+            <label class="campo__label">Texto</label>
             <textarea class="campo__textarea" id="inp-mensaje" rows="4" placeholder="Vuestra presencia es el mejor regalo…"></textarea>
           </div>
         </div>
       </div>
 
-      <!-- SECCIÓN: FORMULARIO -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Formulario</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ FORMULARIO ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">📋</span>
+          <span class="panel-grupo__titulo">Formulario</span>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body" style="padding:0">
-          <div style="padding:10px 12px 4px;border-bottom:1px solid var(--editor-border)">
+        <div class="panel-grupo__body" style="padding:0">
+          <div style="padding:10px 16px;border-bottom:1px solid #222">
             <div class="campo campo--horizontal">
               <label class="campo__label">Activar formulario</label>
               <label class="campo__toggle">
@@ -311,96 +276,86 @@
         </div>
       </div>
 
-      <!-- SECCIÓN: SECCIONES EXTRA -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Secciones extra</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ SECCIONES EXTRA ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">➕</span>
+          <span class="panel-grupo__titulo">Secciones extra</span>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body" style="padding:0">
+        <div class="panel-grupo__body" style="padding:0">
           <div id="secciones-panel"></div>
         </div>
       </div>
 
-      <!-- SECCIÓN: ORDEN -->
-      <div class="panel-seccion">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Orden de secciones</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ ORDEN ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">↕️</span>
+          <span class="panel-grupo__titulo">Orden de secciones</span>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body" style="padding:0">
+        <div class="panel-grupo__body" style="padding:0">
           <div id="orden-panel"></div>
         </div>
       </div>
 
-      <!-- SECCIÓN: PLANTILLA -->
-      <div class="panel-seccion abierta">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Plantilla</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ PLANTILLA ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">🎨</span>
+          <span class="panel-grupo__titulo">Plantilla</span>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
+        <div class="panel-grupo__body">
           <div class="plantillas-grid" id="plantillas-grid"></div>
         </div>
       </div>
 
-      <!-- SECCIÓN: ESTILO -->
-      <div class="panel-seccion abierta">
-        <div class="panel-seccion__header" onclick="toggleSeccion(this)">
-          <span class="panel-seccion__titulo">Estilo</span>
-          <span class="panel-seccion__chevron">▼</span>
+      <!-- ══ ESTILO ══ -->
+      <div class="panel-grupo">
+        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
+          <span class="panel-grupo__icono">✏️</span>
+          <span class="panel-grupo__titulo">Estilo</span>
+          <span class="panel-grupo__chevron">▼</span>
         </div>
-        <div class="panel-seccion__body">
-
+        <div class="panel-grupo__body">
           <div class="campo">
-            <label class="campo__label">Plantilla de estilo</label>
+            <label class="campo__label">Plantilla de estilo rápido</label>
             <div class="presets-grid" id="presets-grid"></div>
           </div>
-
-          <div class="panel-divisor"></div>
-
+          <div class="panel-sep"></div>
           <div class="campo">
-            <label class="campo__label">Color primario (dorado)</label>
+            <label class="campo__label">Color primario</label>
             <div class="campo__color">
-              <label class="campo__color-swatch">
-                <input type="color" id="inp-color-primario-picker" />
-              </label>
+              <label class="campo__color-swatch"><input type="color" id="inp-color-primario-picker" /></label>
               <input type="text" class="campo__color-value" id="inp-color-primario" maxlength="7" placeholder="#b8860b" />
             </div>
           </div>
-
           <div class="campo">
-            <label class="campo__label">Color secundario (fondo)</label>
+            <label class="campo__label">Color fondo</label>
             <div class="campo__color">
-              <label class="campo__color-swatch">
-                <input type="color" id="inp-color-secundario-picker" />
-              </label>
+              <label class="campo__color-swatch"><input type="color" id="inp-color-secundario-picker" /></label>
               <input type="text" class="campo__color-value" id="inp-color-secundario" maxlength="7" placeholder="#f5f0e8" />
             </div>
           </div>
-
           <div class="campo">
-            <label class="campo__label">Color de texto</label>
+            <label class="campo__label">Color texto</label>
             <div class="campo__color">
-              <label class="campo__color-swatch">
-                <input type="color" id="inp-color-texto-picker" />
-              </label>
+              <label class="campo__color-swatch"><input type="color" id="inp-color-texto-picker" /></label>
               <input type="text" class="campo__color-value" id="inp-color-texto" maxlength="7" placeholder="#2c2c2c" />
             </div>
           </div>
-
           <div class="campo">
-            <label class="campo__label">Color de acento</label>
+            <label class="campo__label">Color acento</label>
             <div class="campo__color">
-              <label class="campo__color-swatch">
-                <input type="color" id="inp-color-accent-picker" />
-              </label>
+              <label class="campo__color-swatch"><input type="color" id="inp-color-accent-picker" /></label>
               <input type="text" class="campo__color-value" id="inp-color-accent" maxlength="7" placeholder="#8b6914" />
             </div>
           </div>
-
+          <div class="panel-sep"></div>
           <div class="campo">
-            <label class="campo__label" for="sel-fuente">Tipografía principal</label>
+            <label class="campo__label">Tipografía principal</label>
             <select class="campo__select" id="sel-fuente">
               <optgroup label="— Serif elegante —">
                 <option value="Cormorant Garamond">Cormorant Garamond</option>
@@ -422,7 +377,6 @@
               </optgroup>
             </select>
           </div>
-
         </div>
       </div>
 
@@ -464,7 +418,9 @@
   <script>
     // ── Acordeón del panel ──
     function toggleSeccion(header) {
-      header.parentElement.classList.toggle('abierta');
+      var parent = header.parentElement;
+      parent.classList.toggle('abierta');
+      parent.classList.toggle('abierto');
     }
 
     // ── Presets ──
