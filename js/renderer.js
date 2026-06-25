@@ -19,6 +19,9 @@ const RENDERER = (() => {
     var flotanteViejo = document.getElementById('musica-flotante-global');
     if (flotanteViejo) flotanteViejo.remove();
 
+    // Calcular orden efectivo y asignarlo al objeto boda
+    boda._ordenEfectivo = _calcularOrden(boda);
+
     var id = boda.plantilla || 'clasica';
     var r = _getRenderer(id);
     if (!r) {
