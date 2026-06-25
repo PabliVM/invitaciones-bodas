@@ -1797,77 +1797,65 @@ html, body {
   flex-shrink: 0;
 }
 
-/* ── Forzar colores correctos ── */
-.eb-bloque__cab { background: #ffffff !important; }
-.eb-bloque__cab:hover { background: #f0f0f0 !important; }
-.eb-bloque__titulo { color: #111111 !important; }
-.eb-bloque__body { background: #f7f7f7 !important; }
 
-.eb-sub__cab { background: #ebebeb !important; }
-.eb-sub__cab:hover { background: #e2e2e2 !important; }
-.eb-sub__titulo { color: #222222 !important; }
-.eb-sub--abierto > .eb-sub__cab { background: #dde8ff !important; border-left: 3px solid #2563eb !important; }
-.eb-sub__body { background: #ffffff !important; }
+/* ══ PANEL IZQUIERDO — TONOS BLANCOS ══ */
 
-/* Variantes coloreadas — NO sobreescribir */
-.eb-bloque__cab--azul { background: #0d2444 !important; }
-.eb-bloque__cab--azul:hover { background: #102d55 !important; }
-.eb-bloque__cab--azul .eb-bloque__titulo { color: #7eb8f7 !important; }
-.eb-bloque__cab--dorado { background: #2a1f00 !important; }
-.eb-bloque__cab--dorado:hover { background: #332600 !important; }
-.eb-bloque__cab--dorado .eb-bloque__titulo { color: #d4a820 !important; }
-
-.eb-chevron { color: #888 !important; }
-.eb-bloque__cab--azul .eb-chevron { color: #4a7abf !important; }
-.eb-bloque__cab--dorado .eb-chevron { color: #8a6d10 !important; }
-
-/* ══ IGUALAR IZQUIERDA A DERECHA ══ */
-
-/* Bloques nivel 1 — igual que --azul */
+/* Bloques nivel 1 — blanco con texto negro */
 .eb-bloque__cab {
-  background: #0d2444 !important;
-  border-bottom: 1px solid #1a3a66 !important;
+  background: #ffffff !important;
+  border-bottom: 2px solid #d0d0d0 !important;
 }
-.eb-bloque__cab:hover { background: #102d55 !important; }
-.eb-bloque__titulo { color: #7eb8f7 !important; }
-.eb-chevron { color: #4a7abf !important; }
-.eb-bloque--abierto > .eb-bloque__body { background: #0a1628 !important; }
+.eb-bloque__cab:hover { background: #f5f5f5 !important; }
+.eb-bloque__titulo { color: #111111 !important; font-size: 11px !important; font-weight: 800 !important; letter-spacing: 1.5px !important; }
+.eb-bloque--abierto > .eb-bloque__body { background: #f4f4f4 !important; }
+.eb-bloque > .eb-bloque__cab .eb-chevron { color: #888 !important; }
 
-/* Subapartados — tono dorado más oscuro que --dorado */
+/* Subapartados — gris medio, claramente diferente al bloque */
 .eb-sub__cab {
-  background: #1e1500 !important;
-  border-left: 3px solid #3d2d00 !important;
+  background: #e0e0e0 !important;
+  border-left: 3px solid #bbb !important;
+  border-bottom: 1px solid #d0d0d0 !important;
 }
-.eb-sub__cab:hover { background: #251a00 !important; }
-.eb-sub__titulo { color: #c49a10 !important; }
+.eb-sub__cab:hover { background: #d8d8d8 !important; }
+.eb-sub__titulo { color: #333333 !important; font-size: 11px !important; font-weight: 600 !important; }
+.eb-sub > .eb-sub__cab .eb-chevron { color: #888 !important; }
+
+/* Subapartado abierto — borde azul para indicar activo */
 .eb-sub--abierto > .eb-sub__cab {
-  background: #2a1f00 !important;
-  border-left: 3px solid #d4a820 !important;
+  background: #dde8ff !important;
+  border-left: 3px solid #2563eb !important;
 }
-.eb-sub--abierto > .eb-sub__cab .eb-sub__titulo { color: #d4a820 !important; }
-.eb-sub--abierto > .eb-sub__cab .eb-chevron { color: #d4a820 !important; }
+.eb-sub--abierto > .eb-sub__cab .eb-sub__titulo { color: #1a3a8a !important; }
+.eb-sub--abierto > .eb-sub__cab .eb-chevron { color: #2563eb !important; transform: rotate(180deg) !important; }
 
-/* Cuerpo subapartado — fondo ligeramente distinto al bloque */
+/* Cuerpo subapartado */
 .eb-sub__body {
-  background: #111000 !important;
-  border-left: 3px solid #2a1f00 !important;
+  background: #ffffff !important;
+  border-left: 3px solid #e0e0e0 !important;
+  padding: 14px 16px 14px 20px !important;
 }
+.eb-sub--abierto > .eb-sub__body { display: flex !important; }
 
-/* Campos dentro — mantener legibles */
-.eb-sub__body .campo__label { color: #a89060 !important; }
+/* Campos */
+.eb-sub__body .campo__label { color: #555 !important; }
 .eb-sub__body .campo__input,
 .eb-sub__body .campo__textarea,
 .eb-sub__body .campo__select {
-  background: #1a1500 !important;
-  border: 1px solid #3d2d00 !important;
-  color: #f0e0b0 !important;
+  background: #fafafa !important;
+  border: 1px solid #d0d0d0 !important;
+  color: #111 !important;
 }
 .eb-sub__body .campo__input:focus,
-.eb-sub__body .campo__textarea:focus {
-  border-color: #d4a820 !important;
-}
+.eb-sub__body .campo__textarea:focus { border-color: #2563eb !important; }
 
-/* URL panel — mismo tono */
-.url-panel { background: #0a1628 !important; border-bottom: 2px solid #1a3a66 !important; }
-.url-panel__label { color: #7eb8f7 !important; }
-.url-panel__input { background: #0d2444 !important; color: #c8d8f0 !important; border-color: #1a3a66 !important; }
+/* Campos en bloque (La boda) */
+.eb-bloque__body > .campo .campo__label { color: #555 !important; }
+.eb-bloque__body > .campo .campo__input { background: #fafafa !important; border: 1px solid #d0d0d0 !important; color: #111 !important; }
+
+/* URL panel */
+.url-panel { background: #f0f0f0 !important; border-bottom: 2px solid #d0d0d0 !important; }
+.url-panel__label { color: #666 !important; }
+.url-panel__input { background: #fff !important; color: #111 !important; border-color: #d0d0d0 !important; }
+
+/* Chevron abierto en bloque */
+.eb-bloque--abierto > .eb-bloque__cab .eb-chevron { transform: rotate(180deg) !important; }
