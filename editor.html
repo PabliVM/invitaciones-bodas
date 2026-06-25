@@ -12,18 +12,15 @@
 </head>
 <body>
 
-  <!-- Overlay de carga -->
   <div class="editor-cargando" id="editor-cargando">
     <div class="editor-cargando__spinner"></div>
     <span class="editor-cargando__texto">Cargando boda…</span>
   </div>
-
-  <!-- Indicador de guardado automático -->
   <div class="indicador-guardado" id="indicador-guardado"></div>
 
   <div class="editor-layout">
 
-    <!-- ── TOPBAR ── -->
+    <!-- TOPBAR -->
     <header class="editor-topbar">
       <a href="index.html" class="editor-topbar__logo">← Wedding Builder</a>
       <div class="editor-topbar__actions">
@@ -34,322 +31,364 @@
       </div>
     </header>
 
-    <!-- ── PANEL LATERAL ── -->
+    <!-- COLUMNA IZQUIERDA -->
     <aside class="editor-panel">
 
-      <!-- URL cliente -->
       <div class="url-panel" id="url-panel">
         <span class="url-panel__label">URL del cliente</span>
         <div class="url-panel__row">
           <input type="text" class="url-panel__input" id="url-invitacion" readonly />
-          <button class="btn btn--secundario" onclick="
-            navigator.clipboard.writeText(document.getElementById('url-invitacion').value);
-            this.textContent='✓';
-            setTimeout(()=>this.textContent='Copiar',1500);
-          ">Copiar</button>
+          <button class="btn btn--secundario" onclick="navigator.clipboard.writeText(document.getElementById('url-invitacion').value);this.textContent='✓';setTimeout(()=>this.textContent='Copiar',1500)">Copiar</button>
         </div>
       </div>
 
-      <!-- ══ LA BODA ══ -->
-      <div class="panel-grupo abierto">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">💍</span>
-          <span class="panel-grupo__titulo">La boda</span>
-          <span class="panel-grupo__chevron">▼</span>
+      <!-- BLOQUE: LA BODA -->
+      <div class="eb-bloque">
+        <div class="eb-bloque__cab" onclick="toggleBloque(this)">
+          <span class="eb-bloque__titulo">La boda</span>
+          <span class="eb-chevron">▼</span>
         </div>
-        <div class="panel-grupo__body">
+        <div class="eb-bloque__body">
           <div class="campo">
-            <label class="campo__label">Título interno (solo para ti)</label>
+            <label class="campo__label">Título interno</label>
             <input type="text" class="campo__input" id="inp-titulo" placeholder="Ej: Boda García-López" />
           </div>
-          <div class="campo">
-            <label class="campo__label">Foto de cabecera</label>
-            <input type="url" class="campo__input" id="inp-foto-cabecera" placeholder="https://…/foto.jpg" />
-          </div>
-          <div class="panel-sep"></div>
-          <div class="campo">
-            <label class="campo__label">Nombre del novio</label>
-            <input type="text" class="campo__input" id="inp-novio" placeholder="Alejandro" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Nombre de la novia</label>
-            <input type="text" class="campo__input" id="inp-novia" placeholder="Sofía" />
-          </div>
-          <div class="panel-sep"></div>
-          <div class="campo">
-            <label class="campo__label">Fecha</label>
-            <div class="fecha-row">
-              <input type="text" class="campo__input" id="inp-dia" placeholder="Día" maxlength="2" />
-              <input type="text" class="campo__input" id="inp-mes" placeholder="Mes" maxlength="2" />
-              <input type="text" class="campo__input" id="inp-anio" placeholder="Año" maxlength="4" />
+        </div>
+      </div>
+
+      <!-- BLOQUE: SECCIONES -->
+      <div class="eb-bloque eb-bloque--abierto">
+        <div class="eb-bloque__cab" onclick="toggleBloque(this)">
+          <span class="eb-bloque__titulo">Secciones</span>
+          <span class="eb-chevron">▼</span>
+        </div>
+        <div class="eb-bloque__body">
+
+          <!-- SUB: CABECERA -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">🖼️</span>
+              <span class="eb-sub__titulo">Cabecera</span>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Foto de cabecera</label>
+                <input type="url" class="campo__input" id="inp-foto-cabecera" placeholder="https://…/foto.jpg" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Nombre del novio</label>
+                <input type="text" class="campo__input" id="inp-novio" placeholder="Alejandro" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Nombre de la novia</label>
+                <input type="text" class="campo__input" id="inp-novia" placeholder="Sofía" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Fecha</label>
+                <div class="fecha-row">
+                  <input type="text" class="campo__input" id="inp-dia" placeholder="Día" maxlength="2" />
+                  <input type="text" class="campo__input" id="inp-mes" placeholder="Mes" maxlength="2" />
+                  <input type="text" class="campo__input" id="inp-anio" placeholder="Año" maxlength="4" />
+                </div>
+              </div>
+              <div class="campo">
+                <label class="campo__label">Hora</label>
+                <input type="time" class="campo__input" id="inp-hora" />
+              </div>
             </div>
           </div>
-          <div class="campo">
-            <label class="campo__label">Hora</label>
-            <input type="time" class="campo__input" id="inp-hora" />
-          </div>
-        </div>
-      </div>
 
-      <!-- ══ HISTORIA ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">📖</span>
-          <span class="panel-grupo__titulo">Historia</span>
-          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-historia" checked /><span class="campo__toggle-slider"></span></div>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
-        <div class="panel-grupo__body">
-          <div class="campo">
-            <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-historia" placeholder="Nuestra historia" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Texto</label>
-            <textarea class="campo__textarea" id="inp-historia" rows="5" placeholder="Vuestra historia…"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ GALERÍA ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">📷</span>
-          <span class="panel-grupo__titulo">Galería</span>
-          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-galeria" checked /><span class="campo__toggle-slider"></span></div>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
-        <div class="panel-grupo__body">
-          <div class="campo">
-            <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-galeria" placeholder="Nuestra galería" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">URLs de fotos (una por línea)</label>
-            <textarea class="campo__textarea" id="inp-galeria" rows="6" placeholder="https://…&#10;https://…"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ MÚSICA ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">🎵</span>
-          <span class="panel-grupo__titulo">Música</span>
-          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-musica" checked /><span class="campo__toggle-slider"></span></div>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
-        <div class="panel-grupo__body">
-          <div class="campo">
-            <label class="campo__label">Título de la canción</label>
-            <input type="text" class="campo__input" id="inp-musica-titulo" placeholder="Ej: Perfect – Ed Sheeran" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">URL del MP3</label>
-            <input type="url" class="campo__input" id="inp-musica-url" placeholder="https://…/cancion.mp3" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Mostrar junto al botón flotante</label>
-            <select class="campo__select" id="sel-musica-texto">
-              <option value="ninguno">Solo el icono ▶</option>
-              <option value="titulo">Título de la canción</option>
-              <option value="personalizado">Texto personalizado</option>
-            </select>
-          </div>
-          <div class="campo" id="campo-musica-personalizado" style="display:none">
-            <label class="campo__label">Texto personalizado</label>
-            <input type="text" class="campo__input" id="inp-musica-texto-flotante" placeholder="Nuestra canción favorita" />
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ EVENTO ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">📍</span>
-          <span class="panel-grupo__titulo">El evento</span>
-          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-evento" checked /><span class="campo__toggle-slider"></span></div>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
-        <div class="panel-grupo__body">
-          <div class="campo">
-            <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-evento" placeholder="La celebración" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Nombre del lugar</label>
-            <input type="text" class="campo__input" id="inp-lugar" placeholder="Finca La Alameda" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Dirección</label>
-            <input type="text" class="campo__input" id="inp-direccion" placeholder="Ctra. de Burgos, km 24" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Enlace Google Maps</label>
-            <input type="url" class="campo__input" id="inp-maps-url" placeholder="https://maps.google.com/…" />
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ DRESS CODE ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">👔</span>
-          <span class="panel-grupo__titulo">Dress code</span>
-          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-dresscode" checked /><span class="campo__toggle-slider"></span></div>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
-        <div class="panel-grupo__body">
-          <div class="campo">
-            <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-dresscode" placeholder="Dress code" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Indicaciones</label>
-            <textarea class="campo__textarea" id="inp-dresscode" rows="3" placeholder="Elegante. Tonos claros bienvenidos."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ RSVP ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">✉️</span>
-          <span class="panel-grupo__titulo">RSVP</span>
-          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-rsvp" checked /><span class="campo__toggle-slider"></span></div>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
-        <div class="panel-grupo__body">
-          <div class="campo">
-            <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-rsvp" placeholder="Confirma tu asistencia" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Fecha límite</label>
-            <input type="date" class="campo__input" id="inp-rsvp-fecha" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Email</label>
-            <input type="email" class="campo__input" id="inp-rsvp-email" placeholder="boda@ejemplo.com" />
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ MENSAJE FINAL ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">💌</span>
-          <span class="panel-grupo__titulo">Mensaje final</span>
-          <div class="campo__toggle" style="margin-right:8px"><input type="checkbox" id="chk-mensaje" checked /><span class="campo__toggle-slider"></span></div>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
-        <div class="panel-grupo__body">
-          <div class="campo">
-            <label class="campo__label">Título de la sección</label>
-            <input type="text" class="campo__input" id="inp-titulo-mensaje" placeholder="Mensaje final" />
-          </div>
-          <div class="campo">
-            <label class="campo__label">Texto</label>
-            <textarea class="campo__textarea" id="inp-mensaje" rows="4" placeholder="Vuestra presencia es el mejor regalo…"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ FORMULARIO ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">📋</span>
-          <span class="panel-grupo__titulo">Formulario</span>
-          <span class="panel-grupo__chevron">▼</span>
-        </div>
-        <div class="panel-grupo__body" style="padding:0">
-          <div style="padding:10px 16px;border-bottom:1px solid #222">
-            <div class="campo campo--horizontal">
-              <label class="campo__label">Activar formulario</label>
-              <label class="campo__toggle">
-                <input type="checkbox" id="chk-formulario" onchange="STATE.set('formulario.activo',this.checked)" />
-                <span class="campo__toggle-slider"></span>
-              </label>
+          <!-- SUB: HISTORIA -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">📖</span>
+              <span class="eb-sub__titulo">Historia</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-historia" checked /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título</label>
+                <input type="text" class="campo__input" id="inp-titulo-historia" placeholder="Nuestra historia" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Texto</label>
+                <textarea class="campo__textarea" id="inp-historia" rows="4"></textarea>
+              </div>
             </div>
           </div>
-          <div id="formulario-panel"></div>
+
+          <!-- SUB: GALERÍA -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">📷</span>
+              <span class="eb-sub__titulo">Galería</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-galeria" checked /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título</label>
+                <input type="text" class="campo__input" id="inp-titulo-galeria" placeholder="Nuestra galería" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">URLs de fotos (una por línea)</label>
+                <textarea class="campo__textarea" id="inp-galeria" rows="5" placeholder="https://…"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB: MÚSICA -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">🎵</span>
+              <span class="eb-sub__titulo">Música</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-musica" checked /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título de la canción</label>
+                <input type="text" class="campo__input" id="inp-musica-titulo" placeholder="Perfect – Ed Sheeran" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">URL del MP3</label>
+                <input type="url" class="campo__input" id="inp-musica-url" placeholder="https://…/cancion.mp3" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Mostrar junto al botón</label>
+                <select class="campo__select" id="sel-musica-texto">
+                  <option value="ninguno">Solo el icono ▶</option>
+                  <option value="titulo">Título de la canción</option>
+                  <option value="personalizado">Texto personalizado</option>
+                </select>
+              </div>
+              <div class="campo" id="campo-musica-personalizado" style="display:none">
+                <label class="campo__label">Texto personalizado</label>
+                <input type="text" class="campo__input" id="inp-musica-texto-flotante" />
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB: EVENTO -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">📍</span>
+              <span class="eb-sub__titulo">El evento</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-evento" checked /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título</label>
+                <input type="text" class="campo__input" id="inp-titulo-evento" placeholder="La celebración" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Lugar</label>
+                <input type="text" class="campo__input" id="inp-lugar" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Dirección</label>
+                <input type="text" class="campo__input" id="inp-direccion" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Google Maps URL</label>
+                <input type="url" class="campo__input" id="inp-maps-url" />
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB: DRESS CODE -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">👔</span>
+              <span class="eb-sub__titulo">Dress code</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-dresscode" checked /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título</label>
+                <input type="text" class="campo__input" id="inp-titulo-dresscode" placeholder="Dress code" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Indicaciones</label>
+                <textarea class="campo__textarea" id="inp-dresscode" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB: RSVP -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">✉️</span>
+              <span class="eb-sub__titulo">RSVP</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-rsvp" checked /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título</label>
+                <input type="text" class="campo__input" id="inp-titulo-rsvp" placeholder="Confirma tu asistencia" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Fecha límite</label>
+                <input type="date" class="campo__input" id="inp-rsvp-fecha" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Email</label>
+                <input type="email" class="campo__input" id="inp-rsvp-email" placeholder="boda@ejemplo.com" />
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB: MENSAJE FINAL -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">💌</span>
+              <span class="eb-sub__titulo">Mensaje final</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-mensaje" checked /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Título</label>
+                <input type="text" class="campo__input" id="inp-titulo-mensaje" placeholder="Mensaje final" />
+              </div>
+              <div class="campo">
+                <label class="campo__label">Texto</label>
+                <textarea class="campo__textarea" id="inp-mensaje" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB: FORMULARIO -->
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">📋</span>
+              <span class="eb-sub__titulo">Formulario</span>
+              <label class="campo__toggle eb-sub__toggle" onclick="event.stopPropagation()"><input type="checkbox" id="chk-formulario" onchange="STATE.set('formulario.activo',this.checked)" /><span class="campo__toggle-slider"></span></label>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body" style="padding:0">
+              <div id="formulario-panel"></div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- ══ SECCIONES EXTRA ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">➕</span>
-          <span class="panel-grupo__titulo">Secciones extra</span>
-          <span class="panel-grupo__chevron">▼</span>
+      <!-- BLOQUE: SECCIONES EXTRA -->
+      <div class="eb-bloque">
+        <div class="eb-bloque__cab" onclick="toggleBloque(this)">
+          <span class="eb-bloque__titulo">Secciones extra</span>
+          <span class="eb-chevron">▼</span>
         </div>
-        <div class="panel-grupo__body" style="padding:0">
+        <div class="eb-bloque__body" style="padding:0">
           <div id="secciones-panel"></div>
         </div>
       </div>
 
-      <!-- ══ ORDEN ══ -->
-      <div class="panel-grupo">
-        <div class="panel-grupo__cabecera" onclick="this.parentElement.classList.toggle('abierto')">
-          <span class="panel-grupo__icono">↕️</span>
-          <span class="panel-grupo__titulo">Orden de secciones</span>
-          <span class="panel-grupo__chevron">▼</span>
+      <!-- BLOQUE: ORDEN -->
+      <div class="eb-bloque">
+        <div class="eb-bloque__cab" onclick="toggleBloque(this)">
+          <span class="eb-bloque__titulo">Orden de secciones</span>
+          <span class="eb-chevron">▼</span>
         </div>
-        <div class="panel-grupo__body" style="padding:0">
+        <div class="eb-bloque__body" style="padding:0">
           <div id="orden-panel"></div>
         </div>
       </div>
 
-
     </aside>
 
-    <!-- ── PANEL DERECHO ── -->
+    <!-- PREVIEW -->
+    <section class="editor-preview">
+      <div class="preview-phone">
+        <div class="preview-phone__notch"></div>
+        <div class="preview-phone__screen">
+          <div class="inv-root" id="preview-root"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLUMNA DERECHA -->
     <div class="editor-panel-right">
 
-      <div class="panel-bloque-label panel-bloque-label--plantilla">🎨 Plantilla</div>
-      <div class="panel-grupo panel-bloque--plantilla abierto">
-        <div class="panel-grupo__body">
+      <!-- BLOQUE: PLANTILLA -->
+      <div class="eb-bloque eb-bloque--abierto">
+        <div class="eb-bloque__cab eb-bloque__cab--azul" onclick="toggleBloque(this)">
+          <span class="eb-bloque__titulo">🎨 Plantilla</span>
+          <span class="eb-chevron">▼</span>
+        </div>
+        <div class="eb-bloque__body">
           <div class="plantillas-grid" id="plantillas-grid"></div>
         </div>
       </div>
 
-      <div class="panel-bloque-label panel-bloque-label--estilo" style="margin-top:8px">✏️ Estilo</div>
-      <div class="panel-grupo panel-bloque--estilo abierto">
-        <div class="panel-grupo__body">
-          <p class="estilo-subtitulo">Presets rápidos</p>
-          <div class="presets-grid" id="presets-grid"></div>
-          <div class="panel-sep"></div>
-          <p class="estilo-subtitulo">Colores</p>
-          <div class="campo">
-            <label class="campo__label">Color primario</label>
-            <div class="campo__color">
-              <label class="campo__color-swatch"><input type="color" id="inp-color-primario-picker" /></label>
-              <input type="text" class="campo__color-value" id="inp-color-primario" maxlength="7" placeholder="#b8860b" />
+      <!-- BLOQUE: COLORES -->
+      <div class="eb-bloque eb-bloque--abierto">
+        <div class="eb-bloque__cab eb-bloque__cab--dorado" onclick="toggleBloque(this)">
+          <span class="eb-bloque__titulo">🎨 Colores</span>
+          <span class="eb-chevron">▼</span>
+        </div>
+        <div class="eb-bloque__body">
+          <div class="eb-sub">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__titulo">Presets rápidos</span>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="presets-grid" id="presets-grid"></div>
             </div>
           </div>
-          <div class="campo">
-            <label class="campo__label">Color fondo</label>
-            <div class="campo__color">
-              <label class="campo__color-swatch"><input type="color" id="inp-color-secundario-picker" /></label>
-              <input type="text" class="campo__color-value" id="inp-color-secundario" maxlength="7" placeholder="#f5f0e8" />
+          <div class="eb-sub eb-sub--abierto">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__titulo">Personalizar</span>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <div class="campo">
+                <label class="campo__label">Color primario</label>
+                <div class="campo__color">
+                  <label class="campo__color-swatch"><input type="color" id="inp-color-primario-picker" /></label>
+                  <input type="text" class="campo__color-value" id="inp-color-primario" maxlength="7" placeholder="#b8860b" />
+                </div>
+              </div>
+              <div class="campo">
+                <label class="campo__label">Color fondo</label>
+                <div class="campo__color">
+                  <label class="campo__color-swatch"><input type="color" id="inp-color-secundario-picker" /></label>
+                  <input type="text" class="campo__color-value" id="inp-color-secundario" maxlength="7" placeholder="#f5f0e8" />
+                </div>
+              </div>
+              <div class="campo">
+                <label class="campo__label">Color texto</label>
+                <div class="campo__color">
+                  <label class="campo__color-swatch"><input type="color" id="inp-color-texto-picker" /></label>
+                  <input type="text" class="campo__color-value" id="inp-color-texto" maxlength="7" placeholder="#2c2c2c" />
+                </div>
+              </div>
+              <div class="campo">
+                <label class="campo__label">Color acento</label>
+                <div class="campo__color">
+                  <label class="campo__color-swatch"><input type="color" id="inp-color-accent-picker" /></label>
+                  <input type="text" class="campo__color-value" id="inp-color-accent" maxlength="7" placeholder="#8b6914" />
+                </div>
+              </div>
             </div>
           </div>
-          <div class="campo">
-            <label class="campo__label">Color texto</label>
-            <div class="campo__color">
-              <label class="campo__color-swatch"><input type="color" id="inp-color-texto-picker" /></label>
-              <input type="text" class="campo__color-value" id="inp-color-texto" maxlength="7" placeholder="#2c2c2c" />
-            </div>
-          </div>
-          <div class="campo">
-            <label class="campo__label">Color acento</label>
-            <div class="campo__color">
-              <label class="campo__color-swatch"><input type="color" id="inp-color-accent-picker" /></label>
-              <input type="text" class="campo__color-value" id="inp-color-accent" maxlength="7" placeholder="#8b6914" />
-            </div>
-          </div>
-          <div class="panel-sep"></div>
-          <p class="estilo-subtitulo">Tipografía</p>
+        </div>
+      </div>
+
+      <!-- BLOQUE: TIPOGRAFÍA -->
+      <div class="eb-bloque eb-bloque--abierto">
+        <div class="eb-bloque__cab eb-bloque__cab--dorado" onclick="toggleBloque(this)">
+          <span class="eb-bloque__titulo">✏️ Tipografía</span>
+          <span class="eb-chevron">▼</span>
+        </div>
+        <div class="eb-bloque__body">
           <div class="campo">
             <label class="campo__label">Tipografía principal</label>
             <select class="campo__select" id="sel-fuente">
@@ -378,25 +417,10 @@
 
     </div>
 
-    <!-- ── ZONA DE PREVIEW ── -->
-    <section class="editor-preview">
-      <div class="preview-phone">
-        <div class="preview-phone__notch"></div>
-        <div class="preview-phone__screen">
-          <div class="inv-root" id="preview-root">
-            <!-- El renderer dibuja aquí -->
-          </div>
-        </div>
-      </div>
-    </section>
+  </div>
 
-  </div><!-- /editor-layout -->
-
-  <!-- Firebase SDKs (compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-  <!-- App -->
   <script src="js/firebase.js"></script>
   <script src="js/db.js"></script>
   <script src="js/state.js"></script>
@@ -412,30 +436,85 @@
   <script src="js/editor.js"></script>
 
   <script>
-    // ── Acordeón del panel ──
-    function toggleSeccion(header) {
-      var parent = header.parentElement;
-      parent.classList.toggle('abierta');
-      parent.classList.toggle('abierto');
+    function toggleBloque(cab) {
+      cab.parentElement.classList.toggle('eb-bloque--abierto');
+    }
+    function toggleSub(cab) {
+      cab.parentElement.classList.toggle('eb-sub--abierto');
     }
 
-    // ── Presets ──
     function initPresets() {
       var grid = document.getElementById('presets-grid');
       if (!grid) return;
       var html = '';
       for (var i = 0; i < PRESETS.length; i++) {
         var p = PRESETS[i];
-        html += '<button class="preset-btn" onclick="aplicarPreset(' + "'" + p.id + "'" + ')" title="' + p.descripcion + '">';
-        html += '<span class="preset-btn__muestra">';
-        html += '<span class="preset-btn__color" style="background:' + p.muestra[0] + '"></span>';
-        html += '<span class="preset-btn__color" style="background:' + p.muestra[1] + '"></span>';
-        html += '</span>';
+        html += '<button class="preset-btn" onclick="aplicarPreset('' + p.id + '')" title="' + p.descripcion + '">';
+        html += '<span class="preset-btn__muestra"><span class="preset-btn__color" style="background:' + p.muestra[0] + '"></span><span class="preset-btn__color" style="background:' + p.muestra[1] + '"></span></span>';
         html += '<span class="preset-btn__nombre">' + p.nombre + '</span>';
         html += '</button>';
       }
       grid.innerHTML = html;
     }
+
+    var PLANTILLAS_DEF = [
+      { id: 'clasica',      nombre: 'Clásica',     desc: 'Crema y dorado', colores: ['#f5f0e8','#b8860b','#2c2c2c'] },
+      { id: 'floral',       nombre: 'Floral',       desc: 'Flores',         colores: ['#fdf8f5','#d4788a','#7a9e7e'] },
+      { id: 'moderna',      nombre: 'Moderna',      desc: 'Negro/blanco',   colores: ['#111111','#ffffff','#666666'] },
+      { id: 'mediterranea', nombre: 'Mediterránea', desc: 'Azul marino',    colores: ['#1e4d8c','#faf7f0','#c4a466'] },
+    ];
+
+    function initPlantillas() {
+      var grid = document.getElementById('plantillas-grid');
+      if (!grid) return;
+      var actual = STATE.get().plantilla || 'clasica';
+      grid.innerHTML = PLANTILLAS_DEF.map(function(p) {
+        var activo = (actual === p.id) ? ' plantilla-btn--activa' : '';
+        return '<button class="plantilla-btn' + activo + '" id="plt-' + p.id + '" onclick="seleccionarPlantilla('' + p.id + '')">' +
+          '<div class="plantilla-btn__preview"><div style="background:' + p.colores[0] + ';flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:6px">' +
+          '<div style="font-size:8px;font-weight:700;color:' + p.colores[1] + ';margin-bottom:2px">' + p.nombre + '</div>' +
+          '<div style="width:100%;height:1px;background:' + p.colores[1] + ';opacity:.4"></div>' +
+          '<div style="font-size:7px;color:' + p.colores[2] + ';margin-top:2px;opacity:.6">' + p.desc + '</div>' +
+          '</div></div></button>';
+      }).join('');
+    }
+
+    function seleccionarPlantilla(id) {
+      STATE.set('plantilla', id);
+      document.querySelectorAll('.plantilla-btn').forEach(function(b) { b.classList.remove('plantilla-btn--activa'); });
+      var btn = document.getElementById('plt-' + id);
+      if (btn) btn.classList.add('plantilla-btn--activa');
+    }
+
+    function sincronizarColor(pickerId, textId, ruta) {
+      var picker = document.getElementById(pickerId);
+      var text = document.getElementById(textId);
+      if (!picker || !text) return;
+      text.addEventListener('input', function() {
+        if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) picker.value = text.value;
+      });
+      picker.addEventListener('input', function() {
+        text.value = picker.value;
+        STATE.set(ruta, picker.value);
+      });
+    }
+
+    sincronizarColor('inp-color-primario-picker',   'inp-color-primario',   'estilos.colorPrimario');
+    sincronizarColor('inp-color-secundario-picker', 'inp-color-secundario', 'estilos.colorSecundario');
+    sincronizarColor('inp-color-texto-picker',      'inp-color-texto',      'estilos.colorTexto');
+    sincronizarColor('inp-color-accent-picker',     'inp-color-accent',     'estilos.colorAccent');
+
+    STATE.suscribir(function(boda) {
+      var sets = [
+        ['inp-color-primario-picker',   boda.estilos.colorPrimario],
+        ['inp-color-secundario-picker', boda.estilos.colorSecundario],
+        ['inp-color-texto-picker',      boda.estilos.colorTexto],
+        ['inp-color-accent-picker',     boda.estilos.colorAccent],
+      ];
+      sets.forEach(function(p) { var el = document.getElementById(p[0]); if (el && p[1]) el.value = p[1]; });
+      var chk = document.getElementById('chk-formulario');
+      if (chk) chk.checked = !!(boda.formulario && boda.formulario.activo);
+    });
 
     document.addEventListener('DOMContentLoaded', function() {
       initPresets();
@@ -443,98 +522,6 @@
       SECCIONES.init();
       ORDEN.init();
       FORMULARIO.init();
-
-      // Sync formulario toggle
-      STATE.suscribir(function(boda) {
-        var chk = document.getElementById('chk-formulario');
-        if (chk) chk.checked = !!(boda.formulario && boda.formulario.activo);
-      });
-    });
-
-    // ── Selector de plantillas ──
-    var PLANTILLAS_DEF = [
-      { id: 'clasica',      nombre: 'Clásica',       desc: 'Crema y dorado',     colores: ['#f5f0e8','#b8860b','#2c2c2c'] },
-      { id: 'floral',       nombre: 'Floral',         desc: 'Flores y romance',   colores: ['#fdf8f5','#d4788a','#7a9e7e'] },
-      { id: 'moderna',      nombre: 'Moderna',        desc: 'Negro y blanco',     colores: ['#111111','#ffffff','#666666'] },
-      { id: 'mediterranea', nombre: 'Mediterránea',   desc: 'Azul marino',        colores: ['#1e4d8c','#faf7f0','#c4a466'] },
-    ];
-
-    function initPlantillas() {
-      var grid = document.getElementById('plantillas-grid');
-      if (!grid) return;
-      var html = '';
-      for (var i = 0; i < PLANTILLAS_DEF.length; i++) {
-        var p = PLANTILLAS_DEF[i];
-        var actual = STATE.get().plantilla || 'clasica';
-        var activo = (actual === p.id) ? ' plantilla-btn--activa' : '';
-        html += '<button class="plantilla-btn' + activo + '" id="plt-' + p.id + '" onclick="seleccionarPlantilla(' + "'" + p.id + "'" + ')">';
-        html += '<div class="plantilla-btn__preview">';
-        html += '<div style="background:' + p.colores[0] + ';flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:6px">';
-        html += '<div style="font-size:8px;font-weight:700;color:' + p.colores[1] + ';margin-bottom:2px">' + p.nombre + '</div>';
-        html += '<div style="width:100%;height:1px;background:' + p.colores[1] + ';opacity:.4"></div>';
-        html += '<div style="font-size:7px;color:' + p.colores[2] + ';margin-top:2px;opacity:.6">' + p.desc + '</div>';
-        html += '</div>';
-        html += '</div>';
-        html += '</button>';
-      }
-      grid.innerHTML = html;
-    }
-
-    function seleccionarPlantilla(id) {
-      STATE.set('plantilla', id);
-      // Marcar activa
-      document.querySelectorAll('.plantilla-btn').forEach(function(b) {
-        b.classList.remove('plantilla-btn--activa');
-      });
-      var btn = document.getElementById('plt-' + id);
-      if (btn) btn.classList.add('plantilla-btn--activa');
-      // Plantilla cambia solo el diseño visual, NO los colores ni tipografía
-    }
-
-    // ── Sincronización color picker ↔ input texto ──
-    function sincronizarColor(pickerId, textId, ruta) {
-      const picker = document.getElementById(pickerId);
-      const text = document.getElementById(textId);
-
-      if (!picker || !text) return;
-
-      // Inicializar swatch con valor actual
-      text.addEventListener('input', () => {
-        if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) {
-          picker.value = text.value;
-        }
-      });
-
-      picker.addEventListener('input', () => {
-        text.value = picker.value;
-        STATE.set(ruta, picker.value);
-      });
-
-      // Al poblar el panel, sincronizar el swatch
-      document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-          if (text.value) picker.value = text.value;
-        }, 100);
-      });
-    }
-
-    sincronizarColor('inp-color-primario-picker', 'inp-color-primario', 'estilos.colorPrimario');
-    sincronizarColor('inp-color-secundario-picker', 'inp-color-secundario', 'estilos.colorSecundario');
-    sincronizarColor('inp-color-texto-picker', 'inp-color-texto', 'estilos.colorTexto');
-    sincronizarColor('inp-color-accent-picker', 'inp-color-accent', 'estilos.colorAccent');
-
-    // Actualizar swatches cuando el STATE cargue datos de Firebase
-    STATE.suscribir((boda) => {
-      const sets = [
-        ['inp-color-primario-picker', boda.estilos.colorPrimario],
-        ['inp-color-secundario-picker', boda.estilos.colorSecundario],
-        ['inp-color-texto-picker', boda.estilos.colorTexto],
-        ['inp-color-accent-picker', boda.estilos.colorAccent],
-      ];
-      sets.forEach(([id, val]) => {
-        const el = document.getElementById(id);
-        if (el && val) el.value = val;
-      });
     });
   </script>
 
