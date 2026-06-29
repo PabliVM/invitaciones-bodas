@@ -18,33 +18,207 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Great+Vibes&family=Dancing+Script:wght@400;700&family=Parisienne&family=Pinyon+Script&family=Libre+Baskerville:ital,wght@0,400;1,400&family=EB+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400&family=Josefin+Sans:wght@300;400&family=Montserrat:wght@300;400&family=Raleway:wght@300;400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+
   <style>
-    html, body { margin: 0; padding: 0; background: var(--color-secundario); min-height: 100vh; }
-    #pantalla-carga { position: fixed; inset: 0; background: #f5f0e8; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; gap: 16px; transition: opacity 0.5s; }
+    html, body { margin: 0; padding: 0; background: var(--color-secundario, #f5f0e8); min-height: 100vh; }
+
+    /* ── Pantalla de carga ── */
+    #pantalla-carga {
+      position: fixed; inset: 0; background: #f5f0e8;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 200; gap: 16px; transition: opacity 0.5s;
+    }
     #pantalla-carga.oculto { opacity: 0; pointer-events: none; }
     .carga-ornamento { font-size: 24px; color: #b8860b; letter-spacing: 8px; animation: pulso 1.5s ease-in-out infinite; }
     .carga-texto { font-family: 'Lato', sans-serif; font-size: 11px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; color: #aaa; }
     @keyframes pulso { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* ── Error ── */
     #pantalla-error { display: none; min-height: 100vh; align-items: center; justify-content: center; flex-direction: column; gap: 16px; padding: 32px; text-align: center; font-family: 'Lato', sans-serif; }
     .error-titulo { font-size: 28px; color: #b8860b; }
     .error-texto { font-size: 14px; color: #888; line-height: 1.7; }
+
+    /* ══════════════════════════════════
+       LAYOUT DESKTOP (≥ 900px)
+       ══════════════════════════════════ */
+    @media (min-width: 900px) {
+      body { display: flex; min-height: 100vh; }
+
+      /* Panel lateral izquierdo fijo */
+      .inv-sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: 220px;
+        background: var(--color-secundario, #f5f0e8);
+        border-right: 1px solid rgba(0,0,0,0.06);
+        display: flex;
+        flex-direction: column;
+        padding: 48px 32px 80px;
+        z-index: 50;
+        overflow-y: auto;
+      }
+
+      .inv-sidebar__close {
+        position: absolute;
+        top: 16px; right: 16px;
+        background: transparent;
+        border: none;
+        font-size: 18px;
+        color: var(--color-texto, #2c2c2c);
+        cursor: pointer;
+        opacity: .4;
+        display: none; /* solo móvil */
+      }
+
+      .inv-sidebar__nombres {
+        font-family: var(--fuente-display, 'Cormorant Garamond', serif);
+        font-size: clamp(22px, 2.5vw, 30px);
+        font-weight: 300;
+        color: var(--color-texto, #2c2c2c);
+        line-height: 1.15;
+        margin-bottom: 40px;
+      }
+
+      .inv-sidebar__amp {
+        display: block;
+        font-style: italic;
+        color: var(--color-primario, #b8860b);
+        font-size: .85em;
+      }
+
+      .inv-sidebar__nav {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: auto;
+      }
+
+      .inv-sidebar__nav a {
+        font-family: var(--fuente-body, 'Lato', sans-serif);
+        font-size: 12px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: var(--color-texto, #2c2c2c);
+        text-decoration: none;
+        padding: 6px 0;
+        opacity: .55;
+        transition: opacity .2s, color .2s;
+        border-bottom: 1px solid transparent;
+      }
+
+      .inv-sidebar__nav a:hover,
+      .inv-sidebar__nav a.activo {
+        opacity: 1;
+        color: var(--color-primario, #b8860b);
+        border-bottom-color: var(--color-primario, #b8860b);
+      }
+
+      /* Contenido principal desplazado */
+      .inv-main {
+        margin-left: 220px;
+        flex: 1;
+        min-width: 0;
+      }
+
+      /* Barra inferior fija */
+      .inv-bottombar {
+        position: fixed;
+        bottom: 0; left: 220px; right: 0;
+        background: rgba(245,240,232,0.92);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid rgba(0,0,0,0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        padding: 14px 32px;
+        z-index: 50;
+        transform: translateY(100%);
+        transition: transform .4s ease;
+      }
+
+      .inv-bottombar.visible { transform: translateY(0); }
+
+      .inv-bottombar__fecha {
+        font-family: var(--fuente-body, 'Lato', sans-serif);
+        font-size: 12px;
+        font-weight: 300;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--color-texto, #2c2c2c);
+        opacity: .6;
+      }
+
+      .inv-bottombar__btn {
+        font-family: var(--fuente-body, 'Lato', sans-serif);
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--color-secundario, #f5f0e8);
+        background: var(--color-primario, #b8860b);
+        border: none;
+        padding: 10px 24px;
+        cursor: pointer;
+        transition: opacity .2s;
+      }
+
+      .inv-bottombar__btn:hover { opacity: .85; }
+
+      /* Ocultar nav móvil en desktop */
+      .nav-invitacion { display: none !important; }
+
+      /* Añadir padding inferior para que el contenido no quede bajo la barra */
+      .inv-root { padding-bottom: 70px; }
+    }
+
+    /* ══════════════════════════════════
+       MÓVIL (< 900px)
+       ══════════════════════════════════ */
+    @media (max-width: 899px) {
+      .inv-sidebar { display: none; }
+      .inv-bottombar { display: none; }
+      .inv-main { display: contents; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Carga -->
   <div id="pantalla-carga">
     <div class="carga-ornamento">✦</div>
     <div class="carga-texto">Cargando invitación…</div>
   </div>
 
+  <!-- Error -->
   <div id="pantalla-error">
     <div class="error-titulo">✦</div>
     <p class="error-texto">No hemos encontrado esta invitación.<br>Puede que el enlace sea incorrecto.</p>
   </div>
 
+  <!-- ── SIDEBAR (desktop) ── -->
+  <aside class="inv-sidebar" id="inv-sidebar">
+    <div class="inv-sidebar__nombres" id="sidebar-nombres">
+      <!-- Se rellena con JS -->
+    </div>
+    <nav class="inv-sidebar__nav" id="sidebar-nav">
+      <!-- Se rellena con JS -->
+    </nav>
+  </aside>
+
+  <!-- ── BARRA INFERIOR (desktop) ── -->
+  <div class="inv-bottombar" id="inv-bottombar">
+    <span class="inv-bottombar__fecha" id="bottombar-fecha"></span>
+    <button class="inv-bottombar__btn" id="bottombar-btn">Cuestionario</button>
+  </div>
+
+  <!-- ── NAV MÓVIL ── -->
   <nav class="nav-invitacion oculta" id="nav-invitacion"></nav>
 
-  <div class="inv-root inv-root--con-nav" id="invitation-root"></div>
+  <!-- ── CONTENIDO ── -->
+  <div class="inv-main">
+    <div class="inv-root inv-root--con-nav" id="invitation-root"></div>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -60,52 +234,100 @@
     DB.init();
 
     var _navSecciones = [];
+    var _bodaData = null;
 
+    /* ── Construir sidebar y nav móvil ── */
     function _buildNav(boda) {
-      var nav = document.getElementById('nav-invitacion');
-      if (!nav) return;
       var LABELS_DEFAULT = {
-        historia: 'Historia', galeria: 'Galería', evento: 'Evento',
-        dresscode: 'Dress code', alojamiento: 'Alojamiento', transporte: 'Transporte',
-        rsvp: 'RSVP', mensaje: 'Mensaje', formulario: 'Formulario',
+        historia:'Historia', galeria:'Galería', evento:'Evento',
+        dresscode:'Dress code', alojamiento:'Alojamiento', transporte:'Transporte',
+        rsvp:'RSVP', mensaje:'Mensaje', formulario:'Formulario',
       };
-      var orden = (boda.orden_secciones || ['historia','galeria','evento','rsvp']);
-      var secciones = [{ id: 'portada', label: 'Inicio' }];
+
+      var orden = boda.orden_secciones || ['historia','galeria','evento','rsvp'];
+      var secciones = [{ id:'portada', label:'Inicio' }];
+
       orden.forEach(function(id) {
         if (id.indexOf('extra_') === 0) {
-          var idx = parseInt(id.replace('extra_', ''));
+          var idx = parseInt(id.replace('extra_',''));
           var extras = boda.secciones_extra || [];
-          if (extras[idx]) secciones.push({ id: 'extra-' + idx, label: extras[idx].titulo || 'Extra' });
+          if (extras[idx]) secciones.push({ id:'extra-'+idx, label: extras[idx].titulo || 'Extra' });
           return;
         }
         var sec = boda[id];
-        if (!sec) return;
-        if (sec.activo === false || sec.activa === false) return;
-        var label = (sec.titulo) || LABELS_DEFAULT[id] || id;
-        secciones.push({ id: id, label: label });
+        if (!sec || sec.activo === false || sec.activa === false) return;
+        secciones.push({ id: id, label: sec.titulo || LABELS_DEFAULT[id] || id });
       });
+
       _navSecciones = secciones;
-      nav.innerHTML = secciones.map(function(s, i) {
-        return '<a class="nav-invitacion__item' + (i === 0 ? ' activo' : '') + '" href="#sec-' + s.id + '">' + s.label + '</a>';
-      }).join('');
+
+      // Sidebar desktop
+      var sidebarNombres = document.getElementById('sidebar-nombres');
+      if (sidebarNombres && boda.pareja) {
+        sidebarNombres.innerHTML =
+          '<span>' + (boda.pareja.novio||'') + '</span>' +
+          '<span class="inv-sidebar__amp">&amp;</span>' +
+          '<span>' + (boda.pareja.novia||'') + '</span>';
+      }
+
+      var sidebarNav = document.getElementById('sidebar-nav');
+      if (sidebarNav) {
+        sidebarNav.innerHTML = secciones.map(function(s, i) {
+          return '<a href="#sec-' + s.id + '" class="' + (i===0?'activo':'') + '" onclick="return _navClick(this)">' + s.label + '</a>';
+        }).join('');
+      }
+
+      // Barra inferior
+      var fecha = boda.fecha || {};
+      var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      var mesNombre = meses[parseInt(fecha.mes)-1] || fecha.mes || '';
+      var fechaStr = fecha.dia + ' de ' + mesNombre + ' de ' + fecha.anio;
+      var bottomFecha = document.getElementById('bottombar-fecha');
+      if (bottomFecha) bottomFecha.textContent = fechaStr;
+
+      // Botón barra inferior → scroll al formulario o RSVP
+      var bottomBtn = document.getElementById('bottombar-btn');
+      if (bottomBtn) {
+        var targetId = (boda.formulario && boda.formulario.activo) ? 'sec-formulario' : 'sec-rsvp';
+        var targetLabel = (boda.formulario && boda.formulario.activo)
+          ? (boda.formulario.textoBtnEnviar || 'Formulario')
+          : (boda.rsvp && boda.rsvp.titulo || 'RSVP');
+        bottomBtn.textContent = targetLabel;
+        bottomBtn.onclick = function() {
+          var el = document.getElementById(targetId);
+          if (el) el.scrollIntoView({ behavior:'smooth' });
+        };
+      }
+
+      // Nav móvil
+      var navMovil = document.getElementById('nav-invitacion');
+      if (navMovil) {
+        navMovil.innerHTML = secciones.map(function(s, i) {
+          return '<a class="nav-invitacion__item' + (i===0?' activo':'') + '" href="#sec-' + s.id + '">' + s.label + '</a>';
+        }).join('');
+      }
+    }
+
+    function _navClick(a) {
+      // smooth scroll
+      var href = a.getAttribute('href');
+      var el = document.querySelector(href);
+      if (el) { el.scrollIntoView({ behavior:'smooth' }); return false; }
+      return true;
     }
 
     function _actualizarOGTags(boda) {
       var novio = boda.pareja ? boda.pareja.novio : '';
       var novia = boda.pareja ? boda.pareja.novia : '';
-      var dia = boda.fecha ? boda.fecha.dia : '';
-      var mes = boda.fecha ? boda.fecha.mes : '';
-      var anio = boda.fecha ? boda.fecha.anio : '';
-      var lugar = boda.evento ? boda.evento.lugar : '';
-      var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-      var mesNombre = meses[parseInt(mes)-1] || mes;
       var titulo = 'Boda de ' + novio + ' & ' + novia;
-      var desc = 'El ' + dia + ' de ' + mesNombre + ' de ' + anio + ' en ' + lugar + '. ¡Estás invitado!';
-      var foto = (boda.galeria && boda.galeria.fotos && boda.galeria.fotos.length > 0) ? boda.galeria.fotos[0] : '';
+      var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      var mes = boda.fecha ? (meses[parseInt(boda.fecha.mes)-1]||boda.fecha.mes) : '';
+      var desc = 'El ' + (boda.fecha&&boda.fecha.dia||'') + ' de ' + mes + ' de ' + (boda.fecha&&boda.fecha.anio||'') + '. ¡Estás invitado!';
+      var foto = (boda.galeria&&boda.galeria.fotos&&boda.galeria.fotos.length>0) ? boda.galeria.fotos[0] : '';
       document.title = titulo;
-      var set = function(id, val) { var el = document.getElementById(id); if (el && val) el.setAttribute('content', val); };
-      set('og-title', titulo); set('og-description', desc); set('og-image', foto); set('og-url', window.location.href);
-      set('tw-title', titulo); set('tw-description', desc); set('tw-image', foto);
+      var set = function(id,v){ var e=document.getElementById(id); if(e&&v) e.setAttribute('content',v); };
+      set('og-title',titulo); set('og-description',desc); set('og-image',foto); set('og-url',window.location.href);
+      set('tw-title',titulo); set('tw-description',desc); set('tw-image',foto);
     }
 
     async function cargarInvitacion() {
@@ -114,35 +336,45 @@
       var pantallaCarga = document.getElementById('pantalla-carga');
       var pantallaError = document.getElementById('pantalla-error');
       var root = document.getElementById('invitation-root');
-      if (!id) { pantallaCarga.classList.add('oculto'); pantallaError.style.display = 'flex'; return; }
+
+      if (!id) { pantallaCarga.classList.add('oculto'); pantallaError.style.display='flex'; return; }
+
       try {
         var boda = await DB.cargarBoda(id);
-        if (!boda) { pantallaCarga.classList.add('oculto'); pantallaError.style.display = 'flex'; return; }
+        if (!boda) { pantallaCarga.classList.add('oculto'); pantallaError.style.display='flex'; return; }
+
+        _bodaData = boda;
         _actualizarOGTags(boda);
         RENDERER.render(boda, root);
         _buildNav(boda);
-        setTimeout(function() { pantallaCarga.classList.add('oculto'); }, 300);
+
+        setTimeout(function(){ pantallaCarga.classList.add('oculto'); }, 300);
         _initRSVP(id, boda);
-      } catch (err) {
-        console.error('Error:', err);
+
+      } catch(err) {
+        console.error(err);
         pantallaCarga.classList.add('oculto');
         pantallaError.style.display = 'flex';
       }
     }
 
-    function _initRSVP(bodaId, boda) {
+    function _initRSVP(bodaId) {
       var form = document.getElementById('rsvp-form');
       if (!form) return;
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
         var btn = form.querySelector('.inv-rsvp__btn');
         btn.textContent = 'Enviando…'; btn.disabled = true;
-        var data = { nombre: form.nombre.value, asistencia: form.asistencia.value, mensaje: form.mensaje.value, enviadoEn: firebase.firestore.FieldValue.serverTimestamp() };
         try {
-          await firebase.firestore().collection('weddings').doc(bodaId).collection('rsvps').add(data);
+          await firebase.firestore().collection('weddings').doc(bodaId).collection('rsvps').add({
+            nombre: form.nombre.value,
+            asistencia: form.asistencia.value,
+            mensaje: form.mensaje.value,
+            enviadoEn: firebase.firestore.FieldValue.serverTimestamp()
+          });
           form.style.display = 'none';
           document.getElementById('rsvp-enviado').style.display = 'block';
-        } catch (err) {
+        } catch(err) {
           btn.textContent = 'Error. Inténtalo de nuevo.'; btn.disabled = false;
         }
       });
@@ -150,26 +382,59 @@
 
     cargarInvitacion();
 
-    function initNav() {
-      var nav = document.getElementById('nav-invitacion');
-      if (!nav) return;
-      var mostrado = false;
+    /* ── Scroll: nav activo + bottombar + sidebar highlight ── */
+    function initScroll() {
+      var bottombar = document.getElementById('inv-bottombar');
+      var navMovil = document.getElementById('nav-invitacion');
+      var mostradoMovil = false;
+      var mostradoBottom = false;
+
       window.addEventListener('scroll', function() {
         var scrollY = window.scrollY || window.pageYOffset;
-        var altoPantalla = window.innerHeight;
-        if (scrollY > altoPantalla * 0.6 && !mostrado) { nav.classList.remove('oculta'); mostrado = true; }
-        else if (scrollY < altoPantalla * 0.3 && mostrado) { nav.classList.add('oculta'); mostrado = false; }
-        var activa = 'portada';
+        var vh = window.innerHeight;
+        var isDesktop = window.innerWidth >= 900;
+
+        // Bottombar: aparece al pasar la portada
+        if (bottombar) {
+          if (scrollY > vh * 0.7 && !mostradoBottom) {
+            bottombar.classList.add('visible');
+            mostradoBottom = true;
+          } else if (scrollY < vh * 0.3 && mostradoBottom) {
+            bottombar.classList.remove('visible');
+            mostradoBottom = false;
+          }
+        }
+
+        // Nav móvil
+        if (navMovil && !isDesktop) {
+          if (scrollY > vh * 0.6 && !mostradoMovil) {
+            navMovil.classList.remove('oculta'); mostradoMovil = true;
+          } else if (scrollY < vh * 0.3 && mostradoMovil) {
+            navMovil.classList.add('oculta'); mostradoMovil = false;
+          }
+        }
+
+        // Sección activa
+        var activa = _navSecciones.length ? _navSecciones[0].id : 'portada';
         _navSecciones.forEach(function(s) {
           var el = document.getElementById('sec-' + s.id);
-          if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) activa = s.id;
+          if (el && el.getBoundingClientRect().top < vh * 0.4) activa = s.id;
         });
-        nav.querySelectorAll('.nav-invitacion__item').forEach(function(a) {
+
+        // Sidebar desktop
+        document.querySelectorAll('.inv-sidebar__nav a').forEach(function(a) {
           a.classList.toggle('activo', a.getAttribute('href') === '#sec-' + activa);
         });
+        // Nav móvil
+        if (navMovil) {
+          navMovil.querySelectorAll('.nav-invitacion__item').forEach(function(a) {
+            a.classList.toggle('activo', a.getAttribute('href') === '#sec-' + activa);
+          });
+        }
       }, { passive: true });
     }
-    setTimeout(initNav, 800);
+
+    setTimeout(initScroll, 800);
   </script>
 </body>
 </html>
