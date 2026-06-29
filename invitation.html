@@ -20,113 +20,236 @@
   <link rel="stylesheet" href="css/styles.css" />
 
   <style>
-    html, body { margin: 0; padding: 0; background: var(--color-secundario, #f5f0e8); min-height: 100vh; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--color-secundario, #f5f0e8); }
 
-    /* ── Pantalla de carga ── */
-    #pantalla-carga {
-      position: fixed; inset: 0; background: #f5f0e8;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 200; gap: 16px; transition: opacity 0.5s;
-    }
+    /* ── Carga ── */
+    #pantalla-carga { position: fixed; inset: 0; background: #f5f0e8; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 200; gap: 16px; transition: opacity 0.5s; }
     #pantalla-carga.oculto { opacity: 0; pointer-events: none; }
     .carga-ornamento { font-size: 24px; color: #b8860b; letter-spacing: 8px; animation: pulso 1.5s ease-in-out infinite; }
     .carga-texto { font-family: 'Lato', sans-serif; font-size: 11px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; color: #aaa; }
-    @keyframes pulso { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-    /* ── Error ── */
-    #pantalla-error { display: none; min-height: 100vh; align-items: center; justify-content: center; flex-direction: column; gap: 16px; padding: 32px; text-align: center; font-family: 'Lato', sans-serif; }
-    .error-titulo { font-size: 28px; color: #b8860b; }
-    .error-texto { font-size: 14px; color: #888; line-height: 1.7; }
+    @keyframes pulso { 0%,100%{opacity:1}50%{opacity:.3} }
+    #pantalla-error { display:none; min-height:100vh; align-items:center; justify-content:center; flex-direction:column; gap:16px; padding:32px; text-align:center; font-family:'Lato',sans-serif; }
+    .error-titulo { font-size:28px; color:#b8860b; }
+    .error-texto { font-size:14px; color:#888; line-height:1.7; }
 
     /* ══════════════════════════════════
-       LAYOUT DESKTOP (≥ 900px)
+       MÓVIL — scroll vertical normal
+       ══════════════════════════════════ */
+    .nav-invitacion { /* estilos en styles.css */ }
+    .desk-layout { display: none; }
+
+    /* ══════════════════════════════════
+       DESKTOP ≥ 900px — split layout
        ══════════════════════════════════ */
     @media (min-width: 900px) {
-      body { display: flex; min-height: 100vh; }
 
-      /* Panel lateral izquierdo fijo */
-      .inv-sidebar {
+      /* Ocultar versión móvil */
+      .inv-root, .nav-invitacion { display: none !important; }
+
+      /* Layout principal */
+      .desk-layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* ── Menú hamburguesa ── */
+      .desk-menu-btn {
+        position: fixed;
+        top: 20px; left: 20px;
+        z-index: 100;
+        background: rgba(255,255,255,0.9);
+        border: none;
+        padding: 10px 16px;
+        font-family: 'Lato', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        backdrop-filter: blur(4px);
+      }
+
+      .desk-menu-btn span { font-size: 16px; }
+
+      /* ── Sidebar nav (drawer) ── */
+      .desk-nav {
         position: fixed;
         top: 0; left: 0; bottom: 0;
-        width: 220px;
+        width: 260px;
         background: var(--color-secundario, #f5f0e8);
-        border-right: 1px solid rgba(0,0,0,0.06);
+        z-index: 90;
+        transform: translateX(-100%);
+        transition: transform 0.35s ease;
+        padding: 64px 40px 40px;
         display: flex;
         flex-direction: column;
-        padding: 48px 32px 80px;
-        z-index: 50;
+        gap: 0;
+        border-right: 1px solid rgba(0,0,0,0.06);
         overflow-y: auto;
       }
 
-      .inv-sidebar__close {
+      .desk-nav.abierto { transform: translateX(0); }
+
+      .desk-nav__close {
         position: absolute;
-        top: 16px; right: 16px;
+        top: 20px; right: 20px;
         background: transparent;
         border: none;
-        font-size: 18px;
-        color: var(--color-texto, #2c2c2c);
+        font-size: 20px;
         cursor: pointer;
-        opacity: .4;
-        display: none; /* solo móvil */
+        color: var(--color-texto, #2c2c2c);
+        opacity: .5;
       }
 
-      .inv-sidebar__nombres {
+      .desk-nav__nombres {
         font-family: var(--fuente-display, 'Cormorant Garamond', serif);
-        font-size: clamp(22px, 2.5vw, 30px);
+        font-size: 28px;
         font-weight: 300;
         color: var(--color-texto, #2c2c2c);
-        line-height: 1.15;
+        line-height: 1.2;
         margin-bottom: 40px;
       }
 
-      .inv-sidebar__amp {
+      .desk-nav__nombres em {
         display: block;
         font-style: italic;
         color: var(--color-primario, #b8860b);
-        font-size: .85em;
+        font-size: .8em;
       }
 
-      .inv-sidebar__nav {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        margin-top: auto;
-      }
-
-      .inv-sidebar__nav a {
-        font-family: var(--fuente-body, 'Lato', sans-serif);
+      .desk-nav__link {
+        display: block;
+        font-family: 'Lato', sans-serif;
         font-size: 12px;
         font-weight: 300;
         letter-spacing: 1px;
         color: var(--color-texto, #2c2c2c);
         text-decoration: none;
-        padding: 6px 0;
-        opacity: .55;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        opacity: .6;
         transition: opacity .2s, color .2s;
-        border-bottom: 1px solid transparent;
       }
 
-      .inv-sidebar__nav a:hover,
-      .inv-sidebar__nav a.activo {
+      .desk-nav__link:hover,
+      .desk-nav__link.activo {
         opacity: 1;
         color: var(--color-primario, #b8860b);
-        border-bottom-color: var(--color-primario, #b8860b);
       }
 
-      /* Contenido principal desplazado */
-      .inv-main {
-        margin-left: 220px;
+      /* Overlay oscuro al abrir nav */
+      .desk-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.3);
+        z-index: 80;
+      }
+      .desk-overlay.activo { display: block; }
+
+      /* ── Contenido split ── */
+      .desk-content {
         flex: 1;
-        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Cada sección = fila split */
+      .desk-seccion {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+      }
+
+      /* Portada ocupa toda la pantalla */
+      .desk-seccion--portada {
+        grid-template-columns: 1fr;
+        position: relative;
+      }
+
+      .desk-foto {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+        background: #111;
+      }
+
+      .desk-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        display: block;
+      }
+
+      .desk-texto {
+        padding: 80px 64px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: var(--color-secundario, #f5f0e8);
+        min-height: 100vh;
+      }
+
+      /* Portada: foto full + texto superpuesto */
+      .desk-portada-wrap {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .desk-portada-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      .desk-portada-overlay {
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 60%);
+        padding: 48px 64px;
+        color: #fff;
+      }
+
+      .desk-portada-nombres {
+        font-family: var(--fuente-display, 'Cormorant Garamond', serif);
+        font-size: clamp(48px, 6vw, 80px);
+        font-weight: 300;
+        line-height: 1.05;
+        margin-bottom: 16px;
+      }
+
+      .desk-portada-nombres em {
+        font-style: italic;
+        font-size: .6em;
+        display: block;
+        color: rgba(255,255,255,.7);
+      }
+
+      .desk-portada-fecha {
+        font-family: 'Lato', sans-serif;
+        font-size: 13px;
+        font-weight: 300;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        opacity: .8;
       }
 
       /* Barra inferior fija */
-      .inv-bottombar {
+      .desk-bottombar {
         position: fixed;
-        bottom: 0; left: 220px; right: 0;
-        background: rgba(245,240,232,0.92);
+        bottom: 0; left: 0; right: 0;
+        background: rgba(245,240,232,0.95);
         backdrop-filter: blur(8px);
-        border-top: 1px solid rgba(0,0,0,0.06);
+        border-top: 1px solid rgba(0,0,0,.06);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -137,25 +260,25 @@
         transition: transform .4s ease;
       }
 
-      .inv-bottombar.visible { transform: translateY(0); }
+      .desk-bottombar.visible { transform: translateY(0); }
 
-      .inv-bottombar__fecha {
-        font-family: var(--fuente-body, 'Lato', sans-serif);
-        font-size: 12px;
+      .desk-bottombar__fecha {
+        font-family: 'Lato', sans-serif;
+        font-size: 11px;
         font-weight: 300;
-        letter-spacing: 2px;
+        letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--color-texto, #2c2c2c);
         opacity: .6;
       }
 
-      .inv-bottombar__btn {
-        font-family: var(--fuente-body, 'Lato', sans-serif);
+      .desk-bottombar__btn {
+        font-family: 'Lato', sans-serif;
         font-size: 11px;
         font-weight: 400;
         letter-spacing: 2px;
         text-transform: uppercase;
-        color: var(--color-secundario, #f5f0e8);
+        color: #fff;
         background: var(--color-primario, #b8860b);
         border: none;
         padding: 10px 24px;
@@ -163,61 +286,151 @@
         transition: opacity .2s;
       }
 
-      .inv-bottombar__btn:hover { opacity: .85; }
+      .desk-bottombar__btn:hover { opacity: .85; }
 
-      /* Ocultar nav móvil en desktop */
-      .nav-invitacion { display: none !important; }
+      /* Títulos de sección desktop */
+      .desk-sec-titulo {
+        font-family: var(--fuente-display, 'Cormorant Garamond', serif);
+        font-size: clamp(28px, 3vw, 42px);
+        font-weight: 300;
+        color: var(--color-texto, #2c2c2c);
+        margin-bottom: 24px;
+        letter-spacing: 1px;
+      }
 
-      /* Añadir padding inferior para que el contenido no quede bajo la barra */
-      .inv-root { padding-bottom: 70px; }
-    }
+      .desk-sec-texto {
+        font-family: var(--fuente-body, 'Lato', sans-serif);
+        font-size: 15px;
+        font-weight: 300;
+        line-height: 1.8;
+        color: var(--color-texto, #2c2c2c);
+        opacity: .8;
+      }
 
-    /* ══════════════════════════════════
-       MÓVIL (< 900px)
-       ══════════════════════════════════ */
-    @media (max-width: 899px) {
-      .inv-sidebar { display: none; }
-      .inv-bottombar { display: none; }
-      .inv-main { display: contents; }
+      .desk-sec-meta {
+        font-family: 'Lato', sans-serif;
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--color-primario, #b8860b);
+        margin-bottom: 8px;
+      }
+
+      .desk-sec-lugar {
+        font-family: var(--fuente-display, 'Cormorant Garamond', serif);
+        font-size: 22px;
+        color: var(--color-texto, #2c2c2c);
+        margin-bottom: 8px;
+      }
+
+      .desk-sec-dir {
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 20px;
+      }
+
+      .desk-sec-btn {
+        display: inline-block;
+        font-family: 'Lato', sans-serif;
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--color-primario, #b8860b);
+        text-decoration: none;
+        border-bottom: 1px solid var(--color-primario, #b8860b);
+        padding-bottom: 2px;
+      }
+
+      /* Galería desktop: grid de fotos */
+      .desk-galeria-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .desk-galeria-grid img {
+        width: 100%;
+        aspect-ratio: 3/4;
+        object-fit: cover;
+        display: block;
+      }
+
+      .desk-galeria-grid img:first-child {
+        grid-column: 1 / -1;
+        aspect-ratio: 16/9;
+      }
+
+      /* RSVP desktop */
+      .desk-rsvp-form { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+      .desk-rsvp-form input,
+      .desk-rsvp-form textarea {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(0,0,0,.2);
+        font-family: 'Lato', sans-serif;
+        font-size: 14px;
+        font-weight: 300;
+        padding: 10px 0;
+        outline: none;
+        width: 100%;
+        color: var(--color-texto, #2c2c2c);
+      }
+      .desk-rsvp-btn {
+        align-self: flex-start;
+        background: var(--color-primario, #b8860b);
+        color: #fff;
+        border: none;
+        padding: 12px 32px;
+        font-family: 'Lato', sans-serif;
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-top: 8px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Carga -->
   <div id="pantalla-carga">
     <div class="carga-ornamento">✦</div>
     <div class="carga-texto">Cargando invitación…</div>
   </div>
-
-  <!-- Error -->
   <div id="pantalla-error">
     <div class="error-titulo">✦</div>
     <p class="error-texto">No hemos encontrado esta invitación.<br>Puede que el enlace sea incorrecto.</p>
   </div>
 
-  <!-- ── SIDEBAR (desktop) ── -->
-  <aside class="inv-sidebar" id="inv-sidebar">
-    <div class="inv-sidebar__nombres" id="sidebar-nombres">
-      <!-- Se rellena con JS -->
-    </div>
-    <nav class="inv-sidebar__nav" id="sidebar-nav">
-      <!-- Se rellena con JS -->
-    </nav>
-  </aside>
-
-  <!-- ── BARRA INFERIOR (desktop) ── -->
-  <div class="inv-bottombar" id="inv-bottombar">
-    <span class="inv-bottombar__fecha" id="bottombar-fecha"></span>
-    <button class="inv-bottombar__btn" id="bottombar-btn">Cuestionario</button>
-  </div>
-
-  <!-- ── NAV MÓVIL ── -->
+  <!-- MÓVIL: renderizado normal -->
   <nav class="nav-invitacion oculta" id="nav-invitacion"></nav>
+  <div class="inv-root inv-root--con-nav" id="invitation-root"></div>
 
-  <!-- ── CONTENIDO ── -->
-  <div class="inv-main">
-    <div class="inv-root inv-root--con-nav" id="invitation-root"></div>
+  <!-- DESKTOP: layout split -->
+  <div class="desk-layout" id="desk-layout" style="display:none">
+
+    <!-- Menú -->
+    <button class="desk-menu-btn" onclick="abrirNav()">
+      <span>☰</span> MENÚ
+    </button>
+
+    <div class="desk-overlay" id="desk-overlay" onclick="cerrarNav()"></div>
+
+    <nav class="desk-nav" id="desk-nav">
+      <button class="desk-nav__close" onclick="cerrarNav()">✕</button>
+      <div class="desk-nav__nombres" id="desk-nombres"></div>
+      <div id="desk-nav-links"></div>
+    </nav>
+
+    <!-- Barra inferior -->
+    <div class="desk-bottombar" id="desk-bottombar">
+      <span class="desk-bottombar__fecha" id="desk-fecha"></span>
+      <button class="desk-bottombar__btn" id="desk-btn-form">Cuestionario</button>
+    </div>
+
+    <!-- Contenido por secciones -->
+    <div class="desk-content" id="desk-content"></div>
+
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -233,137 +446,164 @@
   <script>
     DB.init();
 
+    var _boda = null;
     var _navSecciones = [];
-    var _bodaData = null;
+    var _ultimaFoto = '';
 
-    /* ── Construir sidebar y nav móvil ── */
-    function _buildNav(boda) {
-      var LABELS_DEFAULT = {
-        historia:'Historia', galeria:'Galería', evento:'Evento',
-        dresscode:'Dress code', alojamiento:'Alojamiento', transporte:'Transporte',
-        rsvp:'RSVP', mensaje:'Mensaje', formulario:'Formulario',
-      };
+    var LABELS = {
+      historia:'Historia', galeria:'Galería', evento:'Evento',
+      dresscode:'Dress code', alojamiento:'Alojamiento', transporte:'Transporte',
+      rsvp:'RSVP', mensaje:'Mensaje', formulario:'Formulario',
+    };
 
-      var orden = boda.orden_secciones || ['historia','galeria','evento','rsvp'];
-      var secciones = [{ id:'portada', label:'Inicio' }];
+    function abrirNav() {
+      document.getElementById('desk-nav').classList.add('abierto');
+      document.getElementById('desk-overlay').classList.add('activo');
+    }
+
+    function cerrarNav() {
+      document.getElementById('desk-nav').classList.remove('abierto');
+      document.getElementById('desk-overlay').classList.remove('activo');
+    }
+
+    function _getFoto(sec) {
+      if (sec && sec.foto && sec.foto.trim()) {
+        _ultimaFoto = sec.foto.trim();
+      }
+      return _ultimaFoto;
+    }
+
+    function _buildDesktop(boda) {
+      var content = document.getElementById('desk-content');
+      var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      var f = boda.fecha || {};
+      var mesNombre = meses[parseInt(f.mes)-1] || f.mes || '';
+      var fechaStr = (f.dia||'') + ' de ' + mesNombre + ' de ' + (f.anio||'');
+
+      // Foto inicial = foto de cabecera
+      _ultimaFoto = boda.fotoCabecera || '';
+
+      var html = '';
+
+      // ── PORTADA ──
+      html += '<section class="desk-seccion desk-seccion--portada" id="desk-sec-portada">';
+      html += '<div class="desk-portada-wrap">';
+      if (boda.fotoCabecera) {
+        html += '<img src="' + boda.fotoCabecera + '" alt="Portada" />';
+      }
+      html += '<div class="desk-portada-overlay">';
+      html += '<div class="desk-portada-nombres">';
+      html += (boda.pareja && boda.pareja.novio || '') + '<em>&amp;</em>' + (boda.pareja && boda.pareja.novia || '');
+      html += '</div>';
+      html += '<div class="desk-portada-fecha">' + fechaStr + '</div>';
+      html += '</div></div>';
+      html += '</section>';
+
+      // ── SECCIONES en orden ──
+      var orden = boda.orden_secciones || ['historia','galeria','evento','dresscode','rsvp','mensaje'];
+      var navItems = [{ id: 'portada', label: 'Inicio' }];
 
       orden.forEach(function(id) {
-        if (id.indexOf('extra_') === 0) {
-          var idx = parseInt(id.replace('extra_',''));
-          var extras = boda.secciones_extra || [];
-          if (extras[idx]) secciones.push({ id:'extra-'+idx, label: extras[idx].titulo || 'Extra' });
-          return;
-        }
         var sec = boda[id];
-        if (!sec || sec.activo === false || sec.activa === false) return;
-        secciones.push({ id: id, label: sec.titulo || LABELS_DEFAULT[id] || id });
+        if (!sec) return;
+        if (sec.activo === false || sec.activa === false) return;
+
+        var label = (sec.titulo) || LABELS[id] || id;
+        navItems.push({ id: id, label: label });
+        var foto = _getFoto(sec);
+
+        html += '<section class="desk-seccion" id="desk-sec-' + id + '">';
+
+        // Foto izquierda
+        html += '<div class="desk-foto">';
+        if (foto) html += '<img src="' + foto + '" alt="' + label + '" />';
+        html += '</div>';
+
+        // Texto derecha
+        html += '<div class="desk-texto">';
+
+        if (id === 'galeria') {
+          html += '<h2 class="desk-sec-titulo">' + label + '</h2>';
+          var fotos = sec.fotos || [];
+          html += '<div class="desk-galeria-grid">';
+          fotos.forEach(function(url) {
+            html += '<img src="' + url + '" loading="lazy" />';
+          });
+          html += '</div>';
+
+        } else if (id === 'evento') {
+          html += '<p class="desk-sec-meta">' + fechaStr + ' · ' + (f.hora||'') + 'h</p>';
+          html += '<h2 class="desk-sec-titulo">' + label + '</h2>';
+          html += '<div class="desk-sec-lugar">' + (sec.lugar||'') + '</div>';
+          html += '<div class="desk-sec-dir">' + (sec.direccion||'') + '</div>';
+          if (sec.googleMapsUrl) html += '<a class="desk-sec-btn" href="' + sec.googleMapsUrl + '" target="_blank">Ver en el mapa →</a>';
+
+        } else if (id === 'rsvp') {
+          html += '<h2 class="desk-sec-titulo">' + label + '</h2>';
+          if (sec.fechaLimite) {
+            var dl = new Date(sec.fechaLimite);
+            html += '<p class="desk-sec-meta">Antes del ' + dl.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) + '</p>';
+          }
+          html += '<form class="desk-rsvp-form" id="desk-rsvp-form">';
+          html += '<input type="text" name="nombre" placeholder="Tu nombre completo" required />';
+          html += '<label style="display:flex;gap:10px;align-items:center;font-size:14px;font-weight:300"><input type="radio" name="asistencia" value="si" /> Asistiré con alegría</label>';
+          html += '<label style="display:flex;gap:10px;align-items:center;font-size:14px;font-weight:300"><input type="radio" name="asistencia" value="no" /> No podré asistir</label>';
+          html += '<textarea name="mensaje" placeholder="Mensaje para los novios (opcional)" rows="3"></textarea>';
+          html += '<button type="submit" class="desk-rsvp-btn">Confirmar asistencia</button>';
+          html += '</form>';
+          html += '<div id="desk-rsvp-ok" style="display:none;font-family:var(--fuente-display);font-size:20px;font-style:italic;color:var(--color-primario)">¡Gracias! Lo hemos anotado.</div>';
+
+        } else {
+          html += '<h2 class="desk-sec-titulo">' + label + '</h2>';
+          if (sec.texto) html += '<p class="desk-sec-texto">' + sec.texto.replace(/\n/g,'<br>') + '</p>';
+        }
+
+        html += '</div></section>';
       });
 
-      _navSecciones = secciones;
+      content.innerHTML = html;
 
-      // Sidebar desktop
-      var sidebarNombres = document.getElementById('sidebar-nombres');
-      if (sidebarNombres && boda.pareja) {
-        sidebarNombres.innerHTML =
-          '<span>' + (boda.pareja.novio||'') + '</span>' +
-          '<span class="inv-sidebar__amp">&amp;</span>' +
-          '<span>' + (boda.pareja.novia||'') + '</span>';
-      }
-
-      var sidebarNav = document.getElementById('sidebar-nav');
-      if (sidebarNav) {
-        sidebarNav.innerHTML = secciones.map(function(s, i) {
-          return '<a href="#sec-' + s.id + '" class="' + (i===0?'activo':'') + '" onclick="return _navClick(this)">' + s.label + '</a>';
+      // Nav links
+      _navSecciones = navItems;
+      var navLinksEl = document.getElementById('desk-nav-links');
+      if (navLinksEl) {
+        navLinksEl.innerHTML = navItems.map(function(s, i) {
+          return '<a class="desk-nav__link' + (i===0?' activo':'') + '" href="#desk-sec-' + s.id + '" onclick="cerrarNav()">' + s.label + '</a>';
         }).join('');
       }
 
-      // Barra inferior
-      var fecha = boda.fecha || {};
-      var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-      var mesNombre = meses[parseInt(fecha.mes)-1] || fecha.mes || '';
-      var fechaStr = fecha.dia + ' de ' + mesNombre + ' de ' + fecha.anio;
-      var bottomFecha = document.getElementById('bottombar-fecha');
-      if (bottomFecha) bottomFecha.textContent = fechaStr;
+      // Nombres sidebar
+      var nombresEl = document.getElementById('desk-nombres');
+      if (nombresEl && boda.pareja) {
+        nombresEl.innerHTML = (boda.pareja.novio||'') + '<em>&amp; ' + (boda.pareja.novia||'') + '</em>';
+      }
 
-      // Botón barra inferior → scroll al formulario o RSVP
-      var bottomBtn = document.getElementById('bottombar-btn');
-      if (bottomBtn) {
-        var targetId = (boda.formulario && boda.formulario.activo) ? 'sec-formulario' : 'sec-rsvp';
-        var targetLabel = (boda.formulario && boda.formulario.activo)
-          ? (boda.formulario.textoBtnEnviar || 'Formulario')
-          : (boda.rsvp && boda.rsvp.titulo || 'RSVP');
-        bottomBtn.textContent = targetLabel;
-        bottomBtn.onclick = function() {
-          var el = document.getElementById(targetId);
+      // Fecha barra inferior
+      var fechaEl = document.getElementById('desk-fecha');
+      if (fechaEl) fechaEl.textContent = fechaStr;
+
+      // Botón formulario
+      var btnForm = document.getElementById('desk-btn-form');
+      if (btnForm) {
+        var hasForm = boda.formulario && boda.formulario.activo;
+        btnForm.textContent = hasForm ? (boda.formulario.textoBtnEnviar || 'Formulario') : (boda.rsvp && boda.rsvp.titulo || 'RSVP');
+        btnForm.onclick = function() {
+          var target = hasForm ? 'desk-sec-formulario' : 'desk-sec-rsvp';
+          var el = document.getElementById(target);
           if (el) el.scrollIntoView({ behavior:'smooth' });
         };
       }
 
-      // Nav móvil
-      var navMovil = document.getElementById('nav-invitacion');
-      if (navMovil) {
-        navMovil.innerHTML = secciones.map(function(s, i) {
-          return '<a class="nav-invitacion__item' + (i===0?' activo':'') + '" href="#sec-' + s.id + '">' + s.label + '</a>';
-        }).join('');
-      }
+      // RSVP form
+      _initRSVP_desk(boda.id || new URLSearchParams(window.location.search).get('id'));
     }
 
-    function _navClick(a) {
-      // smooth scroll
-      var href = a.getAttribute('href');
-      var el = document.querySelector(href);
-      if (el) { el.scrollIntoView({ behavior:'smooth' }); return false; }
-      return true;
-    }
-
-    function _actualizarOGTags(boda) {
-      var novio = boda.pareja ? boda.pareja.novio : '';
-      var novia = boda.pareja ? boda.pareja.novia : '';
-      var titulo = 'Boda de ' + novio + ' & ' + novia;
-      var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-      var mes = boda.fecha ? (meses[parseInt(boda.fecha.mes)-1]||boda.fecha.mes) : '';
-      var desc = 'El ' + (boda.fecha&&boda.fecha.dia||'') + ' de ' + mes + ' de ' + (boda.fecha&&boda.fecha.anio||'') + '. ¡Estás invitado!';
-      var foto = (boda.galeria&&boda.galeria.fotos&&boda.galeria.fotos.length>0) ? boda.galeria.fotos[0] : '';
-      document.title = titulo;
-      var set = function(id,v){ var e=document.getElementById(id); if(e&&v) e.setAttribute('content',v); };
-      set('og-title',titulo); set('og-description',desc); set('og-image',foto); set('og-url',window.location.href);
-      set('tw-title',titulo); set('tw-description',desc); set('tw-image',foto);
-    }
-
-    async function cargarInvitacion() {
-      var params = new URLSearchParams(window.location.search);
-      var id = params.get('id');
-      var pantallaCarga = document.getElementById('pantalla-carga');
-      var pantallaError = document.getElementById('pantalla-error');
-      var root = document.getElementById('invitation-root');
-
-      if (!id) { pantallaCarga.classList.add('oculto'); pantallaError.style.display='flex'; return; }
-
-      try {
-        var boda = await DB.cargarBoda(id);
-        if (!boda) { pantallaCarga.classList.add('oculto'); pantallaError.style.display='flex'; return; }
-
-        _bodaData = boda;
-        _actualizarOGTags(boda);
-        RENDERER.render(boda, root);
-        _buildNav(boda);
-
-        setTimeout(function(){ pantallaCarga.classList.add('oculto'); }, 300);
-        _initRSVP(id, boda);
-
-      } catch(err) {
-        console.error(err);
-        pantallaCarga.classList.add('oculto');
-        pantallaError.style.display = 'flex';
-      }
-    }
-
-    function _initRSVP(bodaId) {
-      var form = document.getElementById('rsvp-form');
+    function _initRSVP_desk(bodaId) {
+      var form = document.getElementById('desk-rsvp-form');
       if (!form) return;
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        var btn = form.querySelector('.inv-rsvp__btn');
+        var btn = form.querySelector('.desk-rsvp-btn');
         btn.textContent = 'Enviando…'; btn.disabled = true;
         try {
           await firebase.firestore().collection('weddings').doc(bodaId).collection('rsvps').add({
@@ -373,59 +613,145 @@
             enviadoEn: firebase.firestore.FieldValue.serverTimestamp()
           });
           form.style.display = 'none';
-          document.getElementById('rsvp-enviado').style.display = 'block';
+          document.getElementById('desk-rsvp-ok').style.display = 'block';
         } catch(err) {
           btn.textContent = 'Error. Inténtalo de nuevo.'; btn.disabled = false;
         }
       });
     }
 
+    function _buildMobile(boda) {
+      var nav = document.getElementById('nav-invitacion');
+      var LABELS_D = { historia:'Historia', galeria:'Galería', evento:'Evento', dresscode:'Dress code', alojamiento:'Alojamiento', transporte:'Transporte', rsvp:'RSVP', mensaje:'Mensaje', formulario:'Formulario' };
+      var orden = boda.orden_secciones || ['historia','galeria','evento','rsvp'];
+      var secciones = [{ id:'portada', label:'Inicio' }];
+      orden.forEach(function(id) {
+        var sec = boda[id];
+        if (!sec || sec.activo === false || sec.activa === false) return;
+        secciones.push({ id: id, label: sec.titulo || LABELS_D[id] || id });
+      });
+      _navSecciones = secciones;
+      if (nav) {
+        nav.innerHTML = secciones.map(function(s,i) {
+          return '<a class="nav-invitacion__item' + (i===0?' activo':'') + '" href="#sec-' + s.id + '">' + s.label + '</a>';
+        }).join('');
+      }
+    }
+
+    function _actualizarOGTags(boda) {
+      var novio = boda.pareja ? boda.pareja.novio : '';
+      var novia = boda.pareja ? boda.pareja.novia : '';
+      var titulo = 'Boda de ' + novio + ' & ' + novia;
+      var foto = (boda.galeria&&boda.galeria.fotos&&boda.galeria.fotos.length>0) ? boda.galeria.fotos[0] : (boda.fotoCabecera||'');
+      document.title = titulo;
+      var set = function(id,v){ var e=document.getElementById(id); if(e&&v) e.setAttribute('content',v); };
+      set('og-title',titulo); set('og-image',foto); set('og-url',window.location.href);
+      set('tw-title',titulo); set('tw-image',foto);
+    }
+
+    async function cargarInvitacion() {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+      var pantallaCarga = document.getElementById('pantalla-carga');
+      var pantallaError = document.getElementById('pantalla-error');
+
+      if (!id) { pantallaCarga.classList.add('oculto'); pantallaError.style.display='flex'; return; }
+
+      try {
+        var boda = await DB.cargarBoda(id);
+        if (!boda) { pantallaCarga.classList.add('oculto'); pantallaError.style.display='flex'; return; }
+        _boda = boda;
+        _actualizarOGTags(boda);
+
+        var isDesktop = window.innerWidth >= 900;
+
+        if (isDesktop) {
+          // Aplicar CSS vars para colores/fuentes
+          _aplicarEstilos(boda.estilos);
+          document.getElementById('desk-layout').style.display = 'flex';
+          _buildDesktop(boda);
+        } else {
+          var root = document.getElementById('invitation-root');
+          RENDERER.render(boda, root);
+          _buildMobile(boda);
+        }
+
+        setTimeout(function(){ pantallaCarga.classList.add('oculto'); }, 300);
+
+        // RSVP móvil
+        var form = document.getElementById('rsvp-form');
+        if (form) _initRSVP_movil(id);
+
+      } catch(err) {
+        console.error(err);
+        pantallaCarga.classList.add('oculto');
+        pantallaError.style.display = 'flex';
+      }
+    }
+
+    function _aplicarEstilos(e) {
+      if (!e) return;
+      var r = document.documentElement;
+      if (e.colorPrimario)    r.style.setProperty('--color-primario',   e.colorPrimario);
+      if (e.colorSecundario)  r.style.setProperty('--color-secundario', e.colorSecundario);
+      if (e.colorTexto)       r.style.setProperty('--color-texto',      e.colorTexto);
+      if (e.colorAccent)      r.style.setProperty('--color-accent',     e.colorAccent);
+      if (e.fuente)           r.style.setProperty('--fuente-display',   "'" + e.fuente + "', serif");
+      if (e.fuenteSecundaria) r.style.setProperty('--fuente-body',      "'" + e.fuenteSecundaria + "', sans-serif");
+    }
+
+    function _initRSVP_movil(bodaId) {
+      var form = document.getElementById('rsvp-form');
+      if (!form) return;
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var btn = form.querySelector('.inv-rsvp__btn');
+        btn.textContent = 'Enviando…'; btn.disabled = true;
+        try {
+          await firebase.firestore().collection('weddings').doc(bodaId).collection('rsvps').add({
+            nombre: form.nombre.value, asistencia: form.asistencia.value,
+            mensaje: form.mensaje.value, enviadoEn: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          form.style.display = 'none';
+          document.getElementById('rsvp-enviado').style.display = 'block';
+        } catch(err) { btn.textContent = 'Error.'; btn.disabled = false; }
+      });
+    }
+
     cargarInvitacion();
 
-    /* ── Scroll: nav activo + bottombar + sidebar highlight ── */
+    // ── Scroll: bottombar + nav activo ──
     function initScroll() {
-      var bottombar = document.getElementById('inv-bottombar');
+      var bottombar = document.getElementById('desk-bottombar');
       var navMovil = document.getElementById('nav-invitacion');
-      var mostradoMovil = false;
       var mostradoBottom = false;
+      var mostradoMovil = false;
 
       window.addEventListener('scroll', function() {
         var scrollY = window.scrollY || window.pageYOffset;
         var vh = window.innerHeight;
         var isDesktop = window.innerWidth >= 900;
 
-        // Bottombar: aparece al pasar la portada
-        if (bottombar) {
-          if (scrollY > vh * 0.7 && !mostradoBottom) {
-            bottombar.classList.add('visible');
-            mostradoBottom = true;
-          } else if (scrollY < vh * 0.3 && mostradoBottom) {
-            bottombar.classList.remove('visible');
-            mostradoBottom = false;
-          }
+        if (bottombar && isDesktop) {
+          if (scrollY > vh * 0.6 && !mostradoBottom) { bottombar.classList.add('visible'); mostradoBottom = true; }
+          else if (scrollY < vh * 0.2 && mostradoBottom) { bottombar.classList.remove('visible'); mostradoBottom = false; }
         }
 
-        // Nav móvil
         if (navMovil && !isDesktop) {
-          if (scrollY > vh * 0.6 && !mostradoMovil) {
-            navMovil.classList.remove('oculta'); mostradoMovil = true;
-          } else if (scrollY < vh * 0.3 && mostradoMovil) {
-            navMovil.classList.add('oculta'); mostradoMovil = false;
-          }
+          if (scrollY > vh * 0.6 && !mostradoMovil) { navMovil.classList.remove('oculta'); mostradoMovil = true; }
+          else if (scrollY < vh * 0.3 && mostradoMovil) { navMovil.classList.add('oculta'); mostradoMovil = false; }
         }
 
-        // Sección activa
+        // Actualizar link activo (desktop)
         var activa = _navSecciones.length ? _navSecciones[0].id : 'portada';
+        var prefix = isDesktop ? 'desk-sec-' : 'sec-';
         _navSecciones.forEach(function(s) {
-          var el = document.getElementById('sec-' + s.id);
-          if (el && el.getBoundingClientRect().top < vh * 0.4) activa = s.id;
+          var el = document.getElementById(prefix + s.id);
+          if (el && el.getBoundingClientRect().top < vh * 0.5) activa = s.id;
         });
-
-        // Sidebar desktop
-        document.querySelectorAll('.inv-sidebar__nav a').forEach(function(a) {
-          a.classList.toggle('activo', a.getAttribute('href') === '#sec-' + activa);
+        document.querySelectorAll('.desk-nav__link').forEach(function(a) {
+          a.classList.toggle('activo', a.getAttribute('href') === '#desk-sec-' + activa);
         });
-        // Nav móvil
         if (navMovil) {
           navMovil.querySelectorAll('.nav-invitacion__item').forEach(function(a) {
             a.classList.toggle('activo', a.getAttribute('href') === '#sec-' + activa);
