@@ -9,8 +9,8 @@
   --editor-input-bg: #242424;
   --editor-text: #e0e0e0;
   --editor-text-muted: #777;
-  --editor-accent: #b8860b;
-  --editor-accent-hover: #d4a017;
+  --editor-accent: #2563eb;
+  --editor-accent-hover: #1d4ed8;
   --editor-success: #4caf50;
   --editor-danger: #f44336;
 }
@@ -136,8 +136,8 @@ html, body {
 .url-panel {
   margin: 12px;
   padding: 12px;
-  background: rgba(184,134,11,0.1);
-  border: 1px solid rgba(184,134,11,0.3);
+  background: rgba(37,99,235,0.1);
+  border: 1px solid rgba(37,99,235,0.3);
   display: none;
 }
 
@@ -342,7 +342,7 @@ html, body {
 }
 
 .campo__toggle input:checked + .campo__toggle-slider {
-  background: rgba(184,134,11,0.3);
+  background: rgba(37,99,235,0.3);
 }
 
 .campo__toggle input:checked + .campo__toggle-slider::before {
@@ -490,7 +490,7 @@ html, body {
 
 .preset-btn.activo {
   border-color: var(--editor-accent);
-  background: rgba(184,134,11,0.08);
+  background: rgba(37,99,235,0.08);
 }
 
 .preset-btn__muestra {
@@ -720,7 +720,7 @@ html, body {
   padding: 9px;
   margin-bottom: 8px;
   background: transparent;
-  border: 1px dashed rgba(184,134,11,0.4);
+  border: 1px dashed rgba(37,99,235,0.4);
   color: var(--editor-accent);
   font-family: inherit;
   font-size: 11px;
@@ -729,7 +729,7 @@ html, body {
   text-align: center;
 }
 
-.sec-btn-nueva:hover { background: rgba(184,134,11,0.08); }
+.sec-btn-nueva:hover { background: rgba(37,99,235,0.08); }
 
 /* ─── Selector de plantillas ─── */
 .plantillas-grid {
@@ -919,7 +919,7 @@ html, body {
   padding: 10px;
   margin-bottom: 12px;
   background: transparent;
-  border: 1px dashed rgba(184,134,11,0.4);
+  border: 1px dashed rgba(37,99,235,0.4);
   color: var(--editor-accent);
   font-family: inherit;
   font-size: 12px;
@@ -929,7 +929,7 @@ html, body {
 }
 
 .sec-btn-nueva:hover {
-  background: rgba(184,134,11,0.08);
+  background: rgba(37,99,235,0.08);
 }
 
 /* ─── Panel formulario ─── */
@@ -1047,22 +1047,22 @@ html, body {
 }
 
 /* ── Bloque ESTILO (dorado oscuro) ── */
-.panel-bloque--estilo { border-bottom: 2px solid #1a1000; }
+.panel-bloque--estilo { border-bottom: 2px solid #0a1628; }
 
 .panel-bloque--estilo .panel-grupo__cabecera {
-  background: #2a1f00;
-  border-bottom: 1px solid #3d2d00;
+  background: #0d2444;
+  border-bottom: 1px solid #1a3a66;
 }
 
-.panel-bloque--estilo .panel-grupo__cabecera:hover { background: #332600; }
+.panel-bloque--estilo .panel-grupo__cabecera:hover { background: #102d55; }
 
-.panel-bloque--estilo .panel-grupo__titulo { color: #d4a820; font-size: 12px; letter-spacing: 2px; }
+.panel-bloque--estilo .panel-grupo__titulo { color: #2563eb; font-size: 12px; letter-spacing: 2px; }
 
-.panel-bloque--estilo .panel-grupo__chevron { color: #8a6d10; }
+.panel-bloque--estilo .panel-grupo__chevron { color: #1a4abf; }
 
 .panel-bloque--estilo .panel-grupo__body {
   background: #1a1400;
-  border-bottom: 2px solid #2a1f00;
+  border-bottom: 2px solid #0d2444;
 }
 
 /* Sub-bloques dentro de ESTILO */
@@ -1071,9 +1071,9 @@ html, body {
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #d4a820;
+  color: #2563eb;
   padding: 8px 0 4px;
-  border-bottom: 1px solid #3d2d00;
+  border-bottom: 1px solid #1a3a66;
   margin-bottom: 4px;
 }
 
@@ -1084,7 +1084,7 @@ html, body {
   margin: 4px -16px;
 }
 
-.panel-bloque--estilo .panel-sep { background: #3d2d00; }
+.panel-bloque--estilo .panel-sep { background: #1a3a66; }
 .panel-bloque--plantilla .panel-sep { background: #1a3a66; }
 
 /* ─── Panel de secciones ─── */
@@ -1252,7 +1252,7 @@ html, body {
   padding: 9px;
   margin-bottom: 8px;
   background: transparent;
-  border: 1px dashed rgba(184,134,11,0.4);
+  border: 1px dashed rgba(37,99,235,0.4);
   color: var(--editor-accent);
   font-family: inherit;
   font-size: 11px;
@@ -1261,7 +1261,7 @@ html, body {
   text-align: center;
 }
 
-.sec-btn-nueva:hover { background: rgba(184,134,11,0.08); }
+.sec-btn-nueva:hover { background: rgba(37,99,235,0.08); }
 
 /* ─── Selector de plantillas ─── */
 .plantillas-grid {
@@ -1451,7 +1451,7 @@ html, body {
   padding: 10px;
   margin-bottom: 12px;
   background: transparent;
-  border: 1px dashed rgba(184,134,11,0.4);
+  border: 1px dashed rgba(37,99,235,0.4);
   color: var(--editor-accent);
   font-family: inherit;
   font-size: 12px;
@@ -1461,7 +1461,7 @@ html, body {
 }
 
 .sec-btn-nueva:hover {
-  background: rgba(184,134,11,0.08);
+  background: rgba(37,99,235,0.08);
 }
 
 /* ─── Panel formulario ─── */
@@ -1586,7 +1586,7 @@ html, body {
 .panel-grupo__badge {
   font-size: 9px;
   padding: 2px 7px;
-  background: rgba(184,134,11,.15);
+  background: rgba(37,99,235,.15);
   color: var(--editor-accent);
   border-radius: 20px;
   letter-spacing: .5px;
@@ -1660,8 +1660,8 @@ html, body {
 }
 
 .panel-bloque-label--estilo {
-  background: #2a1f00;
-  color: #d4a820;
+  background: #0d2444;
+  color: #2563eb;
 }
 
 /* ═══════════════════════════════════════
@@ -1711,10 +1711,10 @@ html, body {
 .eb-bloque__cab--azul .eb-chevron { color: #4a7abf; }
 
 /* Variante dorada (Colores, Tipografía) */
-.eb-bloque__cab--dorado { background: #2a1f00; border-bottom-color: #3d2d00; }
-.eb-bloque__cab--dorado:hover { background: #332600; }
-.eb-bloque__cab--dorado .eb-bloque__titulo { color: #d4a820; }
-.eb-bloque__cab--dorado .eb-chevron { color: #8a6d10; }
+.eb-bloque__cab--dorado { background: #0d3060; border-bottom-color: #1a3a66; }
+.eb-bloque__cab--dorado:hover { background: #0f3d7a; }
+.eb-bloque__cab--dorado .eb-bloque__titulo { color: #93c5fd; }
+.eb-bloque__cab--dorado .eb-chevron { color: #60a5fa; }
 
 /* SUBSECCIÓN nivel 2 — gris claro, letra oscura */
 .eb-sub {
