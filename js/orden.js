@@ -128,5 +128,21 @@ const ORDEN = (() => {
     STATE.set('orden_secciones', orden);
   }
 
-  return { init, mover, sincronizar };
+
+
+  // Mover sección desde los botones inline del panel
+  function moverSeccion(id, direccion) {
+    var boda = STATE.get();
+    var orden = _ordenCompleto(boda).slice();
+    var idx = orden.indexOf(id);
+    if (idx === -1) return;
+    var j = idx + direccion;
+    if (j < 0 || j >= orden.length) return;
+    var tmp = orden[j];
+    orden[j] = orden[idx];
+    orden[idx] = tmp;
+    STATE.set('orden_secciones', orden);
+  }
+
+  return { init, mover, moverSeccion, sincronizar };
 })();
