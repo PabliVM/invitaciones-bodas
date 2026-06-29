@@ -1859,3 +1859,19 @@ html, body {
 
 /* Chevron abierto en bloque */
 .eb-bloque--abierto > .eb-bloque__cab .eb-chevron { transform: rotate(180deg) !important; }
+
+/* Botones orden inline en subsecciones */
+.eb-sub__mv {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #888;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 1px 5px;
+  line-height: 1.4;
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: background 0.1s, color 0.1s;
+}
+.eb-sub__mv:hover { background: #e0e0e0; color: #333; }
+.eb-sub__mv:disabled { opacity: 0.3; cursor: default; }
