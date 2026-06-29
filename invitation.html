@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <meta name="theme-color" content="#b8860b" />
-
-  <!-- OG / WhatsApp preview -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Estás invitado a nuestra boda" id="og-title" />
   <meta property="og:description" content="Abre para ver todos los detalles de nuestra celebración." id="og-description" />
@@ -15,119 +13,41 @@
   <meta name="twitter:title" content="" id="tw-title" />
   <meta name="twitter:description" content="" id="tw-description" />
   <meta name="twitter:image" content="" id="tw-image" />
-
   <title>Invitación de boda</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Fuentes extra para las opciones del selector -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Great+Vibes&family=Dancing+Script:wght@400;700&family=Parisienne&family=Pinyon+Script&family=Libre+Baskerville:ital,wght@0,400;1,400&family=EB+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400&family=Josefin+Sans:wght@300;400&family=Montserrat:wght@300;400&family=Raleway:wght@300;400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
-
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--color-secundario);
-      min-height: 100vh;
-    }
-
-    /* Pantalla de carga */
-    #pantalla-carga {
-      position: fixed;
-      inset: 0;
-      background: #f5f0e8;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      gap: 16px;
-      transition: opacity 0.5s;
-    }
-
-    #pantalla-carga.oculto {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .carga-ornamento {
-      font-size: 24px;
-      color: #b8860b;
-      letter-spacing: 8px;
-      animation: pulso 1.5s ease-in-out infinite;
-    }
-
-    .carga-texto {
-      font-family: 'Lato', sans-serif;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #aaa;
-    }
-
-    @keyframes pulso {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    /* Error */
-    #pantalla-error {
-      display: none;
-      min-height: 100vh;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 16px;
-      padding: 32px;
-      text-align: center;
-      font-family: 'Lato', sans-serif;
-    }
-
-    .error-titulo {
-      font-size: 28px;
-      color: #b8860b;
-    }
-
-    .error-texto {
-      font-size: 14px;
-      color: #888;
-      line-height: 1.7;
-    }
+    html, body { margin: 0; padding: 0; background: var(--color-secundario); min-height: 100vh; }
+    #pantalla-carga { position: fixed; inset: 0; background: #f5f0e8; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; gap: 16px; transition: opacity 0.5s; }
+    #pantalla-carga.oculto { opacity: 0; pointer-events: none; }
+    .carga-ornamento { font-size: 24px; color: #b8860b; letter-spacing: 8px; animation: pulso 1.5s ease-in-out infinite; }
+    .carga-texto { font-family: 'Lato', sans-serif; font-size: 11px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; color: #aaa; }
+    @keyframes pulso { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    #pantalla-error { display: none; min-height: 100vh; align-items: center; justify-content: center; flex-direction: column; gap: 16px; padding: 32px; text-align: center; font-family: 'Lato', sans-serif; }
+    .error-titulo { font-size: 28px; color: #b8860b; }
+    .error-texto { font-size: 14px; color: #888; line-height: 1.7; }
   </style>
 </head>
 <body>
 
-  <!-- Pantalla de carga -->
   <div id="pantalla-carga">
     <div class="carga-ornamento">✦</div>
     <div class="carga-texto">Cargando invitación…</div>
   </div>
 
-  <!-- Error -->
   <div id="pantalla-error">
     <div class="error-titulo">✦</div>
     <p class="error-texto">No hemos encontrado esta invitación.<br>Puede que el enlace sea incorrecto.</p>
   </div>
 
-  <!-- Invitación -->
-  <!-- Navegación flotante -->
-  <nav class="nav-invitacion oculta" id="nav-invitacion">
-    <a class="nav-invitacion__item activo" href="#sec-portada">Inicio</a>
-    <a class="nav-invitacion__item" href="#sec-historia">Historia</a>
-    <a class="nav-invitacion__item" href="#sec-galeria">Galería</a>
-    <a class="nav-invitacion__item" href="#sec-evento">Evento</a>
-    <a class="nav-invitacion__item" href="#sec-rsvp">RSVP</a>
-  </nav>
+  <nav class="nav-invitacion oculta" id="nav-invitacion"></nav>
 
   <div class="inv-root inv-root--con-nav" id="invitation-root"></div>
 
-  <!-- Firebase SDKs (compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-  <!-- App -->
   <script src="js/firebase.js"></script>
   <script src="js/db.js"></script>
   <script src="js/clasica.js"></script>
@@ -139,175 +59,117 @@
   <script>
     DB.init();
 
-    function _actualizarOGTags(boda) {
-      var novio  = boda.pareja ? boda.pareja.novio  : '';
-      var novia  = boda.pareja ? boda.pareja.novia  : '';
-      var dia    = boda.fecha  ? boda.fecha.dia     : '';
-      var mes    = boda.fecha  ? boda.fecha.mes     : '';
-      var anio   = boda.fecha  ? boda.fecha.anio    : '';
-      var lugar  = boda.evento ? boda.evento.lugar  : '';
+    var _navSecciones = [];
 
+    function _buildNav(boda) {
+      var nav = document.getElementById('nav-invitacion');
+      if (!nav) return;
+      var LABELS_DEFAULT = {
+        historia: 'Historia', galeria: 'Galería', evento: 'Evento',
+        dresscode: 'Dress code', alojamiento: 'Alojamiento', transporte: 'Transporte',
+        rsvp: 'RSVP', mensaje: 'Mensaje', formulario: 'Formulario',
+      };
+      var orden = (boda.orden_secciones || ['historia','galeria','evento','rsvp']);
+      var secciones = [{ id: 'portada', label: 'Inicio' }];
+      orden.forEach(function(id) {
+        if (id.indexOf('extra_') === 0) {
+          var idx = parseInt(id.replace('extra_', ''));
+          var extras = boda.secciones_extra || [];
+          if (extras[idx]) secciones.push({ id: 'extra-' + idx, label: extras[idx].titulo || 'Extra' });
+          return;
+        }
+        var sec = boda[id];
+        if (!sec) return;
+        if (sec.activo === false || sec.activa === false) return;
+        var label = (sec.titulo) || LABELS_DEFAULT[id] || id;
+        secciones.push({ id: id, label: label });
+      });
+      _navSecciones = secciones;
+      nav.innerHTML = secciones.map(function(s, i) {
+        return '<a class="nav-invitacion__item' + (i === 0 ? ' activo' : '') + '" href="#sec-' + s.id + '">' + s.label + '</a>';
+      }).join('');
+    }
+
+    function _actualizarOGTags(boda) {
+      var novio = boda.pareja ? boda.pareja.novio : '';
+      var novia = boda.pareja ? boda.pareja.novia : '';
+      var dia = boda.fecha ? boda.fecha.dia : '';
+      var mes = boda.fecha ? boda.fecha.mes : '';
+      var anio = boda.fecha ? boda.fecha.anio : '';
+      var lugar = boda.evento ? boda.evento.lugar : '';
       var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
       var mesNombre = meses[parseInt(mes)-1] || mes;
-
       var titulo = 'Boda de ' + novio + ' & ' + novia;
-      var desc   = 'El ' + dia + ' de ' + mesNombre + ' de ' + anio + ' en ' + lugar + '. ¡Estás invitado!';
-      var url    = window.location.href;
-
-      // Foto de portada: primera foto de galería o imagen por defecto
-      var foto = '';
-      if (boda.galeria && boda.galeria.fotos && boda.galeria.fotos.length > 0) {
-        foto = boda.galeria.fotos[0];
-      }
-
-      // Actualizar <title>
+      var desc = 'El ' + dia + ' de ' + mesNombre + ' de ' + anio + ' en ' + lugar + '. ¡Estás invitado!';
+      var foto = (boda.galeria && boda.galeria.fotos && boda.galeria.fotos.length > 0) ? boda.galeria.fotos[0] : '';
       document.title = titulo;
-
-      // Actualizar meta OG
-      var set = function(id, val) {
-        var el = document.getElementById(id);
-        if (el && val) el.setAttribute('content', val);
-      };
-
-      set('og-title',      titulo);
-      set('og-description', desc);
-      set('og-image',      foto);
-      set('og-url',        url);
-      set('tw-title',      titulo);
-      set('tw-description', desc);
-      set('tw-image',      foto);
+      var set = function(id, val) { var el = document.getElementById(id); if (el && val) el.setAttribute('content', val); };
+      set('og-title', titulo); set('og-description', desc); set('og-image', foto); set('og-url', window.location.href);
+      set('tw-title', titulo); set('tw-description', desc); set('tw-image', foto);
     }
 
     async function cargarInvitacion() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
-      const pantallaCarga = document.getElementById('pantalla-carga');
-      const pantallaError = document.getElementById('pantalla-error');
-      const root = document.getElementById('invitation-root');
-
-      if (!id) {
-        pantallaCarga.classList.add('oculto');
-        pantallaError.style.display = 'flex';
-        return;
-      }
-
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+      var pantallaCarga = document.getElementById('pantalla-carga');
+      var pantallaError = document.getElementById('pantalla-error');
+      var root = document.getElementById('invitation-root');
+      if (!id) { pantallaCarga.classList.add('oculto'); pantallaError.style.display = 'flex'; return; }
       try {
-        const boda = await DB.cargarBoda(id);
-
-        if (!boda) {
-          pantallaCarga.classList.add('oculto');
-          pantallaError.style.display = 'flex';
-          return;
-        }
-
-        // Actualizar meta OG con los nombres reales
-        if (boda.pareja) {
-          document.title = `Boda de ${boda.pareja.novio} & ${boda.pareja.novia}`;
-          document.querySelector('meta[property="og:title"]')
-            ?.setAttribute('content', `Boda de ${boda.pareja.novio} & ${boda.pareja.novia}`);
-        }
-
-        // Renderizar
-        // ── OG tags dinámicos ──
+        var boda = await DB.cargarBoda(id);
+        if (!boda) { pantallaCarga.classList.add('oculto'); pantallaError.style.display = 'flex'; return; }
         _actualizarOGTags(boda);
-
         RENDERER.render(boda, root);
-
-        // Ocultar carga con fade
-        setTimeout(() => pantallaCarga.classList.add('oculto'), 300);
-
-        // RSVP form
+        _buildNav(boda);
+        setTimeout(function() { pantallaCarga.classList.add('oculto'); }, 300);
         _initRSVP(id, boda);
-
       } catch (err) {
-        console.error('Error cargando invitación:', err);
+        console.error('Error:', err);
         pantallaCarga.classList.add('oculto');
         pantallaError.style.display = 'flex';
       }
     }
 
     function _initRSVP(bodaId, boda) {
-      const form = document.getElementById('rsvp-form');
+      var form = document.getElementById('rsvp-form');
       if (!form) return;
-
-      form.addEventListener('submit', async (e) => {
+      form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const btn = form.querySelector('.inv-rsvp__btn');
-        btn.textContent = 'Enviando…';
-        btn.disabled = true;
-
-        const data = {
-          nombre: form.nombre.value,
-          asistencia: form.asistencia.value,
-          mensaje: form.mensaje.value,
-          enviadoEn: firebase.firestore.FieldValue.serverTimestamp()
-        };
-
+        var btn = form.querySelector('.inv-rsvp__btn');
+        btn.textContent = 'Enviando…'; btn.disabled = true;
+        var data = { nombre: form.nombre.value, asistencia: form.asistencia.value, mensaje: form.mensaje.value, enviadoEn: firebase.firestore.FieldValue.serverTimestamp() };
         try {
-          // Guardar RSVP como subcolección de la boda
-          await firebase.firestore()
-            .collection('weddings')
-            .doc(bodaId)
-            .collection('rsvps')
-            .add(data);
-
+          await firebase.firestore().collection('weddings').doc(bodaId).collection('rsvps').add(data);
           form.style.display = 'none';
           document.getElementById('rsvp-enviado').style.display = 'block';
         } catch (err) {
-          console.error('Error RSVP:', err);
-          btn.textContent = 'Error. Inténtalo de nuevo.';
-          btn.disabled = false;
+          btn.textContent = 'Error. Inténtalo de nuevo.'; btn.disabled = false;
         }
       });
     }
 
     cargarInvitacion();
 
-    // ── Navegación flotante ──
     function initNav() {
       var nav = document.getElementById('nav-invitacion');
       if (!nav) return;
-
-      // Mostrar nav después de hacer scroll pasada la portada
       var mostrado = false;
       window.addEventListener('scroll', function() {
         var scrollY = window.scrollY || window.pageYOffset;
         var altoPantalla = window.innerHeight;
-
-        if (scrollY > altoPantalla * 0.6 && !mostrado) {
-          nav.classList.remove('oculta');
-          mostrado = true;
-        } else if (scrollY < altoPantalla * 0.3 && mostrado) {
-          nav.classList.add('oculta');
-          mostrado = false;
-        }
-
-        // Resaltar sección activa
-        var secciones = [
-          { id: 'sec-portada',  link: 'Inicio' },
-          { id: 'sec-historia', link: 'Historia' },
-          { id: 'sec-galeria',  link: 'Galería' },
-          { id: 'sec-evento',   link: 'Evento' },
-          { id: 'sec-rsvp',     link: 'RSVP' },
-        ];
-
-        var activa = 'sec-portada';
-        secciones.forEach(function(s) {
-          var el = document.getElementById(s.id);
-          if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) {
-            activa = s.id;
-          }
+        if (scrollY > altoPantalla * 0.6 && !mostrado) { nav.classList.remove('oculta'); mostrado = true; }
+        else if (scrollY < altoPantalla * 0.3 && mostrado) { nav.classList.add('oculta'); mostrado = false; }
+        var activa = 'portada';
+        _navSecciones.forEach(function(s) {
+          var el = document.getElementById('sec-' + s.id);
+          if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) activa = s.id;
         });
-
         nav.querySelectorAll('.nav-invitacion__item').forEach(function(a) {
-          a.classList.toggle('activo', a.getAttribute('href') === '#' + activa);
+          a.classList.toggle('activo', a.getAttribute('href') === '#sec-' + activa);
         });
       }, { passive: true });
     }
-
-    // Esperar a que el renderer pinte las secciones
     setTimeout(initNav, 800);
   </script>
-
 </body>
 </html>
