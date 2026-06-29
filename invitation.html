@@ -39,6 +39,20 @@
     .nav-invitacion { /* estilos en styles.css */ }
     .desk-layout { display: none; }
 
+    /* Evitar scroll horizontal */
+    body { overflow-x: hidden; }
+
+    /* Forzar ocultar nav en desktop */
+    @media (min-width: 900px) {
+      .nav-invitacion {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+      }
+      html, body { overflow-x: hidden; }
+    }
+
     /* ══════════════════════════════════
        DESKTOP ≥ 900px — split layout
        ══════════════════════════════════ */
