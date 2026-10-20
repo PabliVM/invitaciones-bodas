@@ -359,9 +359,9 @@ h1, h2, h3, p { margin: 0; }
   background: #fff; color: var(--l-tinta); font-family: var(--l-sans); font-size: 12.5px; line-height: 1.2; text-align: center; cursor: pointer;
   box-shadow: inset 0 0 0 1px var(--l-linea); transition: box-shadow .2s, background .2s;
 }
-.l-opcion > span:last-child { max-width: 100%; }
+.l-opcion__nombre { max-width: 100%; }
 #config-colores .l-opcion, #config-fuentes .l-opcion { justify-content: flex-start; }
-#config-colores .l-opcion > span:last-child, #config-fuentes .l-opcion > span:last-child { min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+#config-colores .l-opcion__nombre, #config-fuentes .l-opcion__nombre { min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
 #config-colores .l-opcion, #config-fuentes .l-opcion { min-height: 78px; }
 .l-opcion:hover { box-shadow: inset 0 0 0 1px var(--l-oro); }
 .l-opcion.activo { background: var(--l-tinta); color: var(--l-marfil); box-shadow: inset 0 0 0 1px var(--l-tinta); }
