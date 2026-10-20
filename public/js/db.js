@@ -146,9 +146,74 @@ const DB = (() => {
     }
   }
 
-  async function logout() {
+  async function logout(destino) {
     await db.auth.signOut();
-    window.location.href = 'login.html';
+    if (destino !== false) window.location.href = destino || 'login.html'; // false = sin redirigir
+  }
+
+  // ── Solicitudes de información (web pública) ──
+
+  async function enviarSolicitud(datos) {
+    const { error } = await db.from('solicitudes').insert(datos);
+    if (error) throw error;
+  }
+
+  async function listarSolicitudes() {
+    const { data, error } = await db.from('solicitudes').select('*').order('creado_en', { ascending: false });
+    if (error) throw error;
+    return data;
+  }
+
+  async function actualizarSolicitud(id, cambios) {
+    const { error } = await db.from('solicitudes').update(cambios).eq('id', id);
+    if (error) throw error;
+  }
+
+  async function eliminarSolicitud(id) {
+    const { error } = await db.from('solicitudes').delete().eq('id', id);
+    if (error) throw error;
+  }
+
+  async function contarSolicitudesNuevas() {
+    const { count, error } = await db.from('solicitudes').select('id', { count: 'exact', head: true }).eq('estado', 'nueva');
+    return error ? 0 : count;
+  }
+
+  // ── Novios ──
+
+  // Envía enlace de entrada. Solo funciona para emails dados de alta (no crea cuentas).
+  async function enlaceNovios(email) {
+    const { error } = await db.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + '/novios' }
+    });
+    if (error) console.warn(error.message); // no se revela si el email existe
+  }
+
+  async function sesion() {
+    const { data } = await db.auth.getSession();
+    return data.session;
+  }
+
+  async function miPerfil() {
+    const s = await sesion();
+    if (!s) return null;
+    const { data } = await db.from('profiles').select('role, wedding_id').eq('id', s.user.id).maybeSingle();
+    return data ? { ...data, email: s.user.email } : { role: null, email: s.user.email };
+  }
+
+  // Gestión de accesos de novios (panel) → /api/novios
+  async function apiNovios(metodo, datos) {
+    const s = await sesion();
+    if (!s) throw new Error('Sesión caducada');
+    const opciones = { method: metodo, headers: { Authorization: 'Bearer ' + s.access_token } };
+    let url = '/api/novios';
+    if (metodo === 'GET') url += '?boda=' + encodeURIComponent(datos.boda);
+    else { opciones.headers['Content-Type'] = 'application/json'; opciones.body = JSON.stringify(datos); }
+    const res = await fetch(url, opciones);
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(json.error || 'Error ' + res.status);
+    return json;
   }
 
   async function esSuperadmin() {
@@ -165,5 +230,7 @@ const DB = (() => {
     return new Promise(() => {}); // detiene la carga mientras redirige
   }
 
-  return { init, crearBoda, guardarBoda, cargarBoda, cargarBodaPublica, listarBodas, eliminarBoda, archivarBoda, duplicarBoda, subirFoto, listarRespuestas, enviarRSVP, enviarFormulario, login, logout, requireAdmin };
+  return { init, crearBoda, guardarBoda, cargarBoda, cargarBodaPublica, listarBodas, eliminarBoda, archivarBoda, duplicarBoda, subirFoto, listarRespuestas, enviarRSVP, enviarFormulario, login, logout, requireAdmin,
+    enviarSolicitud, listarSolicitudes, actualizarSolicitud, eliminarSolicitud, contarSolicitudesNuevas,
+    enlaceNovios, sesion, miPerfil, apiNovios };
 })();

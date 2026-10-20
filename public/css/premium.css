@@ -792,6 +792,89 @@ html body .login-card__error {
   padding: 10px 12px;
 }
 
+/* ══════════════════ FASE 3: SOLICITUDES, NOVIOS, MODAL ══════════════════ */
+
+html body .header__solicitudes { position: relative; }
+html body .badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 4px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #1a1306;
+  background: var(--pm-gold-grad);
+}
+
+/* Modal */
+html body .modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 16px; background: rgba(5, 5, 7, .72); backdrop-filter: blur(8px); }
+html body .modal[hidden] { display: none; }
+html body .modal__caja {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px 28px 28px;
+  border-radius: 20px;
+  border: 1px solid var(--pm-line-2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015)), #121216;
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, .9);
+  animation: pm-rise .4s var(--pm-ease) both;
+}
+html body .modal__cerrar { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--pm-glass-2); color: var(--pm-muted); cursor: pointer; }
+html body .modal__cerrar:hover { color: var(--pm-text); }
+html body .modal__titulo { font-family: var(--pm-serif); font-size: 28px; font-weight: 500; color: var(--pm-text); margin-bottom: 8px; }
+html body .modal__texto { font-size: 13px; line-height: 1.6; color: var(--pm-muted); margin-bottom: 20px; }
+html body .modal__texto strong { color: var(--pm-gold-2); font-weight: 400; }
+html body .modal__form { display: flex; gap: 8px; margin-bottom: 14px; }
+html body .modal__form .campo__input { flex: 1; min-width: 0; }
+html body .modal__form .btn { flex-shrink: 0; }
+html body .modal__msg { font-size: 12px; padding: 10px 12px; border-radius: var(--pm-radius-sm); margin-bottom: 14px; color: #9fd8a8; background: rgba(120, 200, 140, .1); }
+html body .modal__msg--error { color: var(--pm-danger); background: rgba(229, 103, 91, .1); }
+html body .accesos { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+html body .accesos li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-radius: var(--pm-radius-sm); border: 1px solid var(--pm-line); background: var(--pm-glass); }
+html body .accesos strong { display: block; font-size: 13px; font-weight: 700; color: var(--pm-text); word-break: break-all; }
+html body .accesos span { font-size: 11px; color: var(--pm-muted); }
+
+/* Solicitudes */
+html body .solicitudes { display: grid; gap: 14px; }
+html body .solicitud {
+  padding: 20px 22px;
+  border-radius: var(--pm-radius);
+  border: 1px solid var(--pm-line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .015)), var(--pm-bg-2);
+  animation: pm-rise .5s var(--pm-ease) both;
+}
+html body .solicitud--nueva { border-color: rgba(217, 178, 106, .45); box-shadow: 0 0 40px -24px rgba(217, 178, 106, .6); }
+html body .solicitud__cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+html body .solicitud__nombre { font-family: var(--pm-serif); font-size: 24px; font-weight: 500; color: var(--pm-text); }
+html body .solicitud__meta { font-size: 11px; color: var(--pm-muted); margin-top: 2px; }
+html body .solicitud__estado { width: auto; min-width: 130px; flex-shrink: 0; }
+html body .solicitud__datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px 16px; margin: 0 0 12px; }
+html body .solicitud__datos dt { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--pm-muted); }
+html body .solicitud__datos dd { margin: 2px 0 0; font-size: 13px; color: var(--pm-text); word-break: break-word; }
+html body .solicitud__datos a { color: var(--pm-gold-2); text-decoration: none; }
+html body .solicitud__mensaje { font-size: 14px; line-height: 1.6; color: #cfc9be; padding: 12px 14px; border-left: 2px solid var(--pm-gold); background: rgba(217, 178, 106, .05); border-radius: 0 var(--pm-radius-sm) var(--pm-radius-sm) 0; margin-bottom: 12px; }
+html body .solicitud__notas { min-height: 56px; }
+html body .solicitud__pie { display: flex; justify-content: flex-end; margin-top: 8px; }
+
+/* Portal de novios */
+html body .portal-acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: -8px 0 28px; }
+html body .portal-actualizado { font-size: 11px; color: var(--pm-faint); }
+html body .login-card__texto { font-size: 13px; line-height: 1.6; color: var(--pm-muted); margin-bottom: 4px; }
+html body .login-card__ok { text-align: center; font-size: 13px; line-height: 1.6; color: var(--pm-muted); display: grid; gap: 10px; }
+html body .login-card__ok strong { font-family: var(--pm-serif); font-size: 22px; font-weight: 500; color: var(--pm-gold-2); }
+html body .login-card__ok .btn { justify-self: center; margin-top: 6px; }
+@media (max-width: 520px) {
+  html body .modal__form { flex-direction: column; }
+  html body .solicitud__cab { flex-direction: column; }
+  html body .solicitud__estado { width: 100%; }
+}
+
 /* ══════════════════ ACCESIBILIDAD ══════════════════ */
 
 @media (prefers-reduced-motion: reduce) {

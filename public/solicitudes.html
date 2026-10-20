@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Solicitudes · Wedding Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/editor.css" />
+  <style>
+    html, body { height: auto; }
+    .header { display: flex; align-items: center; justify-content: space-between; }
+    .main { margin: 0 auto; }
+    .btn { padding: 8px 14px; border: none; font-family: inherit; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; }
+    .cargando, .vacio { text-align: center; padding: 32px; }
+  </style>
+  <link rel="stylesheet" href="css/premium.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div>
+      <a href="index.html" class="header__logo">Wedding Builder</a>
+      <div class="header__sub">Solicitudes de información</div>
+    </div>
+    <div class="header__usuario">
+      <span class="header__email" id="usuario-email"></span>
+      <button class="btn btn--secundario" onclick="DB.logout()">Salir</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <a href="index.html" class="volver">← Tus bodas</a>
+    <p class="main__titulo">Solicitudes</p>
+    <div class="pestanas" id="pestanas">
+      <button class="pestana activa" data-filtro="abiertas">Abiertas <span id="cnt-abiertas"></span></button>
+      <button class="pestana" data-filtro="cliente">Clientes <span id="cnt-cliente"></span></button>
+      <button class="pestana" data-filtro="descartada">Descartadas <span id="cnt-descartada"></span></button>
+    </div>
+    <div id="lista"><div class="cargando">Cargando…</div></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="/supabase-config.js"></script>
+  <script src="js/db.js"></script>
+  <script>
+    DB.init();
+
+    var _todas = [];
+    var _filtro = 'abiertas';
+    var PLANES = { esencial: 'Esencial', premium: 'Premium', a_medida: 'A medida', no_se: 'Sin decidir' };
+    var ESTADOS = { nueva: 'Nueva', contactada: 'Contactada', cliente: 'Cliente', descartada: 'Descartada' };
+
+    function esc(t) {
+      return String(t == null ? '' : t).replace(/[&<>"']/g, function(c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function enFiltro(s) {
+      return _filtro === 'abiertas' ? (s.estado === 'nueva' || s.estado === 'contactada') : s.estado === _filtro;
+    }
+
+    function pintar() {
+      document.getElementById('cnt-abiertas').textContent = _todas.filter(function(s) { return s.estado === 'nueva' || s.estado === 'contactada'; }).length;
+      document.getElementById('cnt-cliente').textContent = _todas.filter(function(s) { return s.estado === 'cliente'; }).length;
+      document.getElementById('cnt-descartada').textContent = _todas.filter(function(s) { return s.estado === 'descartada'; }).length;
+
+      var lista = _todas.filter(enFiltro);
+      var cont = document.getElementById('lista');
+      if (!lista.length) { cont.innerHTML = '<div class="vacio"><p class="vacio__sub">No hay solicitudes aquí.</p></div>'; return; }
+
+      cont.innerHTML = '<div class="solicitudes">' + lista.map(function(s) {
+        var fechaBoda = s.fecha_boda ? new Date(s.fecha_boda + 'T00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Sin fecha';
+        var opciones = Object.keys(ESTADOS).map(function(k) { return '<option value="' + k + '"' + (s.estado === k ? ' selected' : '') + '>' + ESTADOS[k] + '</option>'; }).join('');
+        return '<article class="solicitud solicitud--' + esc(s.estado) + '">' +
+          '<div class="solicitud__cab">' +
+            '<div><h3 class="solicitud__nombre">' + esc(s.nombre) + '</h3>' +
+            '<p class="solicitud__meta">Recibida el ' + new Date(s.creado_en).toLocaleString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) + '</p></div>' +
+            '<select class="campo__select solicitud__estado" data-id="' + s.id + '">' + opciones + '</select>' +
+          '</div>' +
+          '<dl class="solicitud__datos">' +
+            '<div><dt>Email</dt><dd><a href="mailto:' + esc(s.email) + '">' + esc(s.email) + '</a></dd></div>' +
+            (s.telefono ? '<div><dt>Teléfono</dt><dd><a href="tel:' + esc(s.telefono) + '">' + esc(s.telefono) + '</a></dd></div>' : '') +
+            '<div><dt>Boda</dt><dd>' + esc(fechaBoda) + '</dd></div>' +
+            '<div><dt>Plan</dt><dd>' + esc(PLANES[s.plan] || '—') + '</dd></div>' +
+          '</dl>' +
+          (s.mensaje ? '<p class="solicitud__mensaje">' + esc(s.mensaje).replace(/\n/g, '<br>') + '</p>' : '') +
+          '<textarea class="campo__textarea solicitud__notas" data-id="' + s.id + '" rows="2" placeholder="Notas internas…">' + esc(s.notas) + '</textarea>' +
+          '<div class="solicitud__pie"><button class="btn btn--peligro" data-borrar="' + s.id + '">Eliminar</button></div>' +
+        '</article>';
+      }).join('') + '</div>';
+
+      cont.querySelectorAll('.solicitud__estado').forEach(function(sel) {
+        sel.addEventListener('change', async function() {
+          var id = +sel.dataset.id;
+          try { await DB.actualizarSolicitud(id, { estado: sel.value }); _todas.forEach(function(s) { if (s.id === id) s.estado = sel.value; }); pintar(); }
+          catch (err) { alert('No se pudo guardar.'); console.error(err); }
+        });
+      });
+      cont.querySelectorAll('.solicitud__notas').forEach(function(t) {
+        t.addEventListener('change', async function() {
+          var id = +t.dataset.id;
+          try { await DB.actualizarSolicitud(id, { notas: t.value }); _todas.forEach(function(s) { if (s.id === id) s.notas = t.value; }); }
+          catch (err) { alert('No se pudieron guardar las notas.'); console.error(err); }
+        });
+      });
+      cont.querySelectorAll('[data-borrar]').forEach(function(b) {
+        b.addEventListener('click', async function() {
+          if (!confirm('¿Eliminar esta solicitud? No se puede deshacer.')) return;
+          var id = +b.dataset.borrar;
+          try { await DB.eliminarSolicitud(id); _todas = _todas.filter(function(s) { return s.id !== id; }); pintar(); }
+          catch (err) { alert('No se pudo eliminar.'); console.error(err); }
+        });
+      });
+    }
+
+    document.querySelectorAll('.pestana').forEach(function(p) {
+      p.addEventListener('click', function() {
+        _filtro = p.dataset.filtro;
+        document.querySelectorAll('.pestana').forEach(function(x) { x.classList.toggle('activa', x === p); });
+        pintar();
+      });
+    });
+
+    DB.requireAdmin().then(async function(user) {
+      document.getElementById('usuario-email').textContent = user.email;
+      try { _todas = await DB.listarSolicitudes(); pintar(); }
+      catch (err) { console.error(err); document.getElementById('lista').innerHTML = '<div class="cargando">Error al cargar. ¿Has ejecutado fase3_web_novios.sql?</div>'; }
+    });
+  </script>
+</body>
+</html>

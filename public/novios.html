@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Área de novios · Wedding Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/editor.css" />
+  <style>
+    html, body { height: auto; }
+    .header { display: flex; align-items: center; justify-content: space-between; }
+    .main { margin: 0 auto; }
+    .btn { padding: 8px 14px; border: none; font-family: inherit; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; }
+    .cargando, .vacio { text-align: center; padding: 32px; }
+    .vacio__sub { font-size: 13px; }
+    [hidden] { display: none !important; }
+  </style>
+  <link rel="stylesheet" href="css/premium.css" />
+</head>
+<body>
+
+  <!-- Cargando sesión -->
+  <div id="vista-cargando" class="cargando" style="padding-top:30vh">Cargando…</div>
+
+  <!-- Acceso por enlace al email -->
+  <div id="vista-login" class="login" hidden>
+    <main class="login-card">
+      <div class="login-card__logo">✦ Wedding Builder</div>
+      <div class="login-card__sub">Área de novios</div>
+      <form id="form-enlace">
+        <p class="login-card__texto">Escribe el email que nos facilitasteis y te enviaremos un enlace para entrar. Sin contraseñas.</p>
+        <div class="campo">
+          <label class="campo__label" for="inp-email">Email</label>
+          <input type="email" class="campo__input" id="inp-email" autocomplete="email" required />
+        </div>
+        <div class="login-card__error" id="login-error"></div>
+        <button type="submit" class="btn btn--primario" id="btn-enlace">Recibir enlace de acceso</button>
+      </form>
+      <div id="enlace-enviado" class="login-card__ok" hidden>
+        <p><strong>Revisa tu correo.</strong></p>
+        <p>Si ese email tiene acceso, recibirás un enlace en unos minutos. Mira también en spam o promociones.</p>
+        <button type="button" class="btn btn--secundario" onclick="location.reload()">Usar otro email</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Portal -->
+  <div id="vista-portal" hidden>
+    <header class="header">
+      <div>
+        <div class="header__logo">Wedding Builder</div>
+        <div class="header__sub">Área de novios</div>
+      </div>
+      <div class="header__usuario">
+        <span class="header__email" id="usuario-email"></span>
+        <button class="btn btn--secundario" onclick="DB.logout('/novios')">Salir</button>
+      </div>
+    </header>
+    <main class="main">
+      <p class="main__titulo" id="titulo-boda">Vuestra boda</p>
+      <div class="portal-acciones">
+        <a class="btn btn--primario" id="link-invitacion" target="_blank" rel="noopener">Ver la invitación ↗</a>
+        <button class="btn btn--secundario" id="btn-copiar">Copiar enlace para invitados</button>
+        <button class="btn btn--ghost" id="btn-actualizar">↻ Actualizar</button>
+        <span class="portal-actualizado" id="actualizado"></span>
+      </div>
+      <div id="respuestas-container"><div class="cargando">Cargando…</div></div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="/supabase-config.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/respuestas-vista.js"></script>
+  <script>
+    DB.init();
+
+    var _bodaId = null, _nombre = 'boda', _timer = null;
+
+    function ver(id) {
+      ['vista-cargando', 'vista-login', 'vista-portal'].forEach(function(v) { document.getElementById(v).hidden = v !== id; });
+    }
+
+    function errorLogin(txt) {
+      var e = document.getElementById('login-error');
+      e.textContent = txt; e.style.display = txt ? 'block' : 'none';
+    }
+
+    async function cargarRespuestas() {
+      var cont = document.getElementById('respuestas-container');
+      try {
+        RESPUESTAS_VISTA.pintar(cont, await DB.listarRespuestas(_bodaId), _nombre);
+        document.getElementById('actualizado').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      } catch (err) {
+        console.error(err);
+        cont.innerHTML = '<div class="cargando">No se pudieron cargar las respuestas.</div>';
+      }
+    }
+
+    async function iniciar() {
+      // Enlace caducado o ya usado
+      var hash = new URLSearchParams(window.location.hash.slice(1));
+      var perfil = await DB.miPerfil();
+
+      if (!perfil) {
+        ver('vista-login');
+        if (hash.get('error')) errorLogin('El enlace ha caducado o ya se usó. Pide uno nuevo.');
+        return;
+      }
+      if (perfil.role === 'superadmin') { window.location.replace('/admin'); return; }
+      if (perfil.role !== 'novios' || !perfil.wedding_id) {
+        await DB.logout(false);
+        history.replaceState(null, '', '/novios');
+        ver('vista-login');
+        errorLogin('Este email no tiene acceso al área de novios.');
+        return;
+      }
+
+      _bodaId = perfil.wedding_id;
+      document.getElementById('usuario-email').textContent = perfil.email;
+      var boda = await DB.cargarBoda(_bodaId).catch(function() { return null; });
+      if (boda) {
+        var p = boda.pareja || {};
+        _nombre = (p.novio || '') + ' & ' + (p.novia || '');
+        document.getElementById('titulo-boda').textContent = _nombre;
+      }
+      var url = window.location.origin + '/invitation.html?id=' + encodeURIComponent(_bodaId);
+      document.getElementById('link-invitacion').href = url;
+      document.getElementById('btn-copiar').addEventListener('click', function() {
+        var b = this;
+        navigator.clipboard.writeText(url).then(function() { b.textContent = '✓ Enlace copiado'; setTimeout(function() { b.textContent = 'Copiar enlace para invitados'; }, 2000); });
+      });
+      document.getElementById('btn-actualizar').addEventListener('click', cargarRespuestas);
+      ver('vista-portal');
+      history.replaceState(null, '', '/novios');
+      await cargarRespuestas();
+      _timer = setInterval(cargarRespuestas, 60000);
+    }
+
+    document.getElementById('form-enlace').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var email = document.getElementById('inp-email').value.trim().toLowerCase();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return errorLogin('Escribe un email válido.');
+      errorLogin('');
+      var btn = document.getElementById('btn-enlace');
+      btn.disabled = true; btn.textContent = 'Enviando…';
+      await DB.enlaceNovios(email);
+      document.getElementById('form-enlace').hidden = true;
+      document.getElementById('enlace-enviado').hidden = false;
+    });
+
+    iniciar().catch(function(err) { console.error(err); ver('vista-login'); });
+  </script>
+</body>
+</html>

@@ -16,7 +16,7 @@
   <title>Invitación de boda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="css/invitacion.css" />
+  <link rel="stylesheet" href="/css/invitacion.css" />
   <style>
     html, body { margin: 0; padding: 0; }
     body { background: #f5f0e8; }
@@ -30,7 +30,7 @@
     .carga-ornamento { font-size: 24px; color: #b8860b; }
     .carga-texto { font-family: sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #aaa; }
   </style>
-  <link rel="stylesheet" href="css/magia.css" />
+  <link rel="stylesheet" href="/css/magia.css" />
 </head>
 <body>
 
@@ -47,13 +47,16 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
   <script src="/supabase-config.js"></script>
-  <script src="js/db.js"></script>
-  <script src="js/invitacion.js"></script>
-  <script src="js/magia.js"></script>
+  <script src="/js/db.js"></script>
+  <script src="/js/invitacion.js"></script>
+  <script src="/js/demos.js"></script>
+  <script src="/js/magia.js"></script>
 
   <script>
     var PARAMS = new URLSearchParams(window.location.search);
     var PREVIEW = PARAMS.get('preview') === '1';
+    // Ejemplos: /ejemplos/<plantilla> (ruta limpia) o ?demo=<plantilla>
+    var DEMO = PARAMS.get('demo') || (window.location.pathname.match(/^\/ejemplos\/([a-z]+)\/?$/) || [])[1];
     var raiz = document.getElementById('invitation-root');
     var pantallaCarga = document.getElementById('pantalla-carga');
 
@@ -72,7 +75,16 @@
       set('tw-title', titulo); set('tw-image', foto);
     }
 
-    if (PREVIEW) {
+    if (DEMO) {
+      // Ejemplo para la web pública: datos de muestra, los formularios no envían nada
+      var demo = DEMOS.boda(DEMO);
+      document.title = 'Ejemplo · ' + demo.pareja.novio + ' & ' + demo.pareja.novia;
+      INVITACION.render(demo, raiz, {
+        onRsvp: function() { return Promise.resolve(); },
+        onFormulario: function() { return Promise.resolve(); }
+      });
+      setTimeout(function() { pantallaCarga.classList.add('oculto'); }, 200);
+    } else if (PREVIEW) {
       // Vista previa del editor: recibe la boda por postMessage (mismo origen)
       pantallaCarga.classList.add('oculto');
       var desplazamiento = 0;

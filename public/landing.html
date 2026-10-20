@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wedding Builder · Invitaciones de boda digitales</title>
+  <meta name="description" content="Invitaciones de boda digitales elegantes: confirmación de asistencia, cuestionario para invitados, ubicación, galería y un panel privado para los novios." />
+  <meta name="theme-color" content="#0b0b0d" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Wedding Builder · Invitaciones de boda digitales" />
+  <meta property="og:description" content="Una invitación tan especial como vuestro día. Preciosa en el móvil, fácil de compartir y con las confirmaciones en tiempo real." />
+  <meta property="og:image" content="/assets/demo/pareja-1.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/landing.css" />
+</head>
+<body>
+
+  <!-- ════════ CABECERA ════════ -->
+  <header class="l-header" id="cabecera">
+    <div class="l-contenedor l-header__in">
+      <a href="#inicio" class="l-logo">✦ Wedding Builder</a>
+      <nav class="l-nav" id="nav">
+        <a href="#ejemplos">Ejemplos</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#incluye">Qué incluye</a>
+        <a href="#planes">Planes</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+      <div class="l-header__acciones">
+        <a href="/novios" class="l-btn l-btn--linea">Área de novios</a>
+        <a href="#contacto" class="l-btn l-btn--oro">Pedir información</a>
+        <button class="l-menu-btn" id="menu-btn" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ════════ HERO ════════ -->
+  <section class="l-hero" id="inicio">
+    <div class="l-contenedor l-hero__in">
+      <div class="l-hero__texto">
+        <p class="l-kicker">Invitaciones de boda digitales</p>
+        <h1>Una invitación tan <em>especial</em> como vuestro día</h1>
+        <p class="l-sub">Diseñamos vuestra invitación digital: preciosa en el móvil, fácil de compartir y con todo lo que vuestros invitados necesitan saber. Vosotros solo tenéis que ver cómo llegan las confirmaciones.</p>
+        <div class="l-hero__ctas">
+          <a href="#contacto" class="l-btn l-btn--oro">Pedir información</a>
+          <a href="#ejemplos" class="l-btn l-btn--linea">Ver ejemplos</a>
+        </div>
+        <ul class="l-hero__puntos">
+          <li>Confirmación de asistencia</li>
+          <li>Panel privado para los novios</li>
+          <li>Sin apps ni registros para los invitados</li>
+        </ul>
+      </div>
+      <div class="l-probador">
+        <div class="l-movil l-movil--grande">
+          <div class="l-movil__pantalla">
+            <iframe id="probador-frame" src="invitation.html?demo=clasica" title="Invitación de ejemplo" loading="eager"></iframe>
+          </div>
+        </div>
+        <div class="l-chips" id="chips" role="group" aria-label="Probar estilos">
+          <button class="l-chip activo" data-demo="clasica">Clásica</button>
+          <button class="l-chip" data-demo="floral">Floral</button>
+          <button class="l-chip" data-demo="moderna">Moderna</button>
+          <button class="l-chip" data-demo="mediterranea">Mediterránea</button>
+          <button class="l-chip" data-demo="deco">Art Déco</button>
+          <button class="l-chip" data-demo="acuarela">Acuarela</button>
+          <button class="l-chip" data-demo="revista">Revista</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ EJEMPLOS ════════ -->
+  <section class="l-sec" id="ejemplos">
+    <div class="l-contenedor">
+      <div class="l-cab l-cab--centro l-revelar">
+        <p class="l-kicker">Ejemplos</p>
+        <h2 class="l-titulo">Siete estilos, <em>infinitas</em> combinaciones</h2>
+        <p class="l-sub">Cada estilo se adapta a vuestros colores, tipografías y fotos. Tocad cualquiera para verlo como lo verán vuestros invitados.</p>
+      </div>
+      <div class="l-ejemplos" id="lista-ejemplos"></div>
+    </div>
+  </section>
+
+  <!-- ════════ CÓMO FUNCIONA ════════ -->
+  <section class="l-sec l-sec--marfil2" id="como-funciona">
+    <div class="l-contenedor">
+      <div class="l-cab l-revelar">
+        <p class="l-kicker">Cómo funciona</p>
+        <h2 class="l-titulo">De la idea a la <em>confirmación</em></h2>
+      </div>
+      <div class="l-pasos">
+        <div class="l-paso l-revelar"><h3>Nos contáis vuestra boda</h3><p>Fecha, lugar, vuestra historia, fotos y el estilo que os gusta. Nos encargamos del resto.</p></div>
+        <div class="l-paso l-revelar" style="--d:.08s"><h3>Diseñamos la invitación</h3><p>Preparamos vuestra invitación y la ajustamos con vosotros hasta que sea exactamente como la imagináis.</p></div>
+        <div class="l-paso l-revelar" style="--d:.16s"><h3>La compartís</h3><p>Recibís un enlace único para enviar por WhatsApp o email. Se abre en cualquier móvil, sin instalar nada.</p></div>
+        <div class="l-paso l-revelar" style="--d:.24s"><h3>Seguís las respuestas</h3><p>En vuestra área privada veis quién viene, sus menús y alergias, y lo descargáis en Excel cuando queráis.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ QUÉ INCLUYE ════════ -->
+  <section class="l-sec l-sec--oscura" id="incluye">
+    <div class="l-contenedor">
+      <div class="l-cab l-revelar">
+        <p class="l-kicker">Qué incluye</p>
+        <h2 class="l-titulo">Todo lo que vuestros invitados <em>necesitan</em></h2>
+        <p class="l-sub">Y nada de lo que no. Cada sección se activa o se oculta según vuestra boda.</p>
+      </div>
+      <div class="l-incluye l-revelar">
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5V12a9 9 0 1 1-5.3-8.2"/><path d="m21 4.5-9 9-3-3"/></svg></div><h3>Confirmación de asistencia</h3><p>Cada invitado confirma en segundos, con un mensaje para vosotros si quiere.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg></div><h3>Cuestionario a medida</h3><p>Menú, alergias, autobús, la canción que no puede faltar… vosotros elegís las preguntas.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6 7-11.5a7 7 0 1 0-14 0C5 15 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div><h3>Ubicación y cómo llegar</h3><p>Un toque y el invitado abre el mapa con la ruta hasta el lugar de la celebración.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div><h3>Añadir al calendario</h3><p>Para que nadie se olvide de la fecha, con la hora y el lugar ya puestos.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></div><h3>Cuenta atrás</h3><p>Días, horas y minutos hasta el gran día, en directo.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></div><h3>Galería de fotos</h3><p>Vuestras mejores fotos, con visor a pantalla completa.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></div><h3>Vuestra canción</h3><p>Música de fondo que el invitado puede activar mientras lee.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-6h6v6"/></svg></div><h3>Alojamiento y transporte</h3><p>Hoteles recomendados, autobuses y horarios, todo en el mismo sitio.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="14" height="11" rx="1.5"/><rect x="15" y="9" width="7" height="12" rx="1.5"/><path d="M6 19h6"/></svg></div><h3>Móvil y ordenador</h3><p>Diseñada para el móvil y espectacular también en pantalla grande.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Panel para los novios</h3><p>Respuestas en tiempo real y descarga en Excel desde vuestra área privada.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h3>Privada y segura</h3><p>Solo quien tiene vuestro enlace ve la invitación. Las respuestas, solo vosotros.</p></div>
+        <div class="l-rasgo"><div class="l-rasgo__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 0 0 0 20c1 0 1.7-.8 1.7-1.7 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.8-1.7 1.7-1.7H16a6 6 0 0 0 6-6c0-4.4-4.5-8.4-10-8.4z"/></svg></div><h3>Vuestros colores</h3><p>Paletas claras u oscuras y tipografías a elegir para que sea solo vuestra.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ PANEL DE NOVIOS ════════ -->
+  <section class="l-sec">
+    <div class="l-contenedor l-panel">
+      <div class="l-revelar">
+        <p class="l-kicker">Área de novios</p>
+        <h2 class="l-titulo" style="margin-top:14px">Cada confirmación, <em>al momento</em></h2>
+        <ul class="l-panel__lista">
+          <li>Entráis con vuestro email: os llega un enlace, sin contraseñas.</li>
+          <li>Veis quién viene, quién no y sus mensajes.</li>
+          <li>Las respuestas del cuestionario, ordenadas y listas para el catering.</li>
+          <li>Descarga en Excel con un clic.</li>
+        </ul>
+      </div>
+      <div class="l-mock l-revelar" style="--d:.1s" aria-hidden="true">
+        <p class="l-mock__titulo">Lucía &amp; Daniel</p>
+        <div class="l-mock__stats">
+          <div class="l-mock__stat"><b>128</b><span>Confirmaciones</span></div>
+          <div class="l-mock__stat l-mock__stat--si"><b>117</b><span>Asisten</span></div>
+          <div class="l-mock__stat l-mock__stat--no"><b>11</b><span>No asisten</span></div>
+        </div>
+        <table>
+          <thead><tr><th>Nombre</th><th>Asistencia</th><th>Menú</th></tr></thead>
+          <tbody>
+            <tr><td>Ana Martín</td><td><span class="chip chip--si">Asiste</span></td><td>Pescado</td></tr>
+            <tr><td>Jorge Ruiz</td><td><span class="chip chip--si">Asiste</span></td><td>Vegetariano</td></tr>
+            <tr><td>Carmen Gil</td><td><span class="chip chip--no">No asiste</span></td><td>—</td></tr>
+            <tr><td>Luis Ortega</td><td><span class="chip chip--si">Asiste</span></td><td>Carne</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ PLANES ════════ -->
+  <section class="l-sec l-sec--marfil2" id="planes">
+    <div class="l-contenedor">
+      <div class="l-cab l-cab--centro l-revelar">
+        <p class="l-kicker">Planes</p>
+        <h2 class="l-titulo">Elegid cómo <em>queréis</em> vuestra invitación</h2>
+        <p class="l-sub">Os preparamos un presupuesto sin compromiso según lo que necesitéis.</p>
+      </div>
+      <div class="l-planes">
+        <article class="l-plan l-revelar">
+          <h3>Esencial</h3>
+          <p class="l-plan__desc">Todo lo imprescindible, con un diseño precioso.</p>
+          <ul>
+            <li>Un estilo a elegir, con vuestros colores</li>
+            <li>Portada con vuestros nombres y foto</li>
+            <li>Cuenta atrás, lugar y "cómo llegar"</li>
+            <li>Confirmación de asistencia</li>
+            <li>Enlace único para compartir</li>
+          </ul>
+          <button class="l-btn l-btn--linea" data-plan="esencial">Solicitar presupuesto</button>
+        </article>
+        <article class="l-plan l-plan--destacado l-revelar" style="--d:.08s">
+          <span class="l-plan__etiqueta">Recomendado</span>
+          <h3>Premium</h3>
+          <p class="l-plan__desc">La experiencia completa para vosotros y vuestros invitados.</p>
+          <ul>
+            <li>Todo lo del plan Esencial</li>
+            <li>Galería de fotos y vuestra canción</li>
+            <li>Cuestionario a medida (menús, alergias…)</li>
+            <li>Alojamiento, transporte y dress code</li>
+            <li>Área privada con respuestas en tiempo real</li>
+            <li>Descarga de respuestas en Excel</li>
+          </ul>
+          <button class="l-btn l-btn--oro" data-plan="premium">Solicitar presupuesto</button>
+        </article>
+        <article class="l-plan l-revelar" style="--d:.16s">
+          <h3>A medida</h3>
+          <p class="l-plan__desc">Para bodas que quieren algo único.</p>
+          <ul>
+            <li>Todo lo del plan Premium</li>
+            <li>Diseño exclusivo a partir de vuestra idea</li>
+            <li>Secciones personalizadas</li>
+            <li>Acompañamiento personal hasta el gran día</li>
+          </ul>
+          <button class="l-btn l-btn--linea" data-plan="a_medida">Solicitar presupuesto</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ PREGUNTAS ════════ -->
+  <section class="l-sec" id="preguntas">
+    <div class="l-contenedor">
+      <div class="l-cab l-cab--centro l-revelar">
+        <p class="l-kicker">Preguntas frecuentes</p>
+        <h2 class="l-titulo">Lo que suelen <em>preguntarnos</em></h2>
+      </div>
+      <div class="l-faq l-revelar">
+        <details><summary>¿Cómo reciben la invitación los invitados?</summary><p>Con un enlace único que podéis enviar por WhatsApp, email o como queráis. Se abre directamente en el navegador del móvil, sin descargar ninguna app.</p></details>
+        <details><summary>¿Los invitados tienen que registrarse?</summary><p>No. Abren el enlace, leen la invitación y confirman en el momento. Así de sencillo.</p></details>
+        <details><summary>¿Cómo vemos las confirmaciones?</summary><p>Desde vuestra área de novios. Entráis con vuestro email (os llega un enlace de acceso) y veis todas las respuestas actualizadas, con opción de descargarlas en Excel.</p></details>
+        <details><summary>¿Podemos cambiar algo después de enviarla?</summary><p>Sí. Si cambia un horario o queréis añadir información, la actualizamos y los invitados verán siempre la versión más reciente con el mismo enlace.</p></details>
+        <details><summary>¿Quién puede ver nuestra invitación?</summary><p>Solo quien tenga el enlace. No aparece en buscadores, y las respuestas de los invitados solo las veis vosotros.</p></details>
+        <details><summary>¿Con cuánta antelación debemos pedirla?</summary><p>Lo ideal es entre 3 y 6 meses antes de la boda para que los invitados reserven la fecha con tiempo, pero contadnos vuestro caso.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ CONTACTO ════════ -->
+  <section class="l-sec l-sec--marfil2" id="contacto">
+    <div class="l-contenedor l-contacto">
+      <div class="l-contacto__datos l-revelar">
+        <p class="l-kicker">Contacto</p>
+        <h2 class="l-titulo">Contadnos vuestra <em>boda</em></h2>
+        <p class="l-sub">Rellenad el formulario y os escribiremos con una propuesta pensada para vosotros, sin compromiso.</p>
+      </div>
+      <form class="l-form l-revelar" id="form-contacto" novalidate>
+        <div class="l-campo"><label for="c-nombre">Nombre</label><input id="c-nombre" name="nombre" autocomplete="name" maxlength="120" required /></div>
+        <div class="l-campo"><label for="c-email">Email</label><input id="c-email" name="email" type="email" autocomplete="email" maxlength="200" required /></div>
+        <div class="l-campo"><label for="c-telefono">Teléfono (opcional)</label><input id="c-telefono" name="telefono" type="tel" autocomplete="tel" maxlength="40" /></div>
+        <div class="l-campo"><label for="c-fecha">Fecha de la boda</label><input id="c-fecha" name="fecha_boda" type="date" /></div>
+        <div class="l-campo l-campo--ancho"><label for="c-plan">Plan que os interesa</label>
+          <select id="c-plan" name="plan">
+            <option value="no_se">Aún no lo sabemos</option>
+            <option value="esencial">Esencial</option>
+            <option value="premium">Premium</option>
+            <option value="a_medida">A medida</option>
+          </select>
+        </div>
+        <div class="l-campo l-campo--ancho"><label for="c-mensaje">Contadnos algo de vuestra boda (opcional)</label><textarea id="c-mensaje" name="mensaje" maxlength="2000" placeholder="Estilo que os gusta, número de invitados, lo que se os ocurra…"></textarea></div>
+        <div class="l-trampa" aria-hidden="true"><label for="c-web">Web</label><input id="c-web" name="web" tabindex="-1" autocomplete="off" /></div>
+        <label class="l-check"><input type="checkbox" id="c-privacidad" required /> <span>He leído y acepto la <a href="/privacidad" target="_blank">política de privacidad</a>. Usaremos vuestros datos solo para responder a esta solicitud.</span></label>
+        <p class="l-form__error" id="c-error" hidden></p>
+        <button type="submit" class="l-btn l-btn--tinta" id="c-enviar">Enviar solicitud</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ════════ PIE ════════ -->
+  <footer class="l-pie">
+    <div class="l-contenedor l-pie__in">
+      <a href="#inicio" class="l-logo">✦ Wedding Builder</a>
+      <nav>
+        <a href="#ejemplos">Ejemplos</a>
+        <a href="#planes">Planes</a>
+        <a href="/novios">Área de novios</a>
+        <a href="/privacidad">Privacidad</a>
+      </nav>
+      <span>© <span id="anio"></span> Wedding Builder</span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" defer></script>
+  <script src="/supabase-config.js" defer></script>
+  <script src="js/db.js" defer></script>
+  <script src="js/landing.js" defer></script>
+</body>
+</html>

@@ -52,6 +52,7 @@
       <div class="header__sub">Panel de gestión</div>
     </div>
     <div class="header__usuario">
+      <a href="solicitudes.html" class="btn btn--ghost header__solicitudes">Solicitudes <span class="badge" id="badge-solicitudes" hidden></span></a>
       <span class="header__email" id="usuario-email"></span>
       <button class="btn btn--secundario" id="btn-logout" onclick="DB.logout()">Salir</button>
     </div>
@@ -71,6 +72,21 @@
       <div class="cargando">Cargando…</div>
     </div>
   </main>
+
+  <!-- Accesos de novios -->
+  <div class="modal" id="modal-novios" hidden>
+    <div class="modal__caja" role="dialog" aria-modal="true" aria-labelledby="modal-novios-titulo">
+      <button class="modal__cerrar" onclick="cerrarNovios()" aria-label="Cerrar">✕</button>
+      <h2 class="modal__titulo" id="modal-novios-titulo">Acceso de los novios</h2>
+      <p class="modal__texto">Los novios entran en <strong id="url-novios"></strong> con su email y ven solo las respuestas de su boda. Sin contraseñas: reciben un enlace por correo.</p>
+      <form class="modal__form" id="form-novios">
+        <input type="email" class="campo__input" id="inp-email-novios" placeholder="email@ejemplo.com" required />
+        <button class="btn btn--primario" type="submit" id="btn-dar-acceso">Dar acceso</button>
+      </form>
+      <p class="modal__msg" id="msg-novios" hidden></p>
+      <div id="lista-novios"></div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
   <script src="/supabase-config.js"></script>
@@ -141,6 +157,7 @@
         html += '<a href="editor.html?id=' + id + '" class="btn btn--primario">Editar</a>';
         html += '<a href="invitation.html?id=' + id + '" target="_blank" class="btn btn--secundario">Ver</a>';
         html += '<a href="respuestas.html?id=' + id + '" class="btn btn--secundario">Respuestas</a>';
+        html += '<button class="btn btn--secundario" onclick="abrirNovios(\'' + id + '\', this)">Novios</button>';
         html += '</div>';
         html += '<div class="boda-card__extra">';
         html += '<button class="btn btn--ghost" onclick="duplicar(\'' + id + '\', this)">Duplicar</button>';
@@ -175,6 +192,67 @@
       }
     }
 
+    // ── Accesos de novios ──
+    var _bodaNovios = null;
+
+    function msgNovios(txt, error) {
+      var m = document.getElementById('msg-novios');
+      m.textContent = txt || '';
+      m.hidden = !txt;
+      m.classList.toggle('modal__msg--error', !!error);
+    }
+
+    async function pintarNovios() {
+      var cont = document.getElementById('lista-novios');
+      cont.innerHTML = '<div class="cargando">Cargando…</div>';
+      try {
+        var res = await DB.apiNovios('GET', { boda: _bodaNovios });
+        if (!res.accesos.length) { cont.innerHTML = '<p class="vacio__sub">Nadie tiene acceso todavía.</p>'; return; }
+        cont.innerHTML = '<ul class="accesos">' + res.accesos.map(function(a) {
+          var ultimo = a.ultimoAcceso ? 'Último acceso: ' + new Date(a.ultimoAcceso).toLocaleDateString('es-ES') : 'Aún no ha entrado';
+          return '<li><div><strong>' + esc(a.email) + '</strong><span>' + ultimo + '</span></div>' +
+            '<button class="btn btn--peligro" data-email="' + esc(a.email) + '">Quitar</button></li>';
+        }).join('') + '</ul>';
+        cont.querySelectorAll('[data-email]').forEach(function(b) {
+          b.addEventListener('click', async function() {
+            if (!confirm('¿Quitar el acceso a ' + b.dataset.email + '?')) return;
+            try { await DB.apiNovios('DELETE', { boda: _bodaNovios, email: b.dataset.email }); msgNovios('Acceso retirado.'); pintarNovios(); }
+            catch (err) { msgNovios(err.message, true); }
+          });
+        });
+      } catch (err) {
+        cont.innerHTML = '';
+        msgNovios(err.message, true);
+      }
+    }
+
+    function abrirNovios(id) {
+      _bodaNovios = id;
+      document.getElementById('url-novios').textContent = window.location.host + '/novios';
+      msgNovios('');
+      document.getElementById('modal-novios').hidden = false;
+      document.getElementById('inp-email-novios').focus();
+      pintarNovios();
+    }
+
+    function cerrarNovios() { document.getElementById('modal-novios').hidden = true; }
+    document.getElementById('modal-novios').addEventListener('click', function(e) { if (e.target === this) cerrarNovios(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') cerrarNovios(); });
+
+    document.getElementById('form-novios').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var inp = document.getElementById('inp-email-novios');
+      var btn = document.getElementById('btn-dar-acceso');
+      btn.disabled = true; btn.textContent = 'Enviando…';
+      try {
+        var res = await DB.apiNovios('POST', { boda: _bodaNovios, email: inp.value.trim() });
+        msgNovios(res.aviso || 'Acceso dado. Le hemos enviado el enlace por email.', !!res.aviso);
+        inp.value = '';
+        pintarNovios();
+      } catch (err) { msgNovios(err.message, true); }
+      btn.disabled = false; btn.textContent = 'Dar acceso';
+    });
+
     async function eliminar(id) {
       if (!confirm('¿Eliminar esta boda? Esta acción no se puede deshacer.')) return;
       await DB.eliminarBoda(id);
@@ -184,6 +262,10 @@
     DB.requireAdmin().then(function(user) {
       document.getElementById('usuario-email').textContent = user.email;
       cargarBodas();
+      DB.contarSolicitudesNuevas().then(function(n) {
+        var b = document.getElementById('badge-solicitudes');
+        if (n > 0) { b.textContent = n; b.hidden = false; }
+      });
     });
   </script>
 

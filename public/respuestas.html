@@ -44,115 +44,12 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
   <script src="/supabase-config.js"></script>
   <script src="js/db.js"></script>
+  <script src="js/respuestas-vista.js"></script>
 
   <script>
     DB.init();
 
     var _bodaId = new URLSearchParams(window.location.search).get('id');
-    var _nombre = 'boda';
-    var _datos = { rsvps: [], formularios: [] };
-
-    function esc(t) {
-      return String(t == null ? '' : t).replace(/[&<>"']/g, function(c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-      });
-    }
-
-    function fecha(iso) {
-      return iso ? new Date(iso).toLocaleString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-    }
-
-    function asistenciaTexto(v) {
-      return v === 'si' ? 'Asiste' : v === 'no' ? 'No asiste' : (v || '—');
-    }
-
-    // Columnas del formulario = todas las preguntas que aparecen en alguna respuesta
-    function columnasFormulario() {
-      var cols = [];
-      _datos.formularios.forEach(function(f) {
-        Object.keys(f.respuestas || {}).forEach(function(k) { if (cols.indexOf(k) === -1) cols.push(k); });
-      });
-      return cols;
-    }
-
-    function pintar() {
-      var r = _datos.rsvps;
-      var si = r.filter(function(x) { return x.asistencia === 'si'; }).length;
-      var no = r.filter(function(x) { return x.asistencia === 'no'; }).length;
-      var html = '';
-
-      html += '<div class="stats">';
-      html += '<div class="stat"><div class="stat__num">' + r.length + '</div><div class="stat__label">Confirmaciones</div></div>';
-      html += '<div class="stat stat--si"><div class="stat__num">' + si + '</div><div class="stat__label">Asisten</div></div>';
-      html += '<div class="stat stat--no"><div class="stat__num">' + no + '</div><div class="stat__label">No asisten</div></div>';
-      html += '<div class="stat"><div class="stat__num">' + _datos.formularios.length + '</div><div class="stat__label">Cuestionarios</div></div>';
-      html += '</div>';
-
-      // RSVP
-      html += '<section class="bloque-resp">';
-      html += '<div class="bloque-resp__cab"><h2 class="bloque-resp__titulo">Confirmaciones de asistencia</h2>';
-      if (r.length) html += '<button class="btn btn--secundario" onclick="exportar(\'rsvps\')">Descargar Excel</button>';
-      html += '</div>';
-      if (!r.length) {
-        html += '<div class="vacio"><p class="vacio__sub">Todavía no hay confirmaciones.</p></div>';
-      } else {
-        html += '<div class="tabla-wrap"><table class="tabla"><thead><tr><th>Nombre</th><th>Asistencia</th><th>Mensaje</th><th>Fecha</th></tr></thead><tbody>';
-        r.forEach(function(x) {
-          html += '<tr><td>' + esc(x.nombre) + '</td>';
-          html += '<td><span class="chip chip--' + esc(x.asistencia) + '">' + asistenciaTexto(x.asistencia) + '</span></td>';
-          html += '<td>' + esc(x.mensaje) + '</td><td class="tabla__fecha">' + fecha(x.enviado_en) + '</td></tr>';
-        });
-        html += '</tbody></table></div>';
-      }
-      html += '</section>';
-
-      // Formularios
-      var cols = columnasFormulario();
-      html += '<section class="bloque-resp">';
-      html += '<div class="bloque-resp__cab"><h2 class="bloque-resp__titulo">Cuestionario</h2>';
-      if (_datos.formularios.length) html += '<button class="btn btn--secundario" onclick="exportar(\'formularios\')">Descargar Excel</button>';
-      html += '</div>';
-      if (!_datos.formularios.length) {
-        html += '<div class="vacio"><p class="vacio__sub">Todavía no hay cuestionarios enviados.</p></div>';
-      } else {
-        html += '<div class="tabla-wrap"><table class="tabla"><thead><tr>';
-        cols.forEach(function(c) { html += '<th>' + esc(c) + '</th>'; });
-        html += '<th>Fecha</th></tr></thead><tbody>';
-        _datos.formularios.forEach(function(f) {
-          html += '<tr>';
-          cols.forEach(function(c) { html += '<td>' + esc((f.respuestas || {})[c]) + '</td>'; });
-          html += '<td class="tabla__fecha">' + fecha(f.enviado_en) + '</td></tr>';
-        });
-        html += '</tbody></table></div>';
-      }
-      html += '</section>';
-
-      document.getElementById('respuestas-container').innerHTML = html;
-    }
-
-    // CSV con ; y BOM → se abre bien en Excel en español
-    function exportar(tipo) {
-      var filas;
-      if (tipo === 'rsvps') {
-        filas = [['Nombre', 'Asistencia', 'Mensaje', 'Fecha']].concat(_datos.rsvps.map(function(x) {
-          return [x.nombre, asistenciaTexto(x.asistencia), x.mensaje, fecha(x.enviado_en)];
-        }));
-      } else {
-        var cols = columnasFormulario();
-        filas = [cols.concat('Fecha')].concat(_datos.formularios.map(function(f) {
-          return cols.map(function(c) { return (f.respuestas || {})[c]; }).concat(fecha(f.enviado_en));
-        }));
-      }
-      var csv = filas.map(function(fila) {
-        return fila.map(function(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }).join(';');
-      }).join('\r\n');
-      var blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = _nombre.replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-').toLowerCase() + '-' + (tipo === 'rsvps' ? 'asistencia' : 'cuestionario') + '.csv';
-      a.click();
-      setTimeout(function() { URL.revokeObjectURL(a.href); }, 1000);
-    }
 
     async function cargar() {
       var cont = document.getElementById('respuestas-container');
@@ -161,11 +58,10 @@
         var res = await Promise.all([DB.cargarBoda(_bodaId), DB.listarRespuestas(_bodaId)]);
         var boda = res[0];
         if (!boda) { cont.innerHTML = '<div class="vacio"><p class="vacio__texto">Boda no encontrada.</p></div>'; return; }
-        _nombre = (boda.meta && boda.meta.titulo) || ((boda.pareja && (boda.pareja.novio + ' & ' + boda.pareja.novia)) || 'boda');
-        document.getElementById('titulo-boda').textContent = _nombre;
-        document.title = 'Respuestas · ' + _nombre;
-        _datos = res[1];
-        pintar();
+        var nombre = (boda.meta && boda.meta.titulo) || ((boda.pareja && (boda.pareja.novio + ' & ' + boda.pareja.novia)) || 'boda');
+        document.getElementById('titulo-boda').textContent = nombre;
+        document.title = 'Respuestas · ' + nombre;
+        RESPUESTAS_VISTA.pintar(cont, res[1], nombre);
       } catch (err) {
         console.error(err);
         cont.innerHTML = '<div class="cargando">Error al cargar. Revisa la consola.</div>';
