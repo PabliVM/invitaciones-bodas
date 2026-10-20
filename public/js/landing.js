@@ -1,4 +1,4 @@
-// landing.js — Interacción de la web pública: cabecera, probador de estilos, ejemplos, formulario.
+// landing.js — Interacción de la web pública: cabecera, ejemplos (móvil/ordenador), visor, formulario.
 
 (function() {
   const EJEMPLOS = [
@@ -43,23 +43,27 @@
     actualizarCab();
   }));
 
-  // ── Probador del hero ──
-  const frame = document.getElementById('probador-frame');
-  escalar(frame.closest('.l-movil__pantalla'));
-  document.querySelectorAll('#chips .l-chip').forEach(chip => chip.addEventListener('click', () => {
-    document.querySelectorAll('#chips .l-chip').forEach(c => c.classList.toggle('activo', c === chip));
-    frame.src = 'invitation.html?demo=' + chip.dataset.demo;
-  }));
-
   // ── Ejemplos ──
   const lista = document.getElementById('lista-ejemplos');
+  let modoEjemplos = 'movil';
   lista.innerHTML = EJEMPLOS.map((e, i) =>
-    '<a class="l-ejemplo l-revelar" style="--d:' + (i % 2) * 0.08 + 's" href="/ejemplos/' + e.id + '" data-ver="' + i + '">' +
-      '<div class="l-navegador"><div class="l-movil__pantalla" data-base="1280"><iframe src="invitation.html?demo=' + e.id + '" title="Ejemplo ' + e.nombre + '" loading="lazy" tabindex="-1"></iframe></div></div>' +
+    '<a class="l-ejemplo l-revelar" style="--d:' + (i % 4) * 0.06 + 's" href="/ejemplos/' + e.id + '" data-ver="' + i + '">' +
+      '<div class="l-movil"><div class="l-movil__pantalla" data-base="390"><iframe src="invitation.html?demo=' + e.id + '" title="Ejemplo ' + e.nombre + '" loading="lazy" tabindex="-1"></iframe></div></div>' +
       '<h3 class="l-ejemplo__nombre">' + e.nombre + '<span>Ver a fondo →</span></h3>' +
       '<p class="l-ejemplo__desc">' + e.desc + '</p>' +
     '</a>').join('');
   lista.querySelectorAll('.l-movil__pantalla').forEach(escalar);
+
+  // Cambia todas las tarjetas entre marco de móvil (390px) y de ordenador (1280px) sin recargar
+  function verEjemplosEn(modo) {
+    modoEjemplos = modo;
+    const pc = modo === 'ordenador';
+    lista.classList.toggle('l-ejemplos--ordenador', pc);
+    lista.querySelectorAll('.l-ejemplo > div').forEach(d => { d.className = pc ? 'l-navegador' : 'l-movil'; });
+    lista.querySelectorAll('.l-movil__pantalla').forEach(p => { p.dataset.base = pc ? 1280 : ANCHO_MOVIL; ajustar(p); });
+    document.querySelectorAll('#vista-ejemplos .l-vista__btn').forEach(b => b.classList.toggle('activo', b.dataset.modo === modo));
+  }
+  document.querySelectorAll('#vista-ejemplos .l-vista__btn').forEach(b => b.addEventListener('click', () => verEjemplosEn(b.dataset.modo)));
 
   // ── Visor de ejemplos (misma página, Móvil / Ordenador) ──
   const visor = document.getElementById('visor');
@@ -87,7 +91,7 @@
   }
 
   function visorAbrir(i) {
-    visorModo(window.innerWidth < 760 ? 'movil' : vModo);
+    visorModo(modoEjemplos);
     visorVer(i);
     visor.hidden = false;
     document.body.style.overflow = 'hidden';

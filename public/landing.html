@@ -39,6 +39,7 @@
 
   <!-- ════════ HERO ════════ -->
   <section class="l-hero" id="inicio">
+    <div class="l-hero__fondo" aria-hidden="true"><img src="/assets/demo/pareja-1.jpg" alt="" /></div>
     <div class="l-contenedor l-hero__in">
       <div class="l-hero__texto">
         <p class="l-kicker">Invitaciones de boda digitales</p>
@@ -54,24 +55,6 @@
           <li>Sin apps ni registros para los invitados</li>
         </ul>
       </div>
-      <div class="l-probador">
-        <p class="l-etiqueta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg> Versión móvil</p>
-        <div class="l-movil l-movil--grande" id="dispositivo">
-          <div class="l-movil__pantalla" id="probador-pantalla" data-base="390">
-            <iframe id="probador-frame" src="invitation.html?demo=clasica" title="Invitación de ejemplo" loading="eager"></iframe>
-          </div>
-        </div>
-        <div class="l-chips" id="chips" role="group" aria-label="Probar estilos">
-          <button class="l-chip activo" data-demo="clasica">Clásica</button>
-          <button class="l-chip" data-demo="floral">Floral</button>
-          <button class="l-chip" data-demo="moderna">Moderna</button>
-          <button class="l-chip" data-demo="mediterranea">Mediterránea</button>
-          <button class="l-chip" data-demo="deco">Art Déco</button>
-          <button class="l-chip" data-demo="acuarela">Acuarela</button>
-          <button class="l-chip" data-demo="revista">Revista</button>
-          <button class="l-chip" data-demo="boho">Boho</button>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -79,9 +62,13 @@
   <section class="l-sec" id="ejemplos">
     <div class="l-contenedor">
       <div class="l-cab l-cab--centro l-revelar">
-        <p class="l-etiqueta l-etiqueta--clara"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Versión ordenador</p>
+        <p class="l-kicker">Ejemplos</p>
         <h2 class="l-titulo">Ocho estilos, <em>infinitas</em> combinaciones</h2>
-        <p class="l-sub">Arriba, en el móvil. Aquí, cómo se ven en un ordenador. Cada estilo se adapta a vuestros colores, tipografías y fotos. Tocad cualquiera para verlo a fondo, en móvil u ordenador.</p>
+        <p class="l-sub">Cada estilo se adapta a vuestros colores, tipografías y fotos. Elegid cómo verlos y tocad cualquiera para recorrerlo a fondo.</p>
+        <div class="l-vista" id="vista-ejemplos" role="group" aria-label="Ver los ejemplos en">
+          <button class="l-vista__btn activo" data-modo="movil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg> Móvil</button>
+          <button class="l-vista__btn" data-modo="ordenador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Ordenador</button>
+        </div>
       </div>
       <div class="l-ejemplos" id="lista-ejemplos"></div>
     </div>
