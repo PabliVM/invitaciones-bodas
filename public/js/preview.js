@@ -41,6 +41,12 @@ const PREVIEW = (() => {
     marco.style.height = Math.round(altoFrame * escala) + 'px';
   }
 
+  // Desplaza la vista previa hasta una sección y la resalta
+  function irA(seccion) {
+    if (!_listo || !_frame.contentWindow) return;
+    _frame.contentWindow.postMessage({ tipo: 'ir', seccion }, window.location.origin);
+  }
+
   function cambiarModo(modo) {
     _modo = modo;
     document.querySelectorAll('.preview-modos button').forEach(b => b.classList.toggle('activo', b.dataset.modo === modo));
@@ -61,5 +67,5 @@ const PREVIEW = (() => {
     window.addEventListener('resize', _ajustar);
   }
 
-  return { init, actualizar, cambiarModo };
+  return { init, actualizar, cambiarModo, irA };
 })();

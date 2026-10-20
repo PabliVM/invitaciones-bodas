@@ -999,3 +999,10 @@ body.inv-bloqueo { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .inv *, .inv *::before, .inv *::after { animation: none !important; transition: none !important; }
 }
+
+/* Vista previa del editor: resalta la sección que se está editando */
+.inv-sec--foco { animation: inv-foco 1.8s var(--inv-ease); }
+@keyframes inv-foco {
+  0%, 35% { box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--inv-primario) 75%, transparent), inset 0 0 60px color-mix(in srgb, var(--inv-primario) 18%, transparent); }
+  100% { box-shadow: inset 0 0 0 3px transparent, inset 0 0 60px transparent; }
+}

@@ -953,6 +953,86 @@ html body .aviso-editor[hidden] { display: none; }
 html body .aviso-editor span { flex: 1 1 260px; }
 html body .aviso-editor .btn { padding: 8px 14px; }
 
+/* ══════════════════ EDITOR EN MÓVIL / TABLETA: PESTAÑAS ══════════════════ */
+
+html body .editor-pestanas { display: none; }
+
+@media (max-width: 1100px) {
+  html body .editor-layout {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 56px 1fr !important;
+    height: calc(100dvh - 64px);
+  }
+  html body .editor-layout > aside,
+  html body .editor-panel,
+  html body .editor-preview,
+  html body .editor-panel-right {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    display: none !important;
+    border: 0 !important;
+  }
+  html body[data-vista="contenido"] .editor-panel { display: block !important; }
+  html body[data-vista="diseno"] .editor-panel-right { display: block !important; }
+  html body[data-vista="vista"] .editor-preview { display: flex !important; }
+
+  /* Barra inferior de pestañas */
+  html body .editor-pestanas {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 70;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 64px;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: rgba(12, 12, 15, .94);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--pm-line);
+  }
+  html body .editor-pestanas button {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 4px;
+    border: 0;
+    background: transparent;
+    color: var(--pm-muted);
+    font-family: var(--pm-sans);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    cursor: pointer;
+    transition: color .2s;
+  }
+  html body .editor-pestanas svg { width: 22px; height: 22px; }
+  html body .editor-pestanas button.activo { color: var(--pm-gold-2); }
+  html body .editor-pestanas button.activo svg { filter: drop-shadow(0 0 8px rgba(217, 178, 106, .6)); }
+
+  /* Barra superior compacta */
+  html body .editor-topbar { padding: 0 10px !important; gap: 6px; }
+  html body .editor-topbar__izq { gap: 8px; }
+  html body .editor-topbar__logo { font-size: 0 !important; }
+  html body .editor-topbar__logo::before { content: '←'; font-size: 20px; color: var(--pm-gold); -webkit-text-fill-color: var(--pm-gold); }
+  html body .editor-topbar__actions { gap: 4px !important; }
+  html body #btn-guardar, html body #btn-logout { display: none; }
+  html body #btn-abrir-invitacion { font-size: 0; width: 36px; height: 36px; padding: 0; }
+  html body #btn-abrir-invitacion::before { content: '↗'; font-size: 18px; }
+  html body .btn-revisar { padding: 7px 10px; font-size: 11px; }
+
+  /* Vista previa a todo el ancho */
+  html body .editor-preview { padding: 12px 12px 16px !important; gap: 12px; overflow: hidden; }
+  html body .preview-phone:not(.preview-phone--escritorio) { width: min(100%, 420px); border-radius: 28px; }
+  html body .preview-phone:not(.preview-phone--escritorio) #preview-frame { height: calc(100dvh - 56px - 64px - 90px); }
+  html body .aviso-editor { top: 62px; }
+  html body .revision__lista { position: fixed; top: 62px; left: 12px; right: 12px; width: auto; max-height: calc(100dvh - 140px); }
+}
+
+@media (max-width: 420px) {
+  html body .estado-guardado { font-size: 10px; padding: 4px 8px; max-width: 108px; overflow: hidden; text-overflow: ellipsis; }
+}
+
 /* ══════════════════ ACCESIBILIDAD ══════════════════ */
 
 @media (prefers-reduced-motion: reduce) {
