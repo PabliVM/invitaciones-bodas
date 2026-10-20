@@ -81,6 +81,9 @@ const EDITOR = (() => {
     _setVal('sel-musica-texto', boda.musica ? (boda.musica.mostrarTexto || 'titulo') : 'titulo');
     _setVal('inp-musica-texto-flotante', boda.musica ? boda.musica.textoFlotante : '');
     _toggleCampoPersonalizado(boda.musica ? boda.musica.mostrarTexto : 'titulo');
+    _setVal('inp-musica-inicio', _aMinutos(boda.musica.inicio));
+    _setCheck('chk-musica-bienvenida', boda.musica.bienvenida);
+    _sincronizarReproductor(boda);
     _setVal('inp-titulo-evento', boda.evento.titulo || 'La celebración');
     _setVal('inp-lugar', boda.evento.lugar);
     _setVal('inp-direccion', boda.evento.direccion);
@@ -148,6 +151,24 @@ const EDITOR = (() => {
     on('inp-musica-titulo', 'musica.titulo');
     on('inp-musica-url',    'musica.url');
     on('inp-musica-texto-flotante', 'musica.textoFlotante');
+
+    on('chk-musica-bienvenida', 'musica.bienvenida');
+    on('inp-musica-inicio', 'musica.inicio', _aSegundos);
+
+    // Reproductor de prueba: empieza donde se ha elegido; "Usar el punto actual" fija el inicio
+    const prueba = document.getElementById('audio-prueba');
+    if (prueba) {
+      prueba.addEventListener('play', () => {
+        const inicio = +STATE.get().musica.inicio || 0;
+        if (inicio && prueba.currentTime < 0.5) prueba.currentTime = inicio;
+      });
+      document.getElementById('btn-musica-inicio')?.addEventListener('click', () => {
+        const seg = Math.floor(prueba.currentTime || 0);
+        _setVal('inp-musica-inicio', _aMinutos(seg));
+        STATE.set('musica.inicio', seg, 'panel');
+      });
+    }
+    STATE.suscribir(boda => _sincronizarReproductor(boda));
 
     var selMusica = document.getElementById('sel-musica-texto');
     if (selMusica) {
@@ -280,6 +301,27 @@ const EDITOR = (() => {
     el.textContent = texto;
     el.classList.add('visible');
     setTimeout(() => el.classList.remove('visible'), 2500);
+  }
+
+  // "1:25" → 85 · 85 → "1:25"
+  function _aSegundos(txt) {
+    const p = String(txt || '').trim().split(':').map(n => parseInt(n, 10) || 0);
+    return Math.max(0, p.length > 1 ? p[0] * 60 + p[1] : p[0]);
+  }
+  function _aMinutos(seg) {
+    seg = Math.max(0, Math.floor(+seg || 0));
+    return seg ? Math.floor(seg / 60) + ':' + String(seg % 60).padStart(2, '0') : '';
+  }
+
+  // Muestra el reproductor de prueba cuando hay canción
+  function _sincronizarReproductor(boda) {
+    const caja = document.getElementById('musica-prueba');
+    const audio = document.getElementById('audio-prueba');
+    if (!caja || !audio) return;
+    const src = (boda.musica && boda.musica.url || '').trim();
+    caja.hidden = !src;
+    if (src && audio.getAttribute('src') !== src) audio.setAttribute('src', src);
+    if (!src) audio.removeAttribute('src');
   }
 
   function _toggleCampoPersonalizado(valor) {

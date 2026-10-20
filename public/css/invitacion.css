@@ -1006,3 +1006,36 @@ body.inv-bloqueo { overflow: hidden; }
   0%, 35% { box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--inv-primario) 75%, transparent), inset 0 0 60px color-mix(in srgb, var(--inv-primario) 18%, transparent); }
   100% { box-shadow: inset 0 0 0 3px transparent, inset 0 0 60px transparent; }
 }
+
+/* ══════════ PANTALLA DE BIENVENIDA ("Abrir invitación") ══════════ */
+.inv-bienvenida {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: grid;
+  place-items: center;
+  padding: 32px 24px;
+  text-align: center;
+  background: var(--inv-fondo);
+  color: var(--inv-texto);
+  overflow: hidden;
+  transition: opacity .9s var(--inv-ease), transform 1s var(--inv-ease);
+}
+.inv-bienvenida__foto {
+  position: absolute;
+  inset: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
+  object-fit: cover;
+  filter: blur(14px) saturate(.9);
+  opacity: .28;
+}
+.inv-bienvenida::after { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 50% at 50% 50%, transparent, var(--inv-fondo) 95%); }
+.inv-bienvenida__in { position: relative; z-index: 1; display: grid; justify-items: center; gap: 14px; max-width: 420px; animation: inv-bienvenida-in 1.4s var(--inv-ease) both; }
+.inv-bienvenida__nombres { font-family: var(--inv-fuente-display); font-size: clamp(44px, 12vw, 72px); font-weight: 300; line-height: 1.05; }
+.inv-bienvenida__nombres span { font-family: var(--inv-fuente-script, inherit); font-style: italic; color: var(--inv-primario); }
+.inv-bienvenida__fecha { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--inv-acento); }
+.inv-bienvenida__btn { width: auto; margin-top: 14px; padding: 14px 34px; animation: inv-pulso 2.4s ease-in-out 1.4s infinite; }
+.inv-bienvenida__nota { font-size: 12px; color: var(--inv-suave); }
+.inv-bienvenida.abierta { opacity: 0; transform: translateY(-4%) scale(1.03); pointer-events: none; }
+@keyframes inv-bienvenida-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }

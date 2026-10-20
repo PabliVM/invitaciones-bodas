@@ -100,6 +100,8 @@ const REVISION = (() => {
     // Música
     if (activa(b.musica) && vacio(b.musica.url)) err('La música está activa pero falta el enlace del MP3', 'inp-musica-url');
     else if (activa(b.musica) && !esUrl(b.musica.url)) err('El enlace de la música no es válido', 'inp-musica-url');
+    else if (activa(b.musica) && !/\.(mp3|m4a|aac|ogg|wav)(\?|$)/i.test(b.musica.url)) avi('El enlace de la música no parece un archivo de audio (.mp3)', 'inp-musica-url');
+    if (activa(b.musica) && !b.musica.bienvenida) avi('Sin pantalla de bienvenida, en el móvil la música solo suena si el invitado pulsa ♪', 'chk-musica-bienvenida');
 
     // Cuestionario
     if (b.formulario && b.formulario.activo) {
