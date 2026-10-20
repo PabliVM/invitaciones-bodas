@@ -42,6 +42,8 @@ const STATE = (() => {
         url: '',
         textoFlotante: '',
         mostrarTexto: 'titulo',
+        inicio: 0,          // segundo en el que empieza a sonar
+        bienvenida: false,  // pantalla "Abrir invitación" que arranca la música
       },
       evento: {
         activo: true,

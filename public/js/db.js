@@ -127,10 +127,16 @@ const DB = (() => {
     }
   }
 
-  // Sube una foto a <bodaId>/ y devuelve su URL pública
+  // Tipo de archivo por extensión cuando el navegador no lo indica (algunos .m4a/.mp3)
+  const TIPOS = { mp3: 'audio/mpeg', m4a: 'audio/mp4', aac: 'audio/aac', ogg: 'audio/ogg', wav: 'audio/wav', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', gif: 'image/gif' };
+
+  // Sube una foto o una canción a <bodaId>/ y devuelve su URL pública
   async function subirFoto(bodaId, file) {
-    if (!bodaId) throw new Error('Guarda la boda antes de subir fotos.');
-    const final = await _comprimir(file);
+    if (!bodaId) throw new Error('Guarda la boda antes de subir archivos.');
+    if (file.size > 20 * 1024 * 1024) throw new Error('El archivo pesa más de 20 MB.');
+    let final = await _comprimir(file);
+    const ext = (final.name.split('.').pop() || '').toLowerCase();
+    if (!final.type && TIPOS[ext]) final = new File([final], final.name, { type: TIPOS[ext] });
     const nombre = final.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9.]+/g, '-');
     const ruta = bodaId + '/' + Date.now() + '-' + nombre;
     const { error } = await db.storage.from('bodas').upload(ruta, final, { contentType: final.type, cacheControl: '31536000' });

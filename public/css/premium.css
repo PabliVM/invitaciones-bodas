@@ -953,6 +953,56 @@ html body .aviso-editor[hidden] { display: none; }
 html body .aviso-editor span { flex: 1 1 260px; }
 html body .aviso-editor .btn { padding: 8px 14px; }
 
+/* ══════════════════ AYUDAS DEL EDITOR: FOTOS Y MÚSICA ══════════════════ */
+
+html body .campo__ayuda { font-size: 11px; line-height: 1.5; color: var(--pm-faint); margin: 2px 0 0; }
+html body .campo--horizontal .campo__ayuda { margin-top: 4px; }
+html body .campo--horizontal { gap: 12px; align-items: flex-start; }
+html body .subir-quitar { flex-shrink: 0; width: 34px; padding: 0 !important; font-size: 13px; color: var(--pm-muted); }
+html body .subir-quitar:hover { color: var(--pm-danger); }
+
+/* Reproductor de prueba de la canción */
+html body .musica-prueba { display: grid; gap: 10px; padding: 12px; border-radius: var(--pm-radius-sm); border: 1px solid rgba(217, 178, 106, .25); background: rgba(217, 178, 106, .05); }
+html body .musica-prueba[hidden] { display: none; }
+html body .musica-prueba audio { width: 100%; height: 36px; color-scheme: dark; }
+html body .musica-prueba__inicio { display: flex; align-items: flex-end; gap: 8px; }
+html body .musica-prueba__inicio .campo { flex: 1; }
+html body .musica-prueba__inicio .btn { flex-shrink: 0; padding: 9px 12px; font-size: 11px; }
+
+/* Desplegables de ayuda */
+html body .ayuda-desplegable,
+html body .guia-fotos { border-radius: var(--pm-radius-sm); border: 1px solid var(--pm-line); background: var(--pm-glass); font-size: 12px; color: var(--pm-muted); }
+html body .ayuda-desplegable summary,
+html body .guia-fotos summary { cursor: pointer; padding: 10px 12px; color: var(--pm-gold-2); font-weight: 700; list-style: none; }
+html body .ayuda-desplegable summary::-webkit-details-marker,
+html body .guia-fotos summary::-webkit-details-marker { display: none; }
+html body .ayuda-desplegable summary::after,
+html body .guia-fotos summary::after { content: ' ▾'; color: var(--pm-faint); }
+html body .ayuda-desplegable[open] summary::after,
+html body .guia-fotos[open] summary::after { content: ' ▴'; }
+html body .ayuda-desplegable ul,
+html body .guia-fotos ul { margin: 0; padding: 0 14px 12px 28px; display: grid; gap: 6px; line-height: 1.5; }
+html body .ayuda-desplegable strong,
+html body .guia-fotos strong { color: var(--pm-text); font-weight: 700; }
+html body .guia-fotos { margin: 10px 10px 6px; }
+
+/* Esquema móvil / ordenador */
+html body .guia-fotos__esquemas { display: flex; justify-content: center; align-items: flex-end; gap: 14px; padding: 4px 12px 14px; }
+html body .guia-fotos__esquemas em { position: absolute; bottom: -18px; left: 0; right: 0; text-align: center; font-style: normal; font-size: 10px; color: var(--pm-faint); }
+html body .guia-fotos__movil,
+html body .guia-fotos__pc { position: relative; display: grid; gap: 3px; padding: 5px; border-radius: 8px; border: 1px solid var(--pm-line-2); background: rgba(0, 0, 0, .25); margin-bottom: 16px; }
+html body .guia-fotos__movil { width: 62px; grid-template-rows: 44px 18px 26px; }
+html body .guia-fotos__pc { width: 128px; height: 82px; grid-template-columns: 1fr 1fr; }
+html body .gf { display: grid; place-items: center; text-align: center; border-radius: 3px; font-size: 7.5px; line-height: 1.15; font-weight: 700; color: #1a1306; }
+html body .gf--portada,
+html body .gf--lateral { background: var(--pm-gold-grad); }
+html body .gf--texto,
+html body .gf--contenido { background: rgba(255, 255, 255, .1); color: var(--pm-muted); }
+html body .gf--contenido { align-content: start; gap: 4px; padding-top: 6px; }
+html body .gf--galeria { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; background: rgba(217, 178, 106, .25); }
+html body .gf--galeria i { display: block; height: 9px; border-radius: 1px; background: rgba(217, 178, 106, .7); }
+html body .gf--contenido .gf--galeria { width: 80%; }
+
 /* ══════════════════ EDITOR EN MÓVIL / TABLETA: PESTAÑAS ══════════════════ */
 
 html body .editor-pestanas { display: none; }

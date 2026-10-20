@@ -415,24 +415,74 @@ const INVITACION = (() => {
     _timers.push(t);
   }
 
+  let _reproducir = null; // arranca la música (lo usa la pantalla de bienvenida)
+
   function iniciarMusica(musica) {
+    _reproducir = null;
     if (!musica || !activa(musica) || !url(musica.url)) return;
     const texto = musica.mostrarTexto === 'personalizado' ? musica.textoFlotante
       : musica.mostrarTexto === 'ninguno' ? '' : (musica.titulo || 'Nuestra canción');
+    const inicio = Math.max(0, +musica.inicio || 0);
     const el = document.createElement('div');
     el.id = 'inv-musica';
     el.className = 'inv-musica';
     el.innerHTML = (texto ? '<span class="inv-musica__txt">' + esc(texto) + '</span>' : '') +
       '<button type="button" class="inv-musica__btn" aria-label="Reproducir música"><span class="inv-musica__ico">▶</span></button>' +
-      '<audio src="' + url(musica.url) + '" preload="none" loop></audio>';
+      '<audio src="' + url(musica.url) + '" preload="metadata" loop></audio>';
     document.body.appendChild(el);
     const btn = el.querySelector('button'), audio = el.querySelector('audio'), ico = el.querySelector('.inv-musica__ico');
-    btn.addEventListener('click', () => {
-      if (!audio.paused) { audio.pause(); return; }
-      audio.play().catch(() => {});
+    let empezada = false, rampa = null;
+
+    // Primera vez: salta al segundo elegido y sube el volumen suavemente
+    const reproducir = () => {
+      if (!empezada && inicio) {
+        if (audio.readyState >= 1) audio.currentTime = inicio;
+        else audio.addEventListener('loadedmetadata', () => { audio.currentTime = inicio; }, { once: true });
+      }
+      empezada = true;
+      audio.volume = 0;
+      clearInterval(rampa);
+      rampa = setInterval(() => { audio.volume = Math.min(1, audio.volume + 0.05); if (audio.volume >= 1) clearInterval(rampa); }, 100);
+      return audio.play().catch(() => {});
+    };
+    _reproducir = reproducir;
+    btn.addEventListener('click', () => { if (!audio.paused) audio.pause(); else reproducir(); });
+    // Respaldo: si el salto inicial no se aplicó (audio aún cargando), se repite al empezar a sonar
+    audio.addEventListener('playing', () => {
+      if (inicio && audio.currentTime < inicio - 1 && !audio.dataset.saltado) { audio.dataset.saltado = '1'; audio.currentTime = inicio; }
     });
-    audio.addEventListener('play', () => { el.classList.add('sonando'); ico.textContent = '❚❚'; });
-    audio.addEventListener('pause', () => { el.classList.remove('sonando'); ico.textContent = '▶'; });
+    audio.addEventListener('play', () => { el.classList.add('sonando'); ico.textContent = '❚❚'; btn.setAttribute('aria-label', 'Pausar música'); });
+    audio.addEventListener('pause', () => { el.classList.remove('sonando'); ico.textContent = '▶'; btn.setAttribute('aria-label', 'Reproducir música'); });
+  }
+
+  // Pantalla "Abrir invitación": al tocarla arranca la música (los móviles lo exigen)
+  function iniciarBienvenida(boda) {
+    const m = boda.musica || {};
+    if (!m.bienvenida) return;
+    const p = boda.pareja || {}, f = boda.fecha || {};
+    const foto = url(boda.fotoCabecera);
+    const el = document.createElement('div');
+    el.className = 'inv-bienvenida';
+    el.id = 'inv-bienvenida';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-label', 'Abrir invitación');
+    el.innerHTML = (foto ? '<img class="inv-bienvenida__foto" src="' + foto + '" alt="" />' : '') +
+      '<div class="inv-bienvenida__in">' +
+        '<span class="inv-orn" aria-hidden="true"></span>' +
+        '<p class="inv-kicker">Estás invitado a la boda de</p>' +
+        '<p class="inv-bienvenida__nombres">' + esc(p.novio) + ' <span>&amp;</span> ' + esc(p.novia) + '</p>' +
+        '<p class="inv-bienvenida__fecha">' + esc(fechaLarga(f)) + '</p>' +
+        '<button type="button" class="inv-btn inv-btn--lleno inv-bienvenida__btn">Abrir invitación</button>' +
+        (_reproducir ? '<p class="inv-bienvenida__nota">♪ con música</p>' : '') +
+      '</div>';
+    document.querySelector('.inv').appendChild(el);
+    document.body.classList.add('inv-bloqueo');
+    el.querySelector('button').addEventListener('click', () => {
+      if (_reproducir) _reproducir();
+      el.classList.add('abierta');
+      document.body.classList.remove('inv-bloqueo');
+      setTimeout(() => el.remove(), 1000);
+    });
   }
 
   // Nav activa + foto lateral según la sección visible
@@ -593,6 +643,7 @@ const INVITACION = (() => {
     iniciarGaleria(raiz);
     iniciarFormularios(raiz, boda, opciones);
     iniciarMusica(boda.musica);
+    if (!opciones.preview) iniciarBienvenida(boda);
   }
 
   return { render, orden, PLANTILLAS };

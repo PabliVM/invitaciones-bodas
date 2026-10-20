@@ -17,7 +17,7 @@
   }
 
   // Crea el botón + input file oculto; onUrls recibe las URLs subidas
-  function _boton(texto, multiple, onUrls) {
+  function _boton(texto, multiple, onUrls, acepta) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'btn btn--secundario subir-btn';
@@ -25,7 +25,7 @@
 
     const file = document.createElement('input');
     file.type = 'file';
-    file.accept = 'image/*';
+    file.accept = acepta || 'image/*';
     file.multiple = multiple;
     file.hidden = true;
 
@@ -49,7 +49,7 @@
           btn.textContent = archivos.length > 1 ? `Subiendo ${i + 1}/${archivos.length}…` : 'Subiendo…';
           urls.push(await DB.subirFoto(_bodaId(), archivos[i]));
         }
-        _aviso(urls.length > 1 ? `${urls.length} fotos subidas` : 'Foto subida');
+        _aviso(urls.length > 1 ? `${urls.length} fotos subidas` : (acepta ? 'Canción subida' : 'Foto subida'));
       } catch (err) {
         console.error(err);
         _aviso('Error al subir: ' + (err.message || 'inténtalo de nuevo'));
@@ -60,6 +60,22 @@
     });
 
     return [btn, file];
+  }
+
+  // Botón ✕ para vaciar el campo (la foto/canción deja de usarse en la invitación)
+  function _quitar(input) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'btn btn--ghost subir-quitar';
+    b.title = 'Quitar';
+    b.setAttribute('aria-label', 'Quitar');
+    b.textContent = '✕';
+    const ver = () => { b.hidden = !input.value.trim(); };
+    b.addEventListener('click', () => { input.value = ''; _emitir(input); ver(); });
+    input.addEventListener('input', ver);
+    if (typeof STATE !== 'undefined') STATE.suscribir(() => setTimeout(ver));
+    ver();
+    return b;
   }
 
   function _emitir(el) {
@@ -75,7 +91,20 @@
       fila.appendChild(input);
       _boton('Subir', false, urls => { input.value = urls[0]; _emitir(input); })
         .forEach(el => fila.appendChild(el));
+      fila.appendChild(_quitar(input));
     });
+
+    // Canción: sube MP3/M4A a la carpeta de la boda
+    const musica = document.getElementById('inp-musica-url');
+    if (musica) {
+      const fila = document.createElement('div');
+      fila.className = 'subir-fila';
+      musica.parentNode.insertBefore(fila, musica);
+      fila.appendChild(musica);
+      _boton('Subir canción', false, urls => { musica.value = urls[0]; _emitir(musica); }, 'audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,audio/ogg,audio/wav,.mp3,.m4a')
+        .forEach(el => fila.appendChild(el));
+      fila.appendChild(_quitar(musica));
+    }
 
     // Galería: varias fotos, se añaden al final de la lista
     const galeria = document.getElementById('inp-galeria');

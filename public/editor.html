@@ -92,6 +92,29 @@
         </div>
         <div class="eb-bloque__body">
 
+          <details class="guia-fotos">
+            <summary>📐 Dónde va cada foto</summary>
+            <div class="guia-fotos__esquemas" aria-hidden="true">
+              <div class="guia-fotos__movil">
+                <span class="gf gf--portada">Portada</span>
+                <span class="gf gf--texto">Nombres y fecha</span>
+                <span class="gf gf--galeria"><i></i><i></i><i></i></span>
+                <em>Móvil</em>
+              </div>
+              <div class="guia-fotos__pc">
+                <span class="gf gf--lateral">Portada<br>y fotos de<br>sección</span>
+                <span class="gf gf--contenido">Contenido<span class="gf gf--galeria"><i></i><i></i><i></i></span></span>
+                <em>Ordenador</em>
+              </div>
+            </div>
+            <ul>
+              <li><strong>Portada</strong> (en Cabecera): arriba en el móvil y a la izquierda en ordenador.</li>
+              <li><strong>Foto de sección</strong>: solo en ordenador; cambia la foto de la izquierda al llegar a esa sección.</li>
+              <li><strong>Galería</strong>: cuadrícula en móvil y ordenador.</li>
+              <li>Pulsa <strong>Subir</strong> junto a cada campo. Las fotos se guardan en la carpeta de esta boda y se reducen solas si pesan mucho.</li>
+            </ul>
+          </details>
+
           <!-- SUB: CABECERA -->
           <div class="eb-sub">
             <div class="eb-sub__cab" onclick="toggleSub(this)">
@@ -101,8 +124,9 @@
             </div>
             <div class="eb-sub__body">
               <div class="campo">
-                <label class="campo__label">Foto de cabecera</label>
+                <label class="campo__label">Foto de portada</label>
                 <input type="url" class="campo__input" id="inp-foto-cabecera" placeholder="https://…/foto.jpg" />
+                <p class="campo__ayuda">La primera que se ve: arriba en el móvil y a la izquierda en ordenador. Mejor vertical (4:5) y de al menos 1200 px.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Nombre del novio</label>
@@ -137,8 +161,9 @@
             </div>
             <div class="eb-sub__body">
               <div class="campo">
-                <label class="campo__label">Foto (URL) — se ve en escritorio</label>
+                <label class="campo__label">Foto de esta sección</label>
                 <input type="url" class="campo__input" id="inp-foto-historia" placeholder="https://…/foto.jpg" />
+                <p class="campo__ayuda">Solo en ordenador: aparece a la izquierda al llegar a esta sección. Si la dejas vacía, sigue la foto anterior.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Título</label>
@@ -161,16 +186,18 @@
             </div>
             <div class="eb-sub__body">
               <div class="campo">
-                <label class="campo__label">Foto (URL) — se ve en escritorio</label>
+                <label class="campo__label">Foto de esta sección</label>
                 <input type="url" class="campo__input" id="inp-foto-galeria" placeholder="https://…/foto.jpg" />
+                <p class="campo__ayuda">Solo en ordenador: aparece a la izquierda al llegar a esta sección. Si la dejas vacía, sigue la foto anterior.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Título</label>
                 <input type="text" class="campo__input" id="inp-titulo-galeria" placeholder="Nuestra galería" />
               </div>
               <div class="campo">
-                <label class="campo__label">URLs de fotos (una por línea)</label>
+                <label class="campo__label">Fotos de la galería (una por línea)</label>
                 <textarea class="campo__textarea" id="inp-galeria" rows="5" placeholder="https://…"></textarea>
+                <p class="campo__ayuda">Se ven en cuadrícula en móvil y ordenador; al tocar una se abre a pantalla completa. Valen horizontales y verticales.</p>
               </div>
             </div>
           </div>
@@ -189,9 +216,37 @@
                 <input type="text" class="campo__input" id="inp-musica-titulo" placeholder="Perfect – Ed Sheeran" />
               </div>
               <div class="campo">
-                <label class="campo__label">URL del MP3</label>
-                <input type="url" class="campo__input" id="inp-musica-url" placeholder="https://…/cancion.mp3" />
+                <label class="campo__label">Canción (MP3)</label>
+                <input type="url" class="campo__input" id="inp-musica-url" placeholder="Sube el archivo o pega un enlace .mp3" />
+                <p class="campo__ayuda">Sube el MP3 que os pasen los novios (máx. 20 MB). Suena con el botón ♪ abajo a la derecha de la invitación.</p>
               </div>
+              <div class="musica-prueba" id="musica-prueba" hidden>
+                <audio id="audio-prueba" controls preload="metadata"></audio>
+                <div class="musica-prueba__inicio">
+                  <div class="campo">
+                    <label class="campo__label" for="inp-musica-inicio">Empieza en (min:seg)</label>
+                    <input type="text" class="campo__input" id="inp-musica-inicio" placeholder="0:00" inputmode="numeric" />
+                  </div>
+                  <button type="button" class="btn btn--secundario" id="btn-musica-inicio" title="Pon la canción donde quieras que empiece y pulsa aquí">Usar el punto actual</button>
+                </div>
+              </div>
+              <div class="campo campo--horizontal">
+                <div>
+                  <label class="campo__label" for="chk-musica-bienvenida">Pantalla de bienvenida</label>
+                  <p class="campo__ayuda">El invitado ve "Abrir invitación" y la música empieza al tocarlo. Los móviles no dejan sonar música hasta que se toca la pantalla.</p>
+                </div>
+                <label class="campo__toggle"><input type="checkbox" id="chk-musica-bienvenida" /><span class="campo__toggle-slider"></span></label>
+              </div>
+              <details class="ayuda-desplegable">
+                <summary>¿De dónde saco la canción?</summary>
+                <ul>
+                  <li><strong>Lo mejor:</strong> que los novios os envíen el MP3.</li>
+                  <li><strong>Comprarla:</strong> en iTunes Store o Amazon Music se compra la canción y se descarga en un archivo.</li>
+                  <li><strong>Música libre:</strong> Pixabay Music, YouTube Audio Library o Free Music Archive tienen canciones que se pueden descargar gratis.</li>
+                  <li><strong>Spotify o Apple Music no sirven:</strong> sus canciones no se pueden descargar como archivo.</li>
+                  <li>Evitad las webs que "convierten YouTube a MP3": la canción tiene derechos de autor y suelen bajar la calidad.</li>
+                </ul>
+              </details>
               <div class="campo">
                 <label class="campo__label">Mostrar junto al botón</label>
                 <select class="campo__select" id="sel-musica-texto">
@@ -217,8 +272,9 @@
             </div>
             <div class="eb-sub__body">
               <div class="campo">
-                <label class="campo__label">Foto (URL) — se ve en escritorio</label>
+                <label class="campo__label">Foto de esta sección</label>
                 <input type="url" class="campo__input" id="inp-foto-evento" placeholder="https://…/foto.jpg" />
+                <p class="campo__ayuda">Solo en ordenador: aparece a la izquierda al llegar a esta sección. Si la dejas vacía, sigue la foto anterior.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Título</label>
@@ -249,8 +305,9 @@
             </div>
             <div class="eb-sub__body">
               <div class="campo">
-                <label class="campo__label">Foto (URL) — se ve en escritorio</label>
+                <label class="campo__label">Foto de esta sección</label>
                 <input type="url" class="campo__input" id="inp-foto-dresscode" placeholder="https://…/foto.jpg" />
+                <p class="campo__ayuda">Solo en ordenador: aparece a la izquierda al llegar a esta sección. Si la dejas vacía, sigue la foto anterior.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Título</label>
@@ -273,8 +330,9 @@
             </div>
             <div class="eb-sub__body">
               <div class="campo">
-                <label class="campo__label">Foto (URL) — se ve en escritorio</label>
+                <label class="campo__label">Foto de esta sección</label>
                 <input type="url" class="campo__input" id="inp-foto-rsvp" placeholder="https://…/foto.jpg" />
+                <p class="campo__ayuda">Solo en ordenador: aparece a la izquierda al llegar a esta sección. Si la dejas vacía, sigue la foto anterior.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Título</label>
@@ -301,8 +359,9 @@
             </div>
             <div class="eb-sub__body">
               <div class="campo">
-                <label class="campo__label">Foto (URL) — se ve en escritorio</label>
+                <label class="campo__label">Foto de esta sección</label>
                 <input type="url" class="campo__input" id="inp-foto-mensaje" placeholder="https://…/foto.jpg" />
+                <p class="campo__ayuda">Solo en ordenador: aparece a la izquierda al llegar a esta sección. Si la dejas vacía, sigue la foto anterior.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Título</label>
@@ -325,8 +384,9 @@
             </div>
             <div class="eb-sub__body">
               <div class="campo">
-                <label class="campo__label">Foto (URL) — se ve en escritorio</label>
+                <label class="campo__label">Foto de esta sección</label>
                 <input type="url" class="campo__input" id="inp-foto-alojamiento" placeholder="https://…/foto.jpg" />
+                <p class="campo__ayuda">Solo en ordenador: aparece a la izquierda al llegar a esta sección. Si la dejas vacía, sigue la foto anterior.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Título</label>
@@ -349,8 +409,9 @@
             </div>
             <div class="eb-sub__body">
               <div class="campo">
-                <label class="campo__label">Foto (URL) — se ve en escritorio</label>
+                <label class="campo__label">Foto de esta sección</label>
                 <input type="url" class="campo__input" id="inp-foto-transporte" placeholder="https://…/foto.jpg" />
+                <p class="campo__ayuda">Solo en ordenador: aparece a la izquierda al llegar a esta sección. Si la dejas vacía, sigue la foto anterior.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Título</label>
