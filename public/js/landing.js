@@ -136,12 +136,12 @@
   const muestra = cols => '<span class="l-opcion__muestra">' + cols.map(c => '<i style="background:' + c + '"></i>').join('') + '</span>';
 
   document.getElementById('config-estilos').innerHTML = EJEMPLOS.map(e => opcion('estilo', e.id, escHtml(e.nombre), e.desc)).join('');
-  document.getElementById('config-colores').innerHTML = opcion('paleta', '', muestra([]) + '<span>Original</span>', 'Colores originales del estilo') +
-    PALETAS.map(p => opcion('paleta', p.id, muestra([p.estilos.colorSecundario, p.estilos.colorPrimario, p.estilos.colorAccent]) + '<span>' + escHtml(p.nombre) + '</span>', p.descripcion || p.nombre)).join('') +
-    opcion('paleta', 'libre', '<span class="l-opcion__muestra l-opcion__muestra--libre"></span><span>A medida</span>', 'Probad cualquier color');
+  document.getElementById('config-colores').innerHTML = opcion('paleta', '', muestra([]) + '<span class="l-opcion__nombre">Original</span>', 'Colores originales del estilo') +
+    PALETAS.map(p => opcion('paleta', p.id, muestra([p.estilos.colorSecundario, p.estilos.colorPrimario, p.estilos.colorAccent]) + '<span class="l-opcion__nombre">' + escHtml(p.nombre) + '</span>', p.descripcion || p.nombre)).join('') +
+    opcion('paleta', 'libre', '<span class="l-opcion__muestra l-opcion__muestra--libre"></span><span class="l-opcion__nombre">A medida</span>', 'Probad cualquier color');
   const libre = k => document.getElementById('config-' + k).value.slice(1).toLowerCase();
-  document.getElementById('config-fuentes').innerHTML = opcion('fuente', '', '<span class="l-opcion__aa">Aa</span><span>Original</span>', 'Tipografía original del estilo') +
-    FUENTES.map(f => opcion('fuente', f, '<span class="l-opcion__aa" style="font-family:\'' + f + '\', serif">Aa</span><span>' + escHtml(f) + '</span>', f)).join('');
+  document.getElementById('config-fuentes').innerHTML = opcion('fuente', '', '<span class="l-opcion__aa">Aa</span><span class="l-opcion__nombre">Original</span>', 'Tipografía original del estilo') +
+    FUENTES.map(f => opcion('fuente', f, '<span class="l-opcion__aa" style="font-family:\'' + f + '\', serif">Aa</span><span class="l-opcion__nombre">' + escHtml(f) + '</span>', f)).join('');
 
   // Carga las tipografías solo cuando se acerca la sección (y solo las letras necesarias)
   let fuentesCargadas = false;
