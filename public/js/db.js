@@ -11,12 +11,12 @@ const DB = (() => {
 
   // Fila → objeto boda (mismo formato que antes)
   function _aBoda(fila) {
-    return { ...fila.data, id: fila.id, creadoEn: fila.creado_en, actualizadoEn: fila.actualizado_en };
+    return { ...fila.data, id: fila.id, creadoEn: fila.creado_en, actualizadoEn: fila.actualizado_en, archivada: !!fila.archivada };
   }
 
   // Quita campos que no se guardan dentro de data
   function _limpiar(datos) {
-    const { id, creadoEn, actualizadoEn, ...resto } = datos;
+    const { id, creadoEn, actualizadoEn, archivada, ...resto } = datos;
     return resto;
   }
 
@@ -66,6 +66,63 @@ const DB = (() => {
     if (error) throw error;
   }
 
+  // Archivar / desarchivar
+  async function archivarBoda(id, archivada) {
+    const { error } = await db.from('weddings').update({ archivada }).eq('id', id);
+    if (error) throw error;
+  }
+
+  // Duplicar como plantilla — devuelve el ID de la copia
+  async function duplicarBoda(id) {
+    const original = await cargarBoda(id);
+    if (!original) throw new Error('Boda no encontrada');
+    const copia = JSON.parse(JSON.stringify(original));
+    copia.meta = { ...(copia.meta || {}), titulo: ((original.meta && original.meta.titulo) || 'Boda') + ' (copia)' };
+    return crearBoda(copia);
+  }
+
+  // ── Fotos (Storage, carpeta por boda) ──
+
+  // Reduce fotos grandes antes de subir (máx. 2400px, JPEG 85%)
+  async function _comprimir(file) {
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size < 400 * 1024) return file;
+    try {
+      const img = await createImageBitmap(file);
+      const escala = Math.min(1, 2400 / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * escala);
+      canvas.height = Math.round(img.height * escala);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.85));
+      return blob && blob.size < file.size ? new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' }) : file;
+    } catch (e) {
+      return file;
+    }
+  }
+
+  // Sube una foto a <bodaId>/ y devuelve su URL pública
+  async function subirFoto(bodaId, file) {
+    if (!bodaId) throw new Error('Guarda la boda antes de subir fotos.');
+    const final = await _comprimir(file);
+    const nombre = final.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9.]+/g, '-');
+    const ruta = bodaId + '/' + Date.now() + '-' + nombre;
+    const { error } = await db.storage.from('bodas').upload(ruta, final, { contentType: final.type, cacheControl: '31536000' });
+    if (error) throw error;
+    return db.storage.from('bodas').getPublicUrl(ruta).data.publicUrl;
+  }
+
+  // ── Respuestas de invitados ──
+
+  async function listarRespuestas(bodaId) {
+    const [rsvps, formularios] = await Promise.all([
+      db.from('rsvps').select('*').eq('boda_id', bodaId).order('enviado_en', { ascending: false }),
+      db.from('formularios').select('*').eq('boda_id', bodaId).order('enviado_en', { ascending: false })
+    ]);
+    if (rsvps.error) throw rsvps.error;
+    if (formularios.error) throw formularios.error;
+    return { rsvps: rsvps.data, formularios: formularios.data };
+  }
+
   // RSVP de invitado
   async function enviarRSVP(bodaId, { nombre, asistencia, mensaje }) {
     const { error } = await db.from('rsvps').insert({ boda_id: bodaId, nombre, asistencia, mensaje });
@@ -108,5 +165,5 @@ const DB = (() => {
     return new Promise(() => {}); // detiene la carga mientras redirige
   }
 
-  return { init, crearBoda, guardarBoda, cargarBoda, cargarBodaPublica, listarBodas, eliminarBoda, enviarRSVP, enviarFormulario, login, logout, requireAdmin };
+  return { init, crearBoda, guardarBoda, cargarBoda, cargarBodaPublica, listarBodas, eliminarBoda, archivarBoda, duplicarBoda, subirFoto, listarRespuestas, enviarRSVP, enviarFormulario, login, logout, requireAdmin };
 })();

@@ -6,6 +6,9 @@ const EDITOR = (() => {
   let _guardandoTimer = null;
   let _bodaId = null;
 
+  // Secciones con campo "Foto (URL)" → se guarda en boda[seccion].foto
+  const SECCIONES_CON_FOTO = ['historia', 'galeria', 'evento', 'dresscode', 'rsvp', 'mensaje', 'alojamiento', 'transporte'];
+
   async function init() {
     // 1. ¿Viene con ?id= en la URL? → cargar boda existente
     const params = new URLSearchParams(window.location.search);
@@ -48,6 +51,7 @@ const EDITOR = (() => {
   function _poblarPanel(boda) {
     _setVal('inp-titulo', boda.meta.titulo);
     _setVal('inp-foto-cabecera', boda.fotoCabecera || '');
+    SECCIONES_CON_FOTO.forEach(s => _setVal('inp-foto-' + s, boda[s] ? boda[s].foto : ''));
     _setVal('inp-novio', boda.pareja.novio);
     _setVal('inp-novia', boda.pareja.novia);
     _setVal('inp-dia', boda.fecha.dia);
@@ -116,6 +120,7 @@ const EDITOR = (() => {
 
     on('inp-titulo',        'meta.titulo');
     on('inp-foto-cabecera', 'fotoCabecera');
+    SECCIONES_CON_FOTO.forEach(s => on('inp-foto-' + s, s + '.foto'));
     on('inp-novio', 'pareja.novio');
     on('inp-novia', 'pareja.novia');
     on('inp-dia', 'fecha.dia');
