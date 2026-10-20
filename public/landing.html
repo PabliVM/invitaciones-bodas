@@ -55,6 +55,7 @@
         </ul>
       </div>
       <div class="l-probador">
+        <p class="l-etiqueta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg> Versión móvil</p>
         <div class="l-movil l-movil--grande" id="dispositivo">
           <div class="l-movil__pantalla" id="probador-pantalla" data-base="390">
             <iframe id="probador-frame" src="invitation.html?demo=clasica" title="Invitación de ejemplo" loading="eager"></iframe>
@@ -78,9 +79,9 @@
   <section class="l-sec" id="ejemplos">
     <div class="l-contenedor">
       <div class="l-cab l-cab--centro l-revelar">
-        <p class="l-kicker">Ejemplos</p>
+        <p class="l-etiqueta l-etiqueta--clara"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Versión ordenador</p>
         <h2 class="l-titulo">Ocho estilos, <em>infinitas</em> combinaciones</h2>
-        <p class="l-sub">Arriba los habéis visto en el móvil; así lucen en pantalla grande. Cada estilo se adapta a vuestros colores, tipografías y fotos. Tocad cualquiera para abrirlo.</p>
+        <p class="l-sub">Arriba, en el móvil. Aquí, cómo se ven en un ordenador. Cada estilo se adapta a vuestros colores, tipografías y fotos. Tocad cualquiera para verlo a fondo, en móvil u ordenador.</p>
       </div>
       <div class="l-ejemplos" id="lista-ejemplos"></div>
     </div>
@@ -257,6 +258,26 @@
       </form>
     </div>
   </section>
+
+  <!-- ════════ VISOR DE EJEMPLOS ════════ -->
+  <div class="l-visor" id="visor" hidden role="dialog" aria-modal="true" aria-labelledby="visor-nombre">
+    <div class="l-visor__barra">
+      <p class="l-visor__nombre" id="visor-nombre"></p>
+      <div class="l-visor__modos" role="group" aria-label="Ver en">
+        <button class="l-visor__modo" data-modo="movil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg> Móvil</button>
+        <button class="l-visor__modo" data-modo="ordenador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Ordenador</button>
+      </div>
+      <button class="l-visor__cerrar" id="visor-cerrar" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="l-visor__escena">
+      <button class="l-visor__nav l-visor__prev" id="visor-prev" aria-label="Estilo anterior">‹</button>
+      <div class="l-movil" id="visor-disp">
+        <div class="l-movil__pantalla" id="visor-pantalla" data-base="390"><iframe id="visor-frame" title="Ejemplo de invitación"></iframe></div>
+      </div>
+      <button class="l-visor__nav l-visor__next" id="visor-next" aria-label="Estilo siguiente">›</button>
+    </div>
+    <p class="l-visor__pista">Podéis recorrer la invitación como lo haría un invitado</p>
+  </div>
 
   <!-- ════════ PIE ════════ -->
   <footer class="l-pie">
