@@ -83,6 +83,16 @@
       var paleta = PRESETS.filter(function(x) { return x.id === PARAMS.get('paleta'); })[0];
       if (paleta) ['colorPrimario', 'colorSecundario', 'colorTexto', 'colorAccent'].forEach(function(k) { demo.estilos[k] = paleta.estilos[k]; });
       if (DEMOS.FUENTES.indexOf(PARAMS.get('fuente')) !== -1) demo.estilos.fuente = PARAMS.get('fuente');
+      // Colores libres: ?fondo=&principal=&detalle= (hex sin #); el texto se elige solo para que se lea
+      var hex = function(k) { var v = PARAMS.get(k) || ''; return /^[0-9a-f]{6}$/i.test(v) ? '#' + v : null; };
+      if (hex('fondo')) {
+        var n = parseInt(hex('fondo').slice(1), 16);
+        var luz = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+        demo.estilos.colorSecundario = hex('fondo');
+        demo.estilos.colorTexto = luz < 0.5 ? '#f3efe8' : '#2c2a27';
+      }
+      if (hex('principal')) demo.estilos.colorPrimario = hex('principal');
+      if (hex('detalle')) demo.estilos.colorAccent = hex('detalle');
       document.title = 'Ejemplo · ' + demo.pareja.novio + ' & ' + demo.pareja.novia;
       INVITACION.render(demo, raiz, {
         onRsvp: function() { return Promise.resolve(); },

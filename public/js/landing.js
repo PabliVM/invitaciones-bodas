@@ -134,7 +134,9 @@
 
   document.getElementById('config-estilos').innerHTML = EJEMPLOS.map(e => opcion('estilo', e.id, escHtml(e.nombre), e.desc)).join('');
   document.getElementById('config-colores').innerHTML = opcion('paleta', '', muestra([]) + 'Los del estilo', 'Colores originales del estilo') +
-    PALETAS.map(p => opcion('paleta', p.id, muestra([p.estilos.colorSecundario, p.estilos.colorPrimario, p.estilos.colorAccent]) + escHtml(p.nombre), p.descripcion || p.nombre)).join('');
+    PALETAS.map(p => opcion('paleta', p.id, muestra([p.estilos.colorSecundario, p.estilos.colorPrimario, p.estilos.colorAccent]) + escHtml(p.nombre), p.descripcion || p.nombre)).join('') +
+    opcion('paleta', 'libre', '<span class="l-opcion__muestra l-opcion__muestra--libre"></span>Elegid los vuestros', 'Probad cualquier color');
+  const libre = k => document.getElementById('config-' + k).value.slice(1).toLowerCase();
   document.getElementById('config-fuentes').innerHTML = opcion('fuente', '', '<span class="l-opcion__aa">Aa</span>La del estilo', 'Tipografía original del estilo') +
     FUENTES.map(f => opcion('fuente', f, '<span class="l-opcion__aa" style="font-family:\'' + f + '\', serif">Aa</span>' + escHtml(f), f)).join('');
 
@@ -151,13 +153,18 @@
 
   const nombreDe = {
     estilo: v => (EJEMPLOS.find(e => e.id === v) || {}).nombre,
-    paleta: v => v ? (PALETAS.find(p => p.id === v) || {}).nombre : 'los del estilo',
+    paleta: v => v === 'libre' ? 'a medida (fondo #' + libre('fondo') + ', principal #' + libre('principal') + ', detalles #' + libre('detalle') + ')' : v ? (PALETAS.find(p => p.id === v) || {}).nombre : 'los del estilo',
     fuente: v => v || 'la del estilo'
   };
-  const enlaceConfig = () => {
+  const paramsConfig = () => {
     const q = new URLSearchParams();
-    if (cfg.paleta) q.set('paleta', cfg.paleta);
+    if (cfg.paleta === 'libre') ['fondo', 'principal', 'detalle'].forEach(k => q.set(k, libre(k)));
+    else if (cfg.paleta) q.set('paleta', cfg.paleta);
     if (cfg.fuente) q.set('fuente', cfg.fuente);
+    return q;
+  };
+  const enlaceConfig = () => {
+    const q = paramsConfig();
     return location.origin + '/ejemplos/' + cfg.estilo + (q.toString() ? '?' + q : '');
   };
   const textoConfig = () => 'Estilo ' + nombreDe.estilo(cfg.estilo) + ' · colores ' + nombreDe.paleta(cfg.paleta) + ' · letra ' + nombreDe.fuente(cfg.fuente);
@@ -168,11 +175,11 @@
     document.getElementById('config-resumen').textContent = textoConfig();
     clearTimeout(cTimer);
     cTimer = setTimeout(() => {
-      const q = new URLSearchParams({ demo: cfg.estilo });
-      if (cfg.paleta) q.set('paleta', cfg.paleta);
-      if (cfg.fuente) q.set('fuente', cfg.fuente);
+      const q = paramsConfig();
+      q.set('demo', cfg.estilo);
       cFrame.src = 'invitation.html?' + q;
-    }, 150);
+    }, 250);
+    document.getElementById('config-libres').hidden = cfg.paleta !== 'libre';
   }
   function configModo(modo) {
     cfg.modo = modo;
@@ -185,6 +192,7 @@
   escalar(cPant);
   document.querySelectorAll('.l-opcion').forEach(b => b.addEventListener('click', () => { cfg[b.dataset.grupo] = b.dataset.valor; configPintar(); }));
   document.querySelectorAll('#vista-config .l-vista__btn').forEach(b => b.addEventListener('click', () => configModo(b.dataset.modo)));
+  ['fondo', 'principal', 'detalle'].forEach(k => document.getElementById('config-' + k).addEventListener('input', configPintar));
 
   // La vista se carga al acercarse a la sección
   const ioCfg = new IntersectionObserver(([e]) => {
