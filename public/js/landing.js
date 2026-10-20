@@ -45,24 +45,11 @@
     frame.src = 'invitation.html?demo=' + chip.dataset.demo;
   }));
 
-  // Móvil / Ordenador: el mismo iframe cambia de marco y de ancho real
-  const dispositivo = document.getElementById('dispositivo');
-  const pantalla = document.getElementById('probador-pantalla');
-  document.querySelectorAll('#modos .l-modo').forEach(b => b.addEventListener('click', () => {
-    const ordenador = b.dataset.modo === 'ordenador';
-    document.querySelectorAll('#modos .l-modo').forEach(x => x.classList.toggle('activo', x === b));
-    dispositivo.classList.toggle('l-movil', !ordenador);
-    dispositivo.classList.toggle('l-movil--grande', !ordenador);
-    dispositivo.classList.toggle('l-navegador', ordenador);
-    pantalla.dataset.base = ordenador ? 1280 : ANCHO_MOVIL;
-    ajustar(pantalla);
-  }));
-
   // ── Ejemplos ──
   const lista = document.getElementById('lista-ejemplos');
   lista.innerHTML = EJEMPLOS.map((e, i) =>
-    '<a class="l-ejemplo l-revelar" style="--d:' + (i % 4) * 0.06 + 's" href="/ejemplos/' + e.id + '" target="_blank" rel="noopener">' +
-      '<div class="l-movil"><div class="l-movil__pantalla"><iframe src="invitation.html?demo=' + e.id + '" title="Ejemplo ' + e.nombre + '" loading="lazy" tabindex="-1"></iframe></div></div>' +
+    '<a class="l-ejemplo l-revelar" style="--d:' + (i % 2) * 0.08 + 's" href="/ejemplos/' + e.id + '" target="_blank" rel="noopener">' +
+      '<div class="l-navegador"><div class="l-movil__pantalla" data-base="1280"><iframe src="invitation.html?demo=' + e.id + '" title="Ejemplo ' + e.nombre + '" loading="lazy" tabindex="-1"></iframe></div></div>' +
       '<h3 class="l-ejemplo__nombre">' + e.nombre + '<span>Ver ejemplo ↗</span></h3>' +
       '<p class="l-ejemplo__desc">' + e.desc + '</p>' +
     '</a>').join('');

@@ -28,16 +28,20 @@ const DEMOS = (() => {
   function boda(plantilla) {
     const id = TEMAS[plantilla] ? plantilla : 'clasica';
     const [novia, novio, lugar, direccion] = PAREJAS[id];
+    // Alterna las fotos de portada entre estilos para que los ejemplos no se repitan
+    const par = Object.keys(TEMAS).indexOf(id) % 2 === 1;
+    const fotoA = par ? '/assets/demo/pareja-2.jpg' : '/assets/demo/pareja-1.jpg';
+    const fotoB = par ? '/assets/demo/pareja-1.jpg' : '/assets/demo/pareja-2.jpg';
     return {
       id: 'demo-' + id,
       plantilla: id,
       estilos: Object.assign({}, TEMAS[id]),
       meta: { titulo: 'Demo ' + id },
-      fotoCabecera: '/assets/demo/pareja-1.jpg',
+      fotoCabecera: fotoA,
       pareja: { novio: novia, novia: novio },
       fecha: { dia: '19', mes: '06', anio: '2027', hora: '18:00' },
       historia: {
-        activa: true, titulo: 'Nuestra historia', foto: '/assets/demo/pareja-2.jpg',
+        activa: true, titulo: 'Nuestra historia', foto: fotoB,
         texto: 'Nos conocimos una tarde de verano, sin buscarnos. Diez años, tres mudanzas y mil viajes después, queremos celebrar contigo el comienzo de nuestra vida juntos.',
         subsecciones: []
       },

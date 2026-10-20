@@ -170,13 +170,11 @@ h1, h2, h3, p { margin: 0; }
 .l-sec--marfil2 { background: var(--l-marfil-2); }
 
 /* Ejemplos */
-.l-ejemplos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: clamp(20px, 3vw, 36px); }
+.l-ejemplos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); gap: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 36px); }
 .l-ejemplo { display: grid; gap: 16px; text-decoration: none; color: inherit; }
-.l-ejemplo .l-movil { width: 100%; border-radius: 34px; padding: 8px; box-shadow: 0 0 0 1px var(--l-linea), 0 30px 60px -30px rgba(29, 27, 24, .45); transition: transform .5s var(--l-ease), box-shadow .5s var(--l-ease); }
-.l-ejemplo .l-movil::before { top: 14px; width: 64px; height: 18px; margin-left: -32px; }
-.l-ejemplo .l-movil__pantalla { border-radius: 27px; }
-.l-ejemplo .l-movil iframe { pointer-events: none; }
-.l-ejemplo:hover .l-movil { transform: translateY(-8px); box-shadow: 0 0 0 1px rgba(201, 164, 92, .5), 0 40px 80px -30px rgba(29, 27, 24, .55); }
+.l-ejemplo .l-navegador { width: 100%; animation: none; box-shadow: 0 0 0 1px var(--l-linea), 0 30px 60px -30px rgba(29, 27, 24, .5); transition: transform .5s var(--l-ease), box-shadow .5s var(--l-ease); }
+.l-ejemplo .l-navegador iframe { pointer-events: none; }
+.l-ejemplo:hover .l-navegador { transform: translateY(-6px); box-shadow: 0 0 0 1px rgba(201, 164, 92, .5), 0 40px 80px -30px rgba(29, 27, 24, .6); }
 .l-ejemplo__nombre { font-family: var(--l-serif); font-size: 26px; font-weight: 500; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
 .l-ejemplo__nombre span { font-family: var(--l-sans); font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--l-oro); white-space: nowrap; }
 .l-ejemplo__desc { font-size: 13px; line-height: 1.6; color: var(--l-suave); margin-top: -10px; }
@@ -296,12 +294,6 @@ h1, h2, h3, p { margin: 0; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .l-revelar { opacity: 1; transform: none; }
 }
-
-/* Selector Móvil / Ordenador del probador */
-.l-modos { display: inline-flex; padding: 4px; gap: 2px; border-radius: 999px; border: 1px solid var(--l-linea-osc); background: rgba(255, 255, 255, .04); }
-.l-modo { padding: 8px 18px; border: 0; border-radius: 999px; background: transparent; color: rgba(255, 255, 255, .7); font-family: var(--l-sans); font-size: 12px; font-weight: 700; letter-spacing: .6px; cursor: pointer; transition: background .25s, color .25s; }
-.l-modo:hover { color: #fff; }
-.l-modo.activo { color: #1a1306; background: var(--l-oro-grad); }
 
 /* Marco de navegador (versión ordenador) */
 .l-navegador {
