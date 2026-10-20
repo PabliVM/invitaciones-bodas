@@ -141,7 +141,119 @@ const PRESETS = [
       fuente:          'Playfair Display',
       fuenteSecundaria:'Raleway',
     }
-  }
+  },
+  {
+    id: 'oliva',
+    nombre: 'Verde oliva',
+    descripcion: 'Oliva y arena',
+    muestra: ['#6b7a3a', '#f3f1e7'],
+    estilos: {
+      colorPrimario:   '#6b7a3a',
+      colorSecundario: '#f3f1e7',
+      colorTexto:      '#2f3320',
+      colorAccent:     '#c2a26b',
+      fuente:          'Cormorant Garamond',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
+    id: 'terracota',
+    nombre: 'Terracota',
+    descripcion: 'Barro y ocre',
+    muestra: ['#b5502f', '#f7ece4'],
+    estilos: {
+      colorPrimario:   '#b5502f',
+      colorSecundario: '#f7ece4',
+      colorTexto:      '#3b2219',
+      colorAccent:     '#e0a96d',
+      fuente:          'Playfair Display',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
+    id: 'lavanda',
+    nombre: 'Lavanda',
+    descripcion: 'Lila y malva',
+    muestra: ['#7d6aa8', '#f4f1f8'],
+    estilos: {
+      colorPrimario:   '#7d6aa8',
+      colorSecundario: '#f4f1f8',
+      colorTexto:      '#2e2840',
+      colorAccent:     '#c7a7c9',
+      fuente:          'Cormorant Garamond',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
+    id: 'empolvado',
+    nombre: 'Azul empolvado',
+    descripcion: 'Azul suave y beige',
+    muestra: ['#5d7fa3', '#eef3f7'],
+    estilos: {
+      colorPrimario:   '#5d7fa3',
+      colorSecundario: '#eef3f7',
+      colorTexto:      '#1f2e3d',
+      colorAccent:     '#c9b28a',
+      fuente:          'EB Garamond',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
+    id: 'burdeos',
+    nombre: 'Burdeos',
+    descripcion: 'Vino y dorado',
+    muestra: ['#7b1e32', '#f8f1ee'],
+    estilos: {
+      colorPrimario:   '#7b1e32',
+      colorSecundario: '#f8f1ee',
+      colorTexto:      '#2e1418',
+      colorAccent:     '#c69c6d',
+      fuente:          'Playfair Display',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
+    id: 'esmeralda',
+    nombre: 'Esmeralda',
+    descripcion: 'Verde noche y oro',
+    muestra: ['#d4b06a', '#0f2a24'],
+    estilos: {
+      colorPrimario:   '#d4b06a',
+      colorSecundario: '#0f2a24',
+      colorTexto:      '#ecf2ee',
+      colorAccent:     '#8fbfa8',
+      fuente:          'Cormorant Garamond',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
+    id: 'melocoton',
+    nombre: 'Melocotón',
+    descripcion: 'Coral y salvia',
+    muestra: ['#e0896a', '#fff3ec'],
+    estilos: {
+      colorPrimario:   '#e0896a',
+      colorSecundario: '#fff3ec',
+      colorTexto:      '#4a2f26',
+      colorAccent:     '#9aae8f',
+      fuente:          'Lora',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
+    id: 'mostaza',
+    nombre: 'Mostaza',
+    descripcion: 'Ocre y verde bosque',
+    muestra: ['#c99a2e', '#faf5e8'],
+    estilos: {
+      colorPrimario:   '#c99a2e',
+      colorSecundario: '#faf5e8',
+      colorTexto:      '#2d2a1f',
+      colorAccent:     '#4f6d5a',
+      fuente:          'Libre Baskerville',
+      fuenteSecundaria:'Lato',
+    }
+  },
 ];
 
 function aplicarPreset(id) {
