@@ -37,6 +37,33 @@ const DB = (() => {
     if (error) throw error;
   }
 
+  // ── Guardado con control de versión (editor) ──
+  // La "versión" es actualizado_en: solo se guarda si nadie la cambió desde que la leímos.
+
+  async function crearBodaSegura(datos) {
+    const { data, error } = await db.from('weddings')
+      .insert({ data: _limpiar(datos) })
+      .select('id, actualizado_en')
+      .single();
+    if (error) throw error;
+    return { id: data.id, version: data.actualizado_en };
+  }
+
+  async function guardarBodaSegura(id, datos, version) {
+    let q = db.from('weddings')
+      .update({ data: _limpiar(datos), actualizado_en: new Date().toISOString() })
+      .eq('id', id);
+    if (version) q = q.eq('actualizado_en', version);
+    const { data, error } = await q.select('actualizado_en');
+    if (error) throw error;
+    if (!data || !data.length) {
+      const e = new Error('La boda se ha modificado en otro sitio');
+      e.conflicto = true;
+      throw e;
+    }
+    return data[0].actualizado_en;
+  }
+
   // Cargar una boda por ID
   async function cargarBoda(id) {
     const { data, error } = await db.from('weddings').select('*').eq('id', id).maybeSingle();
@@ -231,6 +258,7 @@ const DB = (() => {
   }
 
   return { init, crearBoda, guardarBoda, cargarBoda, cargarBodaPublica, listarBodas, eliminarBoda, archivarBoda, duplicarBoda, subirFoto, listarRespuestas, enviarRSVP, enviarFormulario, login, logout, requireAdmin,
+    crearBodaSegura, guardarBodaSegura,
     enviarSolicitud, listarSolicitudes, actualizarSolicitud, eliminarSolicitud, contarSolicitudesNuevas,
     enlaceNovios, sesion, miPerfil, apiNovios };
 })();

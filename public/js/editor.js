@@ -3,7 +3,6 @@
 
 const EDITOR = (() => {
 
-  let _guardandoTimer = null;
   let _bodaId = null;
 
   // Secciones con campo "Foto (URL)" → se guarda en boda[seccion].foto
@@ -11,34 +10,47 @@ const EDITOR = (() => {
 
   async function init() {
     PREVIEW.init();
-    // 1. ¿Viene con ?id= en la URL? → cargar boda existente
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    const id = new URLSearchParams(window.location.search).get('id');
+    let version = null;
 
     if (id) {
       _mostrarCargando(true);
-      const boda = await DB.cargarBoda(id);
-      if (boda) {
-        STATE.cargar(boda);
-        _bodaId = id;
-      }
+      let boda = null;
+      try { boda = await DB.cargarBoda(id); } catch (err) { console.error(err); }
       _mostrarCargando(false);
+      if (!boda) {
+        document.body.innerHTML = '<div class="cargando" style="padding-top:30vh">No se ha encontrado esta boda. <a href="index.html">Volver al panel</a></div>';
+        return;
+      }
+      STATE.cargar(boda);
+      _bodaId = id;
+      version = boda.actualizadoEn;
     }
 
-    // 2. Rellenar el panel con los valores actuales
     _poblarPanel(STATE.get());
-
-    // 3. Renderizar preview inicial
+    _actualizarURL();
     _renderizarPreview();
 
-    // 4. Suscribirse a cambios de estado
-    STATE.suscribir(() => {
-      _renderizarPreview();
-      _guardarAutomatico();
+    GUARDADO.init({
+      id: _bodaId,
+      version,
+      alCrear: nuevoId => {
+        _bodaId = nuevoId;
+        history.replaceState({}, '', 'editor.html?id=' + nuevoId);
+        _actualizarURL();
+      }
     });
 
-    // 5. Adjuntar eventos del panel
+    // Vista previa siempre; el panel se repinta entero solo si el cambio no vino de él
+    STATE.suscribir((boda, origen) => {
+      _renderizarPreview();
+      if (origen === 'carga' || origen === 'historial' || origen === 'recuperado') _poblarPanel(boda);
+      _actualizarBotonesHistorial();
+    });
+
     _adjuntarEventos();
+    _actualizarBotonesHistorial();
+    REVISION.init();
   }
 
   function _renderizarPreview() {
@@ -112,7 +124,7 @@ const EDITOR = (() => {
         const valor = el.type === 'checkbox'
           ? el.checked
           : (transform ? transform(el.value) : el.value);
-        STATE.set(ruta, valor);
+        STATE.set(ruta, valor, 'panel');
       });
     };
 
@@ -125,6 +137,10 @@ const EDITOR = (() => {
     on('inp-mes', 'fecha.mes');
     on('inp-anio', 'fecha.anio');
     on('inp-hora', 'fecha.hora');
+    on('inp-titulo-historia', 'historia.titulo');
+    on('inp-titulo-evento',   'evento.titulo');
+    on('inp-titulo-rsvp',     'rsvp.titulo');
+    on('inp-titulo-mensaje',  'mensaje.titulo');
     on('inp-historia', 'historia.texto');
     on('chk-historia', 'historia.activa');
     on('chk-musica',        'musica.activa');
@@ -188,75 +204,51 @@ const EDITOR = (() => {
     });
 
     // Botones del panel
-    document.getElementById('btn-guardar')?.addEventListener('click', guardar);
-    document.getElementById('btn-nueva')?.addEventListener('click', nuevaBoda);
-    document.getElementById('btn-copiar-url')?.addEventListener('click', copiarURL);
+    document.getElementById('btn-guardar')?.addEventListener('click', guardarAhora);
     document.getElementById('btn-abrir-invitacion')?.addEventListener('click', abrirInvitacion);
-  }
+    document.getElementById('btn-deshacer')?.addEventListener('click', () => STATE.deshacer());
+    document.getElementById('btn-rehacer')?.addEventListener('click', () => STATE.rehacer());
 
-  // --- Guardar en Supabase ---
-  async function guardar() {
-    const boda = STATE.get();
-    const btn = document.getElementById('btn-guardar');
-
-    _setBtnEstado(btn, 'Guardando…', true);
-
-    try {
-      if (_bodaId) {
-        await DB.guardarBoda(_bodaId, boda);
-      } else {
-        _bodaId = await DB.crearBoda(boda);
-        STATE.setId(_bodaId);
-        // Actualizar URL del navegador sin recargar
-        history.replaceState({}, '', `editor.html?id=${_bodaId}`);
-      }
-      _setBtnEstado(btn, '✓ Guardado', false);
-      _mostrarURLPanel(_bodaId);
-      setTimeout(() => _setBtnEstado(btn, 'Guardar', false), 2000);
-    } catch (err) {
-      console.error('Error guardando:', err);
-      _setBtnEstado(btn, 'Error al guardar', false);
-      setTimeout(() => _setBtnEstado(btn, 'Guardar', false), 3000);
-    }
-  }
-
-  // Autoguardado 3 segundos después del último cambio
-  function _guardarAutomatico() {
-    if (!_bodaId) return; // Solo si ya existe la boda
-    clearTimeout(_guardandoTimer);
-    _guardandoTimer = setTimeout(() => {
-      DB.guardarBoda(_bodaId, STATE.get()).catch(console.error);
-      _mostrarIndicador('Guardado automático');
-    }, 3000);
-  }
-
-  function nuevaBoda() {
-    if (!confirm('¿Crear nueva boda? Los cambios sin guardar se perderán.')) return;
-    STATE.reset();
-    _bodaId = null;
-    history.replaceState({}, '', 'editor.html');
-    _poblarPanel(STATE.get());
-    _renderizarPreview();
-    _ocultarURLPanel();
-  }
-
-  function copiarURL() {
-    if (!_bodaId) {
-      alert('Guarda primero la boda para obtener su URL.');
-      return;
-    }
-    const url = `${window.location.origin}/invitation.html?id=${_bodaId}`;
-    navigator.clipboard.writeText(url).then(() => {
-      _mostrarIndicador('URL copiada al portapapeles');
+    document.addEventListener('keydown', e => {
+      const mod = e.ctrlKey || e.metaKey;
+      if (!mod) return;
+      const k = e.key.toLowerCase();
+      if (k === 's') { e.preventDefault(); guardarAhora(); }
+      // Deshacer propio solo fuera de campos de texto (dentro, el navegador deshace lo escrito)
+      const enCampo = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement && document.activeElement.tagName);
+      if (k === 'z' && !enCampo) { e.preventDefault(); e.shiftKey ? STATE.rehacer() : STATE.deshacer(); }
+      if (k === 'y' && !enCampo) { e.preventDefault(); STATE.rehacer(); }
     });
   }
 
-  function abrirInvitacion() {
-    if (!_bodaId) {
-      alert('Guarda primero la boda.');
-      return;
-    }
-    window.open(`invitation.html?id=${_bodaId}`, '_blank');
+  async function guardarAhora() {
+    const btn = document.getElementById('btn-guardar');
+    _setBtnEstado(btn, 'Guardando…', true);
+    await GUARDADO.guardarAhora();
+    _setBtnEstado(btn, GUARDADO.hayPendientes() ? 'Guardar' : '✓ Guardado', false);
+    setTimeout(() => _setBtnEstado(btn, 'Guardar', false), 1800);
+  }
+
+  // Abre la invitación real (si es nueva, la guarda antes para tener enlace)
+  async function abrirInvitacion() {
+    const ventana = window.open('about:blank', '_blank');
+    const id = _bodaId || await GUARDADO.guardarAhora();
+    if (!id) { if (ventana) ventana.close(); alert('No se pudo guardar la boda. Revisa la conexión.'); return; }
+    const url = 'invitation.html?id=' + id;
+    if (ventana) ventana.location = url; else window.location.href = url;
+  }
+
+  function _actualizarBotonesHistorial() {
+    const d = document.getElementById('btn-deshacer');
+    const r = document.getElementById('btn-rehacer');
+    if (d) d.disabled = !STATE.puedeDeshacer();
+    if (r) r.disabled = !STATE.puedeRehacer();
+  }
+
+  // Enlace para compartir (campo "URL del cliente")
+  function _actualizarURL() {
+    const input = document.getElementById('url-invitacion');
+    if (input) input.value = _bodaId ? window.location.origin + '/invitation.html?id=' + _bodaId : 'Se genera al guardar';
   }
 
   // --- Helpers UI ---
@@ -279,21 +271,6 @@ const EDITOR = (() => {
   function _mostrarCargando(visible) {
     const el = document.getElementById('editor-cargando');
     if (el) el.style.display = visible ? 'flex' : 'none';
-  }
-
-  function _mostrarURLPanel(id) {
-    const panel = document.getElementById('url-panel');
-    const input = document.getElementById('url-invitacion');
-    if (panel && input) {
-      const url = `${window.location.origin}/invitation.html?id=${id}`;
-      input.value = url;
-      panel.style.display = 'block';
-    }
-  }
-
-  function _ocultarURLPanel() {
-    const panel = document.getElementById('url-panel');
-    if (panel) panel.style.display = 'none';
   }
 
   function _mostrarIndicador(texto) {

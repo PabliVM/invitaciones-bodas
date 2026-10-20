@@ -116,15 +116,24 @@ const INVITACION = (() => {
 
   // ── Orden de secciones ──
 
+  // Sección extra por id estable ('extra_<uid>') o, en datos antiguos, por posición ('extra_0')
+  function buscarExtra(boda, id) {
+    const extras = boda.secciones_extra || [];
+    const clave = id.slice(6);
+    return extras.find(s => s && s.uid === clave) || (/^\d+$/.test(clave) ? extras[+clave] : null);
+  }
+
   function orden(boda) {
     let o = (boda.orden_secciones || ['historia', 'galeria', 'evento', 'dresscode', 'rsvp', 'mensaje']).slice();
     const extras = boda.secciones_extra || [];
     if (boda.formulario && boda.formulario.activo && o.indexOf('formulario') === -1) o.push('formulario');
-    extras.forEach((_, i) => { if (o.indexOf('extra_' + i) === -1) o.push('extra_' + i); });
+    extras.forEach((s, i) => {
+      if (!o.some(id => id.indexOf('extra_') === 0 && buscarExtra(boda, id) === s)) o.push('extra_' + (s && s.uid ? s.uid : i));
+    });
     return o.filter((id, i) => {
       if (o.indexOf(id) !== i) return false;
       if (id.indexOf('extra_') === 0) {
-        const ex = extras[parseInt(id.slice(6))];
+        const ex = buscarExtra(boda, id);
         return !!ex && !!(ex.titulo || ex.texto || (ex.subsecciones && ex.subsecciones.length));
       }
       if (id === 'formulario') return !!(boda.formulario && boda.formulario.activo && (boda.formulario.preguntas || []).length);
@@ -134,7 +143,7 @@ const INVITACION = (() => {
   }
 
   function datosSeccion(boda, id) {
-    return id.indexOf('extra_') === 0 ? (boda.secciones_extra || [])[parseInt(id.slice(6))] : boda[id];
+    return id.indexOf('extra_') === 0 ? buscarExtra(boda, id) : boda[id];
   }
 
   // Etiqueta corta para el menú: fija en las predefinidas, título en las extra

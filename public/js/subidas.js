@@ -29,10 +29,7 @@
     file.multiple = multiple;
     file.hidden = true;
 
-    btn.addEventListener('click', () => {
-      if (!_bodaId()) { _aviso('Guarda la boda antes de subir fotos'); return; }
-      file.click();
-    });
+    btn.addEventListener('click', () => file.click());
 
     file.addEventListener('change', async () => {
       const archivos = Array.from(file.files || []);
@@ -42,6 +39,12 @@
       btn.disabled = true;
       const urls = [];
       try {
+        // Boda nueva: se guarda primero para tener su carpeta de fotos
+        if (!_bodaId() && typeof GUARDADO !== 'undefined') {
+          btn.textContent = 'Preparando…';
+          await GUARDADO.guardarAhora();
+        }
+        if (!_bodaId()) throw new Error('no se pudo guardar la boda');
         for (let i = 0; i < archivos.length; i++) {
           btn.textContent = archivos.length > 1 ? `Subiendo ${i + 1}/${archivos.length}…` : 'Subiendo…';
           urls.push(await DB.subirFoto(_bodaId(), archivos[i]));
