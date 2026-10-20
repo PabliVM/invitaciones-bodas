@@ -14,7 +14,13 @@
   const ANCHO_MOVIL = 390;
 
   // Escala los iframes (ancho real: 390px móvil, 1280px ordenador) al tamaño de su marco
-  const ajustar = el => el.style.setProperty('--k', (el.clientWidth / (+el.dataset.base || ANCHO_MOVIL)).toFixed(4));
+  const ajustar = el => {
+    const k = el.clientWidth / (+el.dataset.base || ANCHO_MOVIL);
+    el.style.setProperty('--k', k.toFixed(4));
+    // Alto real del iframe = alto visible / escala → la invitación llena la pantalla del marco
+    const f = el.querySelector('iframe');
+    if (f && k && el.clientHeight) f.style.height = Math.ceil(el.clientHeight / k) + 'px';
+  };
   const ro = new ResizeObserver(entradas => entradas.forEach(e => ajustar(e.target)));
   const escalar = el => ro.observe(el);
 
@@ -45,28 +51,70 @@
     frame.src = 'invitation.html?demo=' + chip.dataset.demo;
   }));
 
-  // Móvil / Ordenador: el mismo iframe cambia de marco y de ancho real
-  const dispositivo = document.getElementById('dispositivo');
-  const pantalla = document.getElementById('probador-pantalla');
-  document.querySelectorAll('#modos .l-modo').forEach(b => b.addEventListener('click', () => {
-    const ordenador = b.dataset.modo === 'ordenador';
-    document.querySelectorAll('#modos .l-modo').forEach(x => x.classList.toggle('activo', x === b));
-    dispositivo.classList.toggle('l-movil', !ordenador);
-    dispositivo.classList.toggle('l-movil--grande', !ordenador);
-    dispositivo.classList.toggle('l-navegador', ordenador);
-    pantalla.dataset.base = ordenador ? 1280 : ANCHO_MOVIL;
-    ajustar(pantalla);
-  }));
-
   // ── Ejemplos ──
   const lista = document.getElementById('lista-ejemplos');
   lista.innerHTML = EJEMPLOS.map((e, i) =>
-    '<a class="l-ejemplo l-revelar" style="--d:' + (i % 4) * 0.06 + 's" href="/ejemplos/' + e.id + '" target="_blank" rel="noopener">' +
-      '<div class="l-movil"><div class="l-movil__pantalla"><iframe src="invitation.html?demo=' + e.id + '" title="Ejemplo ' + e.nombre + '" loading="lazy" tabindex="-1"></iframe></div></div>' +
-      '<h3 class="l-ejemplo__nombre">' + e.nombre + '<span>Ver ejemplo ↗</span></h3>' +
+    '<a class="l-ejemplo l-revelar" style="--d:' + (i % 2) * 0.08 + 's" href="/ejemplos/' + e.id + '" data-ver="' + i + '">' +
+      '<div class="l-navegador"><div class="l-movil__pantalla" data-base="1280"><iframe src="invitation.html?demo=' + e.id + '" title="Ejemplo ' + e.nombre + '" loading="lazy" tabindex="-1"></iframe></div></div>' +
+      '<h3 class="l-ejemplo__nombre">' + e.nombre + '<span>Ver a fondo →</span></h3>' +
       '<p class="l-ejemplo__desc">' + e.desc + '</p>' +
     '</a>').join('');
   lista.querySelectorAll('.l-movil__pantalla').forEach(escalar);
+
+  // ── Visor de ejemplos (misma página, Móvil / Ordenador) ──
+  const visor = document.getElementById('visor');
+  const vDisp = document.getElementById('visor-disp');
+  const vPant = document.getElementById('visor-pantalla');
+  const vFrame = document.getElementById('visor-frame');
+  let vIndice = 0;
+  let vModo = 'ordenador';
+  escalar(vPant);
+
+  function visorModo(modo) {
+    vModo = modo;
+    const pc = modo === 'ordenador';
+    vDisp.className = pc ? 'l-navegador' : 'l-movil';
+    vPant.dataset.base = pc ? 1280 : ANCHO_MOVIL;
+    visor.querySelectorAll('.l-visor__modo').forEach(b => b.classList.toggle('activo', b.dataset.modo === modo));
+    requestAnimationFrame(() => ajustar(vPant));
+  }
+
+  function visorVer(i) {
+    vIndice = (i + EJEMPLOS.length) % EJEMPLOS.length;
+    const e = EJEMPLOS[vIndice];
+    document.getElementById('visor-nombre').textContent = e.nombre;
+    vFrame.src = 'invitation.html?demo=' + e.id;
+  }
+
+  function visorAbrir(i) {
+    visorModo(window.innerWidth < 760 ? 'movil' : vModo);
+    visorVer(i);
+    visor.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('visor-cerrar').focus();
+  }
+
+  function visorCerrar() {
+    visor.hidden = true;
+    document.body.style.overflow = '';
+    vFrame.src = 'about:blank';
+  }
+
+  lista.querySelectorAll('[data-ver]').forEach(a => a.addEventListener('click', ev => {
+    ev.preventDefault();
+    visorAbrir(+a.dataset.ver);
+  }));
+  visor.querySelectorAll('.l-visor__modo').forEach(b => b.addEventListener('click', () => visorModo(b.dataset.modo)));
+  document.getElementById('visor-cerrar').addEventListener('click', visorCerrar);
+  document.getElementById('visor-prev').addEventListener('click', () => visorVer(vIndice - 1));
+  document.getElementById('visor-next').addEventListener('click', () => visorVer(vIndice + 1));
+  visor.addEventListener('click', ev => { if (ev.target === visor || ev.target.classList.contains('l-visor__escena')) visorCerrar(); });
+  document.addEventListener('keydown', ev => {
+    if (visor.hidden) return;
+    if (ev.key === 'Escape') visorCerrar();
+    if (ev.key === 'ArrowLeft') visorVer(vIndice - 1);
+    if (ev.key === 'ArrowRight') visorVer(vIndice + 1);
+  });
 
   // ── Revelado al hacer scroll ──
   const io = new IntersectionObserver(entradas => entradas.forEach(e => {
