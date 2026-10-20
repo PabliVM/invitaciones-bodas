@@ -103,8 +103,7 @@ const FORMULARIO = (() => {
     // Re-render preview sin re-renderizar panel
     clearTimeout(_renderTimer);
     _renderTimer = setTimeout(function() {
-      var preview = document.getElementById('preview-root');
-      if (preview) RENDERER.render(STATE.get(), preview);
+      PREVIEW.actualizar(STATE.get());
     }, 500);
   }
 

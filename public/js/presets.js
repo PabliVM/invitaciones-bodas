@@ -85,6 +85,34 @@ const PRESETS = [
       fuente:          'Libre Baskerville',
       fuenteSecundaria:'Lato',
     }
+  },
+  {
+    id: 'noche',
+    nombre: 'Noche dorada',
+    descripcion: 'Negro y oro',
+    muestra: ['#c9a45c', '#0f0e0c'],
+    estilos: {
+      colorPrimario:   '#c9a45c',
+      colorSecundario: '#0f0e0c',
+      colorTexto:      '#efe7d6',
+      colorAccent:     '#e3c88e',
+      fuente:          'Cormorant Garamond',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
+    id: 'medianoche',
+    nombre: 'Medianoche',
+    descripcion: 'Azul noche y plata',
+    muestra: ['#9fb4d0', '#0e1726'],
+    estilos: {
+      colorPrimario:   '#9fb4d0',
+      colorSecundario: '#0e1726',
+      colorTexto:      '#e6ebf2',
+      colorAccent:     '#d8c7a3',
+      fuente:          'Playfair Display',
+      fuenteSecundaria:'Raleway',
+    }
   }
 ];
 

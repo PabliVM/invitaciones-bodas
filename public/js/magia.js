@@ -5,27 +5,22 @@
   var reducido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var io = null;
 
+  // En la vista previa del editor no hay efectos (se re-renderiza en cada cambio)
+  if (new URLSearchParams(window.location.search).get('preview') === '1') return;
+
   function observar(el, delay) {
-    if (!el || el.classList.contains('mg-reveal') || el.classList.contains('mg-reveal-img')) return;
+    if (!el || el.classList.contains('mg-reveal')) return;
     if (delay) el.style.setProperty('--mg-delay', delay + 's');
-    el.classList.add(el.tagName === 'IMG' || el.classList.contains('desk-foto') ? 'mg-reveal-img' : 'mg-reveal');
+    el.classList.add('mg-reveal');
     if (io) io.observe(el); else el.classList.add('mg-in');
   }
 
-  function prepararMovil(root) {
-    var secciones = root.querySelectorAll(':scope > section, :scope > * > section');
-    secciones.forEach(function(sec, i) {
-      if (i === 0) { sec.classList.add('mg-entrada'); return; } // portada
-      observar(sec);
-    });
-  }
-
-  function prepararDesktop(content) {
-    content.querySelectorAll('.desk-seccion:not(.desk-seccion--portada)').forEach(function(sec) {
-      observar(sec.querySelector('.desk-foto'));
-      var texto = sec.querySelector('.desk-texto');
-      if (!texto) return;
-      Array.prototype.forEach.call(texto.children, function(hijo, i) { observar(hijo, Math.min(i * 0.12, 0.6)); });
+  // Portada: entrada escalonada. Resto: cada bloque aparece al hacer scroll.
+  function prepararInvitacion(root) {
+    var portada = root.querySelector('.inv-portada .inv-sec__in');
+    if (portada) portada.classList.add('mg-entrada');
+    root.querySelectorAll('.inv-sec:not(.inv-portada) .inv-sec__in').forEach(function(sec) {
+      Array.prototype.forEach.call(sec.children, function(hijo, i) { observar(hijo, Math.min(i * 0.12, 0.48)); });
     });
   }
 
@@ -36,7 +31,7 @@
     new MutationObserver(function() {
       clearTimeout(t);
       t = setTimeout(function() { fn(el); }, 30);
-    }).observe(el, { childList: true, subtree: true });
+    }).observe(el, { childList: true });
     if (el.children.length) fn(el);
   }
 
@@ -65,7 +60,7 @@
     var ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = 0, h = 0, particulas = [];
-    var color = (getComputedStyle(document.documentElement).getPropertyValue('--color-primario') || '').trim() || '#d9b26a';
+    var color = (getComputedStyle(document.getElementById('invitation-root') || document.documentElement).getPropertyValue('--inv-primario') || '').trim() || '#d9b26a';
 
     function medir() {
       w = window.innerWidth; h = window.innerHeight;
@@ -128,8 +123,7 @@
       }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     }
 
-    vigilar('invitation-root', prepararMovil);
-    vigilar('desk-content', prepararDesktop);
+    vigilar('invitation-root', prepararInvitacion);
     progreso();
 
     // El polvo arranca cuando la invitación ya tiene colores aplicados
