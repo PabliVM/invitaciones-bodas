@@ -158,6 +158,7 @@ const REVISION = (() => {
   function irA(id) {
     const el = document.getElementById(id);
     if (!el) return;
+    if (typeof FOCO !== 'undefined') FOCO.mostrarPestanaDe(el);
     let p = el.parentElement;
     while (p) {
       if (p.classList.contains('eb-sub')) p.classList.add('eb-sub--abierto');

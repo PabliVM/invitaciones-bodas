@@ -41,6 +41,13 @@
 
     <div class="aviso-editor" id="aviso-editor" hidden role="alert"></div>
 
+    <!-- Pestañas (solo en pantallas estrechas) -->
+    <nav class="editor-pestanas" id="editor-pestanas" aria-label="Secciones del editor">
+      <button type="button" data-vista="contenido"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Contenido</button>
+      <button type="button" data-vista="diseno"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 0 0 0 20c1 0 1.7-.8 1.7-1.7 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.8-1.7 1.7-1.7H16a6 6 0 0 0 6-6c0-4.4-4.5-8.4-10-8.4z"/></svg>Diseño</button>
+      <button type="button" data-vista="vista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Vista previa</button>
+    </nav>
+
     <!-- COLUMNA IZQUIERDA -->
     <aside class="editor-panel">
 
@@ -516,6 +523,7 @@
   <script src="js/presets.js"></script>
   <script src="js/guardado.js"></script>
   <script src="js/revision.js"></script>
+  <script src="js/foco.js"></script>
   <script src="js/editor.js"></script>
   <script src="js/subidas.js"></script>
 

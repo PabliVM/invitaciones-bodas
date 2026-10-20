@@ -89,10 +89,21 @@
       pantallaCarga.classList.add('oculto');
       var desplazamiento = 0;
       window.addEventListener('message', function(e) {
-        if (e.origin !== window.location.origin || !e.data || e.data.tipo !== 'boda') return;
-        desplazamiento = window.scrollY;
-        INVITACION.render(e.data.boda, raiz, { preview: true });
-        window.scrollTo(0, desplazamiento);
+        if (e.origin !== window.location.origin || !e.data) return;
+        if (e.data.tipo === 'boda') {
+          desplazamiento = window.scrollY;
+          INVITACION.render(e.data.boda, raiz, { preview: true });
+          window.scrollTo(0, desplazamiento);
+        }
+        // El editor pide ir a una sección: se desplaza y la resalta un momento
+        if (e.data.tipo === 'ir') {
+          var el = document.getElementById('sec-' + e.data.seccion);
+          if (!el) return;
+          window.scrollTo({ top: el.id === 'sec-portada' ? 0 : el.getBoundingClientRect().top + window.scrollY - 44, behavior: 'smooth' });
+          el.classList.remove('inv-sec--foco');
+          void el.offsetWidth;
+          el.classList.add('inv-sec--foco');
+        }
       });
       window.parent.postMessage({ tipo: 'preview-listo' }, window.location.origin);
     } else {
