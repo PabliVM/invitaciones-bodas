@@ -191,7 +191,7 @@ const EDITOR = (() => {
     document.getElementById('btn-abrir-invitacion')?.addEventListener('click', abrirInvitacion);
   }
 
-  // --- Guardar en Firebase ---
+  // --- Guardar en Supabase ---
   async function guardar() {
     const boda = STATE.get();
     const btn = document.getElementById('btn-guardar');
