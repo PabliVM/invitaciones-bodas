@@ -122,11 +122,9 @@
 
   // ── Diseñad la vuestra: estilo + colores + letra con vista en vivo ──
   const cfg = { estilo: 'floral', paleta: '', fuente: '', modo: 'movil' };
-  // Selección corta y muy distinta entre sí (el editor tiene todas)
-  const PALETAS_WEB = ['clasica', 'moderna', 'mediterranea', 'oliva', 'lavanda', 'esmeralda', 'medianoche'];
-  const FUENTES_WEB = ['Cormorant Garamond', 'Playfair Display', 'EB Garamond', 'Lora', 'Great Vibes', 'Dancing Script', 'Parisienne', 'Josefin Sans', 'Montserrat', 'Raleway', 'Libre Baskerville'];
-  const PALETAS = typeof PRESETS !== 'undefined' ? PALETAS_WEB.map(id => PRESETS.find(p => p.id === id)).filter(Boolean) : [];
-  const FUENTES = typeof DEMOS !== 'undefined' ? FUENTES_WEB.filter(f => DEMOS.FUENTES.includes(f)) : [];
+  // Mismas paletas y letras que el editor
+  const PALETAS = typeof PRESETS !== 'undefined' ? PRESETS : [];
+  const FUENTES = typeof DEMOS !== 'undefined' ? DEMOS.FUENTES : [];
   const cDisp = document.getElementById('config-disp');
   const cPant = document.getElementById('config-pantalla');
   const cFrame = document.getElementById('config-frame');

@@ -25,9 +25,9 @@ const DEMOS = (() => {
     boho:         ['Alba', 'Mateo', 'Finca El Olivar', 'Camino de los Almendros 7, Granada']
   };
 
-  // Tipografías de títulos que ofrece el editor
-  const FUENTES = ['Cormorant Garamond', 'Playfair Display', 'EB Garamond', 'Libre Baskerville', 'Lora',
-    'Great Vibes', 'Dancing Script', 'Parisienne', 'Pinyon Script', 'Josefin Sans', 'Montserrat', 'Raleway'];
+  // Tipografías de títulos: las mismas en el editor (sel-fuente) y en la web
+  const FUENTES = ['Cormorant Garamond', 'Playfair Display', 'EB Garamond', 'Lora', 'Great Vibes', 'Dancing Script',
+    'Parisienne', 'Josefin Sans', 'Montserrat', 'Raleway', 'Libre Baskerville'];
 
   function boda(plantilla) {
     const id = TEMAS[plantilla] ? plantilla : 'clasica';
