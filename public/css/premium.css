@@ -875,6 +875,84 @@ html body .login-card__ok .btn { justify-self: center; margin-top: 6px; }
   html body .solicitud__estado { width: 100%; }
 }
 
+/* ══════════════════ EDITOR ROBUSTO: GUARDADO, HISTORIAL, REVISIÓN ══════════════════ */
+
+html body .editor-topbar__izq { display: flex; align-items: center; gap: 16px; min-width: 0; }
+html body .estado-guardado { font-size: 11px; font-weight: 700; letter-spacing: .4px; padding: 5px 10px; border-radius: 999px; white-space: nowrap; transition: color .2s, background .2s; }
+html body .estado-guardado--guardado { color: #9fd8a8; background: rgba(120, 200, 140, .08); }
+html body .estado-guardado--pendiente,
+html body .estado-guardado--guardando { color: var(--pm-muted); background: var(--pm-glass); }
+html body .estado-guardado--error { color: #f0b46b; background: rgba(240, 180, 107, .1); }
+html body .estado-guardado--conflicto { color: var(--pm-danger); background: rgba(229, 103, 91, .12); }
+
+html body .btn-icono { width: 36px; height: 36px; padding: 0 !important; font-size: 18px; line-height: 1; }
+html body .btn-icono:disabled { opacity: .3; }
+
+/* Botón y lista de revisión */
+html body .revision { position: relative; }
+html body .btn-revisar { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--pm-line-2); background: var(--pm-glass); }
+html body .btn-revisar--ok { color: #9fd8a8; border-color: rgba(120, 200, 140, .35); }
+html body .btn-revisar--aviso { color: #f0c27b; border-color: rgba(240, 194, 123, .4); }
+html body .btn-revisar--error { color: #fff; background: rgba(229, 103, 91, .85); border-color: transparent; }
+html body .revision__lista {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 60;
+  width: min(380px, 90vw);
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--pm-line-2);
+  background: #121216;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .9);
+  animation: pm-rise .3s var(--pm-ease) both;
+}
+html body .revision__cab { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: var(--pm-text); font-size: 13px; }
+html body .revision__cerrar { border: 0; background: transparent; color: var(--pm-muted); cursor: pointer; font-size: 14px; }
+html body .revision__lista ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+html body .revision__item { display: flex; gap: 10px; align-items: flex-start; width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--pm-line); background: var(--pm-glass); color: var(--pm-text); font-family: var(--pm-sans); font-size: 12.5px; line-height: 1.45; cursor: pointer; transition: border-color .2s, background .2s; }
+html body .revision__item:hover { border-color: var(--pm-line-2); background: var(--pm-glass-2); }
+html body .revision__item span { flex-shrink: 0; width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; font-size: 10px; font-weight: 700; }
+html body .revision__item--error span { color: #fff; background: var(--pm-danger); }
+html body .revision__item--aviso span { color: #1a1306; background: #f0c27b; }
+html body .revision__ok { font-size: 13px; color: #9fd8a8; line-height: 1.6; }
+
+/* Campos con error y resaltado al llegar desde la revisión */
+html body .campo--error,
+html body .eb-sub__body .campo--error,
+html body .eb-bloque__body > .campo .campo--error { border-color: rgba(229, 103, 91, .8) !important; box-shadow: 0 0 0 3px rgba(229, 103, 91, .15); }
+html body .campo--resaltar { animation: pm-resaltar 1.6s var(--pm-ease); }
+@keyframes pm-resaltar { 0%, 30% { box-shadow: 0 0 0 6px rgba(217, 178, 106, .45); } 100% { box-shadow: 0 0 0 0 rgba(217, 178, 106, 0); } }
+
+/* Aviso (conflicto / cambios recuperables) */
+html body .aviso-editor {
+  position: fixed;
+  top: 66px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 12px;
+  width: min(720px, calc(100vw - 32px));
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(240, 194, 123, .45);
+  background: rgba(30, 24, 14, .95);
+  backdrop-filter: blur(12px);
+  color: var(--pm-text);
+  font-size: 13px;
+  line-height: 1.5;
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .9);
+}
+html body .aviso-editor[hidden] { display: none; }
+html body .aviso-editor span { flex: 1 1 260px; }
+html body .aviso-editor .btn { padding: 8px 14px; }
+
 /* ══════════════════ ACCESIBILIDAD ══════════════════ */
 
 @media (prefers-reduced-motion: reduce) {

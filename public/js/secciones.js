@@ -16,12 +16,20 @@ const SECCIONES = (() => {
 
   var _renderTimer = null;
 
+  // Escapa texto para meterlo en value="" o dentro de un textarea
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   function init() {
     _renderPanel();
-    // Debounce: no re-renderizar mientras el usuario escribe
-    STATE.suscribir(function() {
+    // No repintar con los cambios propios (se perdería el foco al escribir)
+    STATE.suscribir(function(boda, origen) {
+      if (origen === 'secciones') return;
       clearTimeout(_renderTimer);
-      _renderTimer = setTimeout(_renderPanel, 400);
+      _renderTimer = setTimeout(_renderPanel, 300);
     });
   }
 
@@ -71,7 +79,7 @@ const SECCIONES = (() => {
         if (def.id === 'alojamiento') textoActual = (boda2.alojamiento && boda2.alojamiento.texto) || '';
         if (def.id === 'transporte') textoActual = (boda2.transporte && boda2.transporte.texto) || '';
         html += '<div style="padding:0 10px 8px">';
-        html += '<textarea class="sec-sub__texto" style="min-height:72px" placeholder="Texto principal..." oninput="SECCIONES.updateTexto(\'' + def.id + '\',this.value)">' + textoActual + '</textarea>';
+        html += '<textarea class="sec-sub__texto" style="min-height:72px" placeholder="Texto principal..." oninput="SECCIONES.updateTexto(\'' + def.id + '\',this.value)">' + esc(textoActual) + '</textarea>';
         html += '</div>';
       }
       // Subsecciones existentes
@@ -80,10 +88,10 @@ const SECCIONES = (() => {
         subsecciones.forEach(function(sub, i) {
           html += '<div class="sec-sub">';
           html += '<div class="sec-sub__header">';
-          html += '<input type="text" class="sec-sub__titulo" value="' + (sub.titulo || '') + '" placeholder="Título" oninput="SECCIONES.updateSubTitulo(\'' + def.id + '\',' + i + ',this.value)" />';
+          html += '<input type="text" class="sec-sub__titulo" value="' + esc(sub.titulo) + '" placeholder="Título" oninput="SECCIONES.updateSubTitulo(\'' + def.id + '\',' + i + ',this.value)" />';
           html += '<button class="sec-sub__eliminar" onclick="SECCIONES.eliminarSub(\'' + def.id + '\',' + i + ')">✕</button>';
           html += '</div>';
-          html += '<textarea class="sec-sub__texto" placeholder="Texto..." oninput="SECCIONES.updateSubTexto(\'' + def.id + '\',' + i + ',this.value)">' + (sub.texto || '') + '</textarea>';
+          html += '<textarea class="sec-sub__texto" placeholder="Texto..." oninput="SECCIONES.updateSubTexto(\'' + def.id + '\',' + i + ',this.value)">' + esc(sub.texto) + '</textarea>';
           html += '</div>';
         });
         html += '</div>';
@@ -100,10 +108,10 @@ const SECCIONES = (() => {
     html += '<div class="sec-item sec-item--extra">';
     html += '<div class="sec-item__header">';
     html += '<span class="sec-item__icono">✦</span>';
-    html += '<input type="text" class="sec-extra__titulo" value="' + (sec.titulo || '') + '" placeholder="Título de la sección" oninput="SECCIONES.updateExtraTitulo(' + i + ',this.value)" />';
+    html += '<input type="text" class="sec-extra__titulo" value="' + esc(sec.titulo) + '" placeholder="Título de la sección" oninput="SECCIONES.updateExtraTitulo(' + i + ',this.value)" />';
     html += '<button class="sec-sub__eliminar" onclick="SECCIONES.eliminarExtra(' + i + ')">✕</button>';
     html += '</div>';
-    html += '<textarea class="sec-sub__texto" placeholder="Texto principal..." oninput="SECCIONES.updateExtraTexto(' + i + ',this.value)">' + (sec.texto || '') + '</textarea>';
+    html += '<textarea class="sec-sub__texto" placeholder="Texto principal..." oninput="SECCIONES.updateExtraTexto(' + i + ',this.value)">' + esc(sec.texto) + '</textarea>';
 
     // Subsecciones de sección extra
     var subs = sec.subsecciones || [];
@@ -112,10 +120,10 @@ const SECCIONES = (() => {
       subs.forEach(function(sub, j) {
         html += '<div class="sec-sub">';
         html += '<div class="sec-sub__header">';
-        html += '<input type="text" class="sec-sub__titulo" value="' + (sub.titulo || '') + '" placeholder="Título" oninput="SECCIONES.updateExtraSubTitulo(' + i + ',' + j + ',this.value)" />';
+        html += '<input type="text" class="sec-sub__titulo" value="' + esc(sub.titulo) + '" placeholder="Título" oninput="SECCIONES.updateExtraSubTitulo(' + i + ',' + j + ',this.value)" />';
         html += '<button class="sec-sub__eliminar" onclick="SECCIONES.eliminarExtraSub(' + i + ',' + j + ')">✕</button>';
         html += '</div>';
-        html += '<textarea class="sec-sub__texto" placeholder="Texto..." oninput="SECCIONES.updateExtraSubTexto(' + i + ',' + j + ',this.value)">' + (sub.texto || '') + '</textarea>';
+        html += '<textarea class="sec-sub__texto" placeholder="Texto..." oninput="SECCIONES.updateExtraSubTexto(' + i + ',' + j + ',this.value)">' + esc(sub.texto) + '</textarea>';
         html += '</div>';
       });
       html += '</div>';
@@ -126,130 +134,77 @@ const SECCIONES = (() => {
   }
 
   // ── API pública ──
+  // Ediciones de texto: origen 'secciones' (no repinta el panel). Altas/bajas: repinta.
+
+  function _extra(boda, i) { return (boda.secciones_extra || [])[i]; }
 
   function updateTexto(secId, val) {
-    // Update text directly without re-rendering panel
-    var boda = STATE.get();
-    if (boda[secId]) {
-      var campo = ('texto' in boda[secId]) ? 'texto' : null;
-      if (campo) boda[secId][campo] = val;
-    }
+    STATE.actualizar(function(b) { if (b[secId]) b[secId].texto = val; }, 'secciones');
   }
 
   function toggleSeccion(id, activo) {
-    // Las secciones usan 'activo' o 'activa' dependiendo del campo
     var boda = STATE.get();
-    if (boda[id]) {
-      var campo = ('activa' in boda[id]) ? id + '.activa' : id + '.activo';
-      STATE.set(campo, activo);
-    }
+    if (!boda[id]) return;
+    STATE.set(id + ('activa' in boda[id] ? '.activa' : '.activo'), activo);
   }
 
   function añadirSub(secId) {
-    var boda = STATE.get();
-    var sec = boda[secId];
-    if (!sec) return;
-    var subs = (sec.subsecciones || []).slice();
-    subs.push({ titulo: '', texto: '' });
-    STATE.set(secId + '.subsecciones', subs);
+    STATE.actualizar(function(b) { if (b[secId]) b[secId].subsecciones = (b[secId].subsecciones || []).concat({ titulo: '', texto: '' }); });
   }
 
   function eliminarSub(secId, i) {
-    var boda = STATE.get();
-    var subs = (boda[secId].subsecciones || []).slice();
-    subs.splice(i, 1);
-    STATE.set(secId + '.subsecciones', subs);
+    STATE.actualizar(function(b) { if (b[secId]) b[secId].subsecciones.splice(i, 1); });
   }
 
   function updateSubTitulo(secId, i, val) {
-    var boda = STATE.get();
-    var subs = (boda[secId].subsecciones || []).slice();
-    subs[i] = Object.assign({}, subs[i], { titulo: val });
-    // Actualizar sin notificar para no perder el foco
-    var partes = (secId + '.subsecciones').split('.');
-    var obj = boda;
-    for (var p = 0; p < partes.length - 1; p++) obj = obj[partes[p]];
-    obj[partes[partes.length-1]] = subs;
+    STATE.actualizar(function(b) { var s = b[secId] && b[secId].subsecciones[i]; if (s) s.titulo = val; }, 'secciones');
   }
 
   function updateSubTexto(secId, i, val) {
-    var boda = STATE.get();
-    var subs = (boda[secId].subsecciones || []).slice();
-    subs[i] = Object.assign({}, subs[i], { texto: val });
-    var partes = (secId + '.subsecciones').split('.');
-    var obj = boda;
-    for (var p = 0; p < partes.length - 1; p++) obj = obj[partes[p]];
-    obj[partes[partes.length-1]] = subs;
+    STATE.actualizar(function(b) { var s = b[secId] && b[secId].subsecciones[i]; if (s) s.texto = val; }, 'secciones');
   }
 
-  // Secciones extra
+  // Secciones extra (identificador estable 'extra_<uid>' en el orden)
   function añadirExtra() {
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    extras.push({ titulo: '', texto: '', subsecciones: [] });
-    STATE.set('secciones_extra', extras);
-    // Sincronizar orden para incluir la nueva extra
-    setTimeout(function() {
-      if (typeof ORDEN !== 'undefined') ORDEN.sincronizar();
-    }, 100);
+    STATE.actualizar(function(b) {
+      var uid = STATE.nuevoUid();
+      b.secciones_extra = (b.secciones_extra || []).concat({ uid: uid, titulo: '', texto: '', subsecciones: [] });
+      b.orden_secciones = (b.orden_secciones || []).concat('extra_' + uid);
+    });
   }
 
   function eliminarExtra(i) {
     if (!confirm('¿Eliminar esta sección?')) return;
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    extras.splice(i, 1);
-    STATE.set('secciones_extra', extras);
+    STATE.actualizar(function(b) {
+      var sec = _extra(b, i);
+      if (!sec) return;
+      b.secciones_extra.splice(i, 1);
+      b.orden_secciones = (b.orden_secciones || []).filter(function(id) { return id !== 'extra_' + sec.uid; });
+    });
   }
 
   function updateExtraTitulo(i, val) {
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    extras[i] = Object.assign({}, extras[i], { titulo: val });
-    boda.secciones_extra = extras;
+    STATE.actualizar(function(b) { var e = _extra(b, i); if (e) e.titulo = val; }, 'secciones');
   }
 
   function updateExtraTexto(i, val) {
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    extras[i] = Object.assign({}, extras[i], { texto: val });
-    boda.secciones_extra = extras;
+    STATE.actualizar(function(b) { var e = _extra(b, i); if (e) e.texto = val; }, 'secciones');
   }
 
   function añadirExtraSub(i) {
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    var subs = (extras[i].subsecciones || []).slice();
-    subs.push({ titulo: '', texto: '' });
-    extras[i] = Object.assign({}, extras[i], { subsecciones: subs });
-    STATE.set('secciones_extra', extras);
+    STATE.actualizar(function(b) { var e = _extra(b, i); if (e) e.subsecciones = (e.subsecciones || []).concat({ titulo: '', texto: '' }); });
   }
 
   function eliminarExtraSub(i, j) {
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    var subs = (extras[i].subsecciones || []).slice();
-    subs.splice(j, 1);
-    extras[i] = Object.assign({}, extras[i], { subsecciones: subs });
-    STATE.set('secciones_extra', extras);
+    STATE.actualizar(function(b) { var e = _extra(b, i); if (e) e.subsecciones.splice(j, 1); });
   }
 
   function updateExtraSubTitulo(i, j, val) {
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    var subs = (extras[i].subsecciones || []).slice();
-    subs[j] = Object.assign({}, subs[j], { titulo: val });
-    extras[i] = Object.assign({}, extras[i], { subsecciones: subs });
-    boda.secciones_extra = extras;
+    STATE.actualizar(function(b) { var e = _extra(b, i); if (e && e.subsecciones[j]) e.subsecciones[j].titulo = val; }, 'secciones');
   }
 
   function updateExtraSubTexto(i, j, val) {
-    var boda = STATE.get();
-    var extras = (boda.secciones_extra || []).slice();
-    var subs = (extras[i].subsecciones || []).slice();
-    subs[j] = Object.assign({}, subs[j], { texto: val });
-    extras[i] = Object.assign({}, extras[i], { subsecciones: subs });
-    boda.secciones_extra = extras;
+    STATE.actualizar(function(b) { var e = _extra(b, i); if (e && e.subsecciones[j]) e.subsecciones[j].texto = val; }, 'secciones');
   }
 
   return {

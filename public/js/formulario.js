@@ -4,9 +4,17 @@ const FORMULARIO = (() => {
 
   var _renderTimer = null;
 
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   function init() {
     _renderPanel();
-    STATE.suscribir(function() {
+    // No repintar con los cambios propios (se perdería el foco al escribir)
+    STATE.suscribir(function(boda, origen) {
+      if (origen === 'formulario') return;
       clearTimeout(_renderTimer);
       _renderTimer = setTimeout(_renderPanel, 300);
     });
@@ -24,13 +32,13 @@ const FORMULARIO = (() => {
     // Config general
     html += '<div style="padding:10px 12px;border-bottom:1px solid var(--editor-border)">';
     html += '<div class="campo" style="margin-bottom:8px"><label class="campo__label">Título del formulario</label>';
-    html += '<input type="text" class="campo__input" value="' + (form.titulo || '') + '" oninput="FORMULARIO.updateCampo(\'titulo\',this.value)" placeholder="Ej: Confirma tu asistencia" /></div>';
+    html += '<input type="text" class="campo__input" value="' + esc(form.titulo) + '" oninput="FORMULARIO.updateCampo(\'titulo\',this.value)" placeholder="Ej: Confirma tu asistencia" /></div>';
     html += '<div class="campo" style="margin-bottom:8px"><label class="campo__label">Descripción (opcional)</label>';
-    html += '<textarea class="campo__textarea" rows="2" oninput="FORMULARIO.updateCampo(\'descripcion\',this.value)" placeholder="Texto introductorio...">' + (form.descripcion || '') + '</textarea></div>';
+    html += '<textarea class="campo__textarea" rows="2" oninput="FORMULARIO.updateCampo(\'descripcion\',this.value)" placeholder="Texto introductorio...">' + esc(form.descripcion) + '</textarea></div>';
     html += '<div class="campo" style="margin-bottom:8px"><label class="campo__label">Texto del botón enviar</label>';
-    html += '<input type="text" class="campo__input" value="' + (form.textoBtnEnviar || 'Enviar') + '" oninput="FORMULARIO.updateCampo(\'textoBtnEnviar\',this.value)" /></div>';
+    html += '<input type="text" class="campo__input" value="' + esc(form.textoBtnEnviar || 'Enviar') + '" oninput="FORMULARIO.updateCampo(\'textoBtnEnviar\',this.value)" /></div>';
     html += '<div class="campo"><label class="campo__label">Mensaje de confirmación</label>';
-    html += '<input type="text" class="campo__input" value="' + (form.mensajeConfirmacion || '') + '" oninput="FORMULARIO.updateCampo(\'mensajeConfirmacion\',this.value)" /></div>';
+    html += '<input type="text" class="campo__input" value="' + esc(form.mensajeConfirmacion) + '" oninput="FORMULARIO.updateCampo(\'mensajeConfirmacion\',this.value)" /></div>';
     html += '</div>';
 
     // Preguntas
@@ -42,7 +50,7 @@ const FORMULARIO = (() => {
       // Header pregunta
       html += '<div class="preg-item__header">';
       html += '<span class="preg-item__num">' + (i + 1) + '</span>';
-      html += '<input type="text" class="preg-item__titulo" value="' + (preg.texto || '') + '" placeholder="Escribe la pregunta..." oninput="FORMULARIO.updatePregunta(' + i + ',\'texto\',this.value)" />';
+      html += '<input type="text" class="preg-item__titulo" value="' + esc(preg.texto) + '" placeholder="Escribe la pregunta..." oninput="FORMULARIO.updatePregunta(' + i + ',\'texto\',this.value)" />';
       html += '<button class="sec-sub__eliminar" onclick="FORMULARIO.eliminarPregunta(' + i + ')">✕</button>';
       html += '</div>';
 
@@ -67,7 +75,7 @@ const FORMULARIO = (() => {
         opciones.forEach(function(op, j) {
           html += '<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">';
           html += '<span style="color:var(--editor-text-muted);font-size:11px;width:14px">' + (preg.tipo === 'opcion_unica' ? '○' : '□') + '</span>';
-          html += '<input type="text" style="flex:1;background:var(--editor-input-bg);border:1px solid var(--editor-border);color:var(--editor-text);font-family:inherit;font-size:11px;padding:4px 6px;outline:none" value="' + op + '" placeholder="Opción ' + (j+1) + '" oninput="FORMULARIO.updateOpcion(' + i + ',' + j + ',this.value)" />';
+          html += '<input type="text" style="flex:1;background:var(--editor-input-bg);border:1px solid var(--editor-border);color:var(--editor-text);font-family:inherit;font-size:11px;padding:4px 6px;outline:none" value="' + esc(op) + '" placeholder="Opción ' + (j+1) + '" oninput="FORMULARIO.updateOpcion(' + i + ',' + j + ',this.value)" />';
           html += '<button onclick="FORMULARIO.eliminarOpcion(' + i + ',' + j + ')" style="background:transparent;border:none;color:var(--editor-text-muted);cursor:pointer;font-size:11px;padding:2px 4px">✕</button>';
           html += '</div>';
         });
@@ -95,84 +103,43 @@ const FORMULARIO = (() => {
   }
 
   // ── API ──
+  // Textos: origen 'formulario' (no repinta el panel). Cambios de estructura: repinta.
 
   function updateCampo(campo, valor) {
-    var boda = STATE.get();
-    if (!boda.formulario) boda.formulario = {};
-    boda.formulario[campo] = valor;
-    // Re-render preview sin re-renderizar panel
-    clearTimeout(_renderTimer);
-    _renderTimer = setTimeout(function() {
-      PREVIEW.actualizar(STATE.get());
-    }, 500);
+    STATE.actualizar(function(b) { b.formulario[campo] = valor; }, 'formulario');
   }
 
   function añadirPregunta() {
-    var boda = STATE.get();
-    if (!boda.formulario) boda.formulario = {};
-    var preguntas = (boda.formulario.preguntas || []).slice();
-    preguntas.push({
-      id: 'p' + Date.now(),
-      texto: '',
-      tipo: 'texto',
-      opciones: [],
-      obligatoria: false,
+    STATE.actualizar(function(b) {
+      b.formulario.preguntas = (b.formulario.preguntas || []).concat({
+        id: 'p' + STATE.nuevoUid(), texto: '', tipo: 'texto', opciones: [], obligatoria: false
+      });
     });
-    boda.formulario.preguntas = preguntas;
-    STATE.set('formulario.preguntas', preguntas);
   }
 
   function eliminarPregunta(i) {
-    var boda = STATE.get();
-    var preguntas = (boda.formulario.preguntas || []).slice();
-    preguntas.splice(i, 1);
-    STATE.set('formulario.preguntas', preguntas);
+    STATE.actualizar(function(b) { b.formulario.preguntas.splice(i, 1); });
   }
 
   function updatePregunta(i, campo, valor) {
-    var boda = STATE.get();
-    var preguntas = (boda.formulario.preguntas || []).slice();
-    preguntas[i] = Object.assign({}, preguntas[i]);
-    preguntas[i][campo] = valor;
-    if (campo === 'tipo' && (valor === 'opcion_unica' || valor === 'opcion_multiple') && (!preguntas[i].opciones || preguntas[i].opciones.length === 0)) {
-      preguntas[i].opciones = ['', ''];
-    }
-    // Para texto: actualizar sin re-renderizar panel (evita perder foco)
-    if (campo === 'texto') {
-      boda.formulario.preguntas = preguntas;
-    } else {
-      // Para tipo y obligatoria: sí re-renderizar para mostrar/ocultar opciones
-      STATE.set('formulario.preguntas', preguntas);
-    }
+    STATE.actualizar(function(b) {
+      var q = b.formulario.preguntas[i];
+      if (!q) return;
+      q[campo] = valor;
+      if (campo === 'tipo' && (valor === 'opcion_unica' || valor === 'opcion_multiple') && !(q.opciones || []).length) q.opciones = ['', ''];
+    }, campo === 'texto' ? 'formulario' : undefined);
   }
 
   function añadirOpcion(pregIdx) {
-    var boda = STATE.get();
-    var preguntas = (boda.formulario.preguntas || []).slice();
-    preguntas[pregIdx] = Object.assign({}, preguntas[pregIdx]);
-    preguntas[pregIdx].opciones = (preguntas[pregIdx].opciones || []).concat('');
-    STATE.set('formulario.preguntas', preguntas);
+    STATE.actualizar(function(b) { var q = b.formulario.preguntas[pregIdx]; if (q) q.opciones = (q.opciones || []).concat(''); });
   }
 
   function eliminarOpcion(pregIdx, opIdx) {
-    var boda = STATE.get();
-    var preguntas = (boda.formulario.preguntas || []).slice();
-    preguntas[pregIdx] = Object.assign({}, preguntas[pregIdx]);
-    var ops = preguntas[pregIdx].opciones.slice();
-    ops.splice(opIdx, 1);
-    preguntas[pregIdx].opciones = ops;
-    STATE.set('formulario.preguntas', preguntas);
+    STATE.actualizar(function(b) { var q = b.formulario.preguntas[pregIdx]; if (q) q.opciones.splice(opIdx, 1); });
   }
 
   function updateOpcion(pregIdx, opIdx, valor) {
-    var boda = STATE.get();
-    var preguntas = (boda.formulario.preguntas || []).slice();
-    preguntas[pregIdx] = Object.assign({}, preguntas[pregIdx]);
-    var ops = preguntas[pregIdx].opciones.slice();
-    ops[opIdx] = valor;
-    preguntas[pregIdx].opciones = ops;
-    // Update directly without triggering re-render
-    boda.formulario.preguntas = preguntas;
+    STATE.actualizar(function(b) { var q = b.formulario.preguntas[pregIdx]; if (q) q.opciones[opIdx] = valor; }, 'formulario');
   }
 
   return { init, updateCampo, añadirPregunta, eliminarPregunta, updatePregunta, añadirOpcion, eliminarOpcion, updateOpcion };

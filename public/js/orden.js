@@ -27,36 +27,9 @@ const ORDEN = (() => {
     });
   }
 
-  // Asegurar que el orden incluye todas las secciones existentes
+  // Orden completo y válido (predefinidas + 'extra_<uid>'), calculado por STATE.normalizar
   function _ordenCompleto(boda) {
-    var orden = (boda.orden_secciones || []).slice();
-    var predefinidas = PREDEFINIDAS_VALIDAS;
-    var extras = boda.secciones_extra || [];
-
-    // Añadir predefinidas que no estén en el orden
-    predefinidas.forEach(function(id) {
-      if (orden.indexOf(id) !== -1) return; // ya está
-      var sec = boda[id];
-      if (!sec) return;
-      orden.push(id);
-    });
-
-    // Sincronizar extras: añadir nuevas, eliminar las que ya no existen
-    var extrasEnOrden = orden.filter(function(id) { return id.indexOf('extra_') === 0; });
-    
-    // Añadir extras nuevas que no estén en el orden
-    extras.forEach(function(_, i) {
-      if (orden.indexOf('extra_' + i) === -1) orden.push('extra_' + i);
-    });
-
-    // Eliminar extras que ya no existen
-    orden = orden.filter(function(id) {
-      if (id.indexOf('extra_') !== 0) return true;
-      var idx = parseInt(id.replace('extra_', ''));
-      return idx < extras.length;
-    });
-
-    return orden;
+    return STATE.normalizar(boda).orden_secciones;
   }
 
   function _renderPanel() {
@@ -73,8 +46,8 @@ const ORDEN = (() => {
       var label, activa;
 
       if (esExtra) {
-        var idx = parseInt(id.replace('extra_', ''));
-        var sec = extras[idx] || {};
+        var uid = id.replace('extra_', '');
+        var sec = extras.find(function(x) { return x.uid === uid; }) || {};
         label = '✦ ' + (sec.titulo || 'Sección personalizada');
         activa = true;
       } else if (id === 'formulario') {

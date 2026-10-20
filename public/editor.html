@@ -22,13 +22,24 @@
 
     <!-- TOPBAR -->
     <header class="editor-topbar">
-      <a href="index.html" class="editor-topbar__logo">← Wedding Builder</a>
+      <div class="editor-topbar__izq">
+        <a href="index.html" class="editor-topbar__logo">← Wedding Builder</a>
+        <span class="estado-guardado" id="estado-guardado" aria-live="polite"></span>
+      </div>
       <div class="editor-topbar__actions">
+        <button class="btn btn--ghost btn-icono" id="btn-deshacer" title="Deshacer (Ctrl+Z)" aria-label="Deshacer" disabled>↶</button>
+        <button class="btn btn--ghost btn-icono" id="btn-rehacer" title="Rehacer (Ctrl+Shift+Z)" aria-label="Rehacer" disabled>↷</button>
+        <div class="revision">
+          <button class="btn btn-revisar" id="btn-revisar">Revisar</button>
+          <div class="revision__lista" id="revision-lista" hidden></div>
+        </div>
         <button class="btn btn--ghost" id="btn-abrir-invitacion">Ver invitación ↗</button>
         <button class="btn btn--primario" id="btn-guardar">Guardar</button>
         <button class="btn btn--ghost" id="btn-logout" onclick="DB.logout()" title="Cerrar sesión">Salir</button>
       </div>
     </header>
+
+    <div class="aviso-editor" id="aviso-editor" hidden role="alert"></div>
 
     <!-- COLUMNA IZQUIERDA -->
     <aside class="editor-panel">
@@ -503,6 +514,8 @@
   <script src="js/formulario.js"></script>
   <script src="js/secciones.js"></script>
   <script src="js/presets.js"></script>
+  <script src="js/guardado.js"></script>
+  <script src="js/revision.js"></script>
   <script src="js/editor.js"></script>
   <script src="js/subidas.js"></script>
 
