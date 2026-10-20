@@ -571,7 +571,6 @@
                 <option value="Great Vibes">Great Vibes</option>
                 <option value="Dancing Script">Dancing Script</option>
                 <option value="Parisienne">Parisienne</option>
-                <option value="Pinyon Script">Pinyon Script</option>
               </optgroup>
               <optgroup label="— Moderna —">
                 <option value="Josefin Sans">Josefin Sans</option>
@@ -595,6 +594,7 @@
   <script src="js/orden.js"></script>
   <script src="js/formulario.js"></script>
   <script src="js/secciones.js"></script>
+  <script src="js/demos.js"></script>
   <script src="js/presets.js"></script>
   <script src="js/guardado.js"></script>
   <script src="js/revision.js"></script>
@@ -616,7 +616,10 @@
     function initPresets() {
       var grid = document.getElementById('presets-grid');
       if (!grid) return;
-      var html = '';
+      // Primero "Original" (colores de la plantilla), como en la web
+      var html = '<button class="preset-btn" onclick="aplicarPreset(\'original\')" title="Colores propios del modelo elegido">' +
+        '<span class="preset-btn__muestra"><span class="preset-btn__color" style="background:conic-gradient(#c9a45c 0 33%,#f7f3ec 0 66%,#7a9e7e 0)"></span></span>' +
+        '<span class="preset-btn__nombre">Original</span></button>';
       for (var i = 0; i < PRESETS.length; i++) {
         var p = PRESETS[i];
         html += '<button class="preset-btn" onclick="aplicarPreset(\'' + p.id + '\')" title="' + p.descripcion + '">';
