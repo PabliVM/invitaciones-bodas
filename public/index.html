@@ -63,6 +63,10 @@
       <div class="card-nueva__icono">＋</div>
       <div class="card-nueva__texto">Crear nueva boda</div>
     </div>
+    <div class="pestanas" id="pestanas">
+      <button class="pestana activa" data-vista="activas" onclick="cambiarVista('activas')">Activas <span id="cnt-activas"></span></button>
+      <button class="pestana" data-vista="archivadas" onclick="cambiarVista('archivadas')">Archivadas <span id="cnt-archivadas"></span></button>
+    </div>
     <div id="bodas-container">
       <div class="cargando">Cargando…</div>
     </div>
@@ -79,36 +83,95 @@
       window.location.href = 'editor.html';
     });
 
+    var _bodas = [];
+    var _vista = 'activas';
+
+    function esc(t) {
+      return String(t == null ? '' : t).replace(/[&<>"']/g, function(c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
     async function cargarBodas() {
       var container = document.getElementById('bodas-container');
       try {
-        var bodas = await DB.listarBodas();
-        if (bodas.length === 0) {
-          container.innerHTML = '<div class="vacio"><p class="vacio__texto">Aún no hay bodas creadas.</p><p class="vacio__sub">Crea la primera con el botón de arriba.</p></div>';
-          return;
-        }
-        var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-        var html = '<div class="bodas-grid">';
-        for (var i = 0; i < bodas.length; i++) {
-          var b = bodas[i];
-          var nombre = (b.meta && b.meta.titulo) ? b.meta.titulo : ((b.pareja) ? ((b.pareja.novio || '—') + ' & ' + (b.pareja.novia || '—')) : 'Sin nombre');
-          var fechaMes = (b.fecha && b.fecha.mes) ? meses[parseInt(b.fecha.mes) - 1] : '—';
-          var fechaStr = b.fecha ? (b.fecha.dia + ' ' + fechaMes + ' ' + b.fecha.anio) : '—';
-          var creadoEn = b.creadoEn ? new Date(b.creadoEn).toLocaleDateString('es-ES') : '—';
-          html += '<div class="boda-card">';
-          html += '<div class="boda-card__nombres">' + nombre + '</div>';
-          html += '<div class="boda-card__meta">Fecha: ' + fechaStr + '<br>Creada: ' + creadoEn + '</div>';
-          html += '<div class="boda-card__acciones">';
-          html += '<a href="editor.html?id=' + b.id + '" class="btn btn--primario">Editar</a>';
-          html += '<a href="invitation.html?id=' + b.id + '" target="_blank" class="btn btn--secundario">Ver</a>';
-          html += '<button class="btn btn--peligro" onclick="eliminar(\'' + b.id + '\')">✕</button>';
-          html += '</div></div>';
-        }
-        html += '</div>';
-        container.innerHTML = html;
+        _bodas = await DB.listarBodas();
+        pintarBodas();
       } catch (err) {
         container.innerHTML = '<div class="cargando">Error al cargar. Revisa la consola.</div>';
         console.error(err);
+      }
+    }
+
+    function cambiarVista(vista) {
+      _vista = vista;
+      document.querySelectorAll('.pestana').forEach(function(p) {
+        p.classList.toggle('activa', p.getAttribute('data-vista') === vista);
+      });
+      pintarBodas();
+    }
+
+    function pintarBodas() {
+      var container = document.getElementById('bodas-container');
+      var archivadas = _vista === 'archivadas';
+      var nArch = _bodas.filter(function(b) { return b.archivada; }).length;
+      document.getElementById('cnt-activas').textContent = _bodas.length - nArch;
+      document.getElementById('cnt-archivadas').textContent = nArch;
+
+      var bodas = _bodas.filter(function(b) { return !!b.archivada === archivadas; });
+      if (bodas.length === 0) {
+        container.innerHTML = archivadas
+          ? '<div class="vacio"><p class="vacio__texto">No hay bodas archivadas.</p><p class="vacio__sub">Archiva las bodas que ya se han celebrado.</p></div>'
+          : '<div class="vacio"><p class="vacio__texto">Aún no hay bodas creadas.</p><p class="vacio__sub">Crea la primera con el botón de arriba.</p></div>';
+        return;
+      }
+      var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+      var html = '<div class="bodas-grid">';
+      for (var i = 0; i < bodas.length; i++) {
+        var b = bodas[i];
+        var nombre = (b.meta && b.meta.titulo) ? b.meta.titulo : ((b.pareja) ? ((b.pareja.novio || '—') + ' & ' + (b.pareja.novia || '—')) : 'Sin nombre');
+        var fechaMes = (b.fecha && b.fecha.mes) ? meses[parseInt(b.fecha.mes) - 1] : '—';
+        var fechaStr = b.fecha ? (b.fecha.dia + ' ' + fechaMes + ' ' + b.fecha.anio) : '—';
+        var creadoEn = b.creadoEn ? new Date(b.creadoEn).toLocaleDateString('es-ES') : '—';
+        var id = esc(b.id);
+        html += '<div class="boda-card' + (b.archivada ? ' boda-card--archivada' : '') + '">';
+        html += '<div class="boda-card__nombres">' + esc(nombre) + '</div>';
+        html += '<div class="boda-card__meta">Fecha: ' + esc(fechaStr) + '<br>Creada: ' + creadoEn + '</div>';
+        html += '<div class="boda-card__acciones">';
+        html += '<a href="editor.html?id=' + id + '" class="btn btn--primario">Editar</a>';
+        html += '<a href="invitation.html?id=' + id + '" target="_blank" class="btn btn--secundario">Ver</a>';
+        html += '<a href="respuestas.html?id=' + id + '" class="btn btn--secundario">Respuestas</a>';
+        html += '</div>';
+        html += '<div class="boda-card__extra">';
+        html += '<button class="btn btn--ghost" onclick="duplicar(\'' + id + '\', this)">Duplicar</button>';
+        html += '<button class="btn btn--ghost" onclick="archivar(\'' + id + '\', ' + !b.archivada + ')">' + (b.archivada ? 'Restaurar' : 'Archivar') + '</button>';
+        html += '<button class="btn btn--peligro" onclick="eliminar(\'' + id + '\')" title="Eliminar">✕</button>';
+        html += '</div></div>';
+      }
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    async function duplicar(id, btn) {
+      btn.disabled = true; btn.textContent = 'Duplicando…';
+      try {
+        var nuevoId = await DB.duplicarBoda(id);
+        window.location.href = 'editor.html?id=' + nuevoId;
+      } catch (err) {
+        console.error(err);
+        alert('No se pudo duplicar la boda.');
+        btn.disabled = false; btn.textContent = 'Duplicar';
+      }
+    }
+
+    async function archivar(id, archivada) {
+      try {
+        await DB.archivarBoda(id, archivada);
+        _bodas.forEach(function(b) { if (b.id === id) b.archivada = archivada; });
+        pintarBodas();
+      } catch (err) {
+        console.error(err);
+        alert('No se pudo ' + (archivada ? 'archivar' : 'restaurar') + ' la boda.');
       }
     }
 
