@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /novios
+Disallow: /invitation.html
+Disallow: /api/

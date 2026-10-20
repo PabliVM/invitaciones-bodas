@@ -87,6 +87,34 @@ const PRESETS = [
     }
   },
   {
+    id: 'acuarela',
+    nombre: 'Acuarela',
+    descripcion: 'Rosa empolvado y salvia',
+    muestra: ['#c98a8a', '#fbf6f3'],
+    estilos: {
+      colorPrimario:   '#c98a8a',
+      colorSecundario: '#fbf6f3',
+      colorTexto:      '#4a3a3a',
+      colorAccent:     '#7a8f7c',
+      fuente:          'Cormorant Garamond',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
+    id: 'editorial',
+    nombre: 'Editorial',
+    descripcion: 'Tinta y terracota',
+    muestra: ['#1b1b1b', '#f4f1ec'],
+    estilos: {
+      colorPrimario:   '#1b1b1b',
+      colorSecundario: '#f4f1ec',
+      colorTexto:      '#1b1b1b',
+      colorAccent:     '#b0532f',
+      fuente:          'Playfair Display',
+      fuenteSecundaria:'Lato',
+    }
+  },
+  {
     id: 'noche',
     nombre: 'Noche dorada',
     descripcion: 'Negro y oro',
