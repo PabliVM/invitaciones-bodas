@@ -303,13 +303,9 @@ const RENDERER = (() => {
         }
       });
 
-      // Guardar en Firebase
+      // Guardar en Supabase
       try {
-        var db = firebase.firestore();
-        db.collection('weddings').doc(bodaId).collection('formularios').add({
-          respuestas: respuestas,
-          enviadoEn: firebase.firestore.FieldValue.serverTimestamp(),
-        }).then(function() {
+        DB.enviarFormulario(bodaId, respuestas).then(function() {
           formEl.style.display = 'none';
           if (confirmEl) confirmEl.style.display = 'block';
         }).catch(function(err) {

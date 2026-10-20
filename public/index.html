@@ -6,7 +6,7 @@
   <title>Wedding Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #0f0f0f; --surface: #1a1a1a; --border: #2a2a2a;
@@ -42,6 +42,7 @@
     .vacio__texto { font-size: 14px; margin-bottom: 8px; }
     .vacio__sub { font-size: 12px; color: #444; }
   </style>
+  <link rel="stylesheet" href="css/premium.css" />
 </head>
 <body>
 
@@ -63,9 +64,8 @@
     </div>
   </main>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="js/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="/supabase-config.js"></script>
   <script src="js/db.js"></script>
 
   <script>
@@ -90,7 +90,7 @@
           var nombre = (b.meta && b.meta.titulo) ? b.meta.titulo : ((b.pareja) ? ((b.pareja.novio || '—') + ' & ' + (b.pareja.novia || '—')) : 'Sin nombre');
           var fechaMes = (b.fecha && b.fecha.mes) ? meses[parseInt(b.fecha.mes) - 1] : '—';
           var fechaStr = b.fecha ? (b.fecha.dia + ' ' + fechaMes + ' ' + b.fecha.anio) : '—';
-          var creadoEn = (b.creadoEn && b.creadoEn.toDate) ? b.creadoEn.toDate().toLocaleDateString('es-ES') : '—';
+          var creadoEn = b.creadoEn ? new Date(b.creadoEn).toLocaleDateString('es-ES') : '—';
           html += '<div class="boda-card">';
           html += '<div class="boda-card__nombres">' + nombre + '</div>';
           html += '<div class="boda-card__meta">Fecha: ' + fechaStr + '<br>Creada: ' + creadoEn + '</div>';
