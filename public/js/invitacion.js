@@ -4,7 +4,7 @@
 
 const INVITACION = (() => {
 
-  const PLANTILLAS = ['clasica', 'floral', 'moderna', 'mediterranea', 'deco', 'acuarela', 'revista'];
+  const PLANTILLAS = ['clasica', 'floral', 'moderna', 'mediterranea', 'deco', 'acuarela', 'revista', 'boho'];
   const PREDEFINIDAS = ['historia', 'galeria', 'evento', 'dresscode', 'alojamiento', 'transporte', 'rsvp', 'mensaje'];
   const ETIQUETAS = {
     portada: 'Inicio', historia: 'Historia', galeria: 'Galería', evento: 'Evento', dresscode: 'Dress code',
@@ -30,7 +30,7 @@ const INVITACION = (() => {
     'Lato':               'wght@300;400;700'
   };
   // Fuente caligráfica que usa cada plantilla para detalles (el "&", firmas…)
-  const FUENTE_SCRIPT = { clasica: null, floral: 'Great Vibes', moderna: 'Great Vibes', mediterranea: null, deco: null, acuarela: 'Great Vibes', revista: null };
+  const FUENTE_SCRIPT = { clasica: null, floral: 'Great Vibes', moderna: 'Great Vibes', mediterranea: null, deco: null, acuarela: 'Great Vibes', revista: null, boho: 'Great Vibes' };
 
   let _timers = [];
   let _observadores = [];

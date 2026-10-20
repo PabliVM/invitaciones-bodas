@@ -10,7 +10,8 @@ const DEMOS = (() => {
     mediterranea: { colorPrimario: '#2c5f8a', colorSecundario: '#faf7f2', colorTexto: '#1e3a52', colorAccent: '#c4a882', fuente: 'EB Garamond', fuenteSecundaria: 'Lato' },
     deco:         { colorPrimario: '#c9a45c', colorSecundario: '#0f0e0c', colorTexto: '#efe7d6', colorAccent: '#e3c88e', fuente: 'Cormorant Garamond', fuenteSecundaria: 'Josefin Sans' },
     acuarela:     { colorPrimario: '#c98a8a', colorSecundario: '#fbf6f3', colorTexto: '#4a3a3a', colorAccent: '#7a8f7c', fuente: 'Cormorant Garamond', fuenteSecundaria: 'Lato' },
-    revista:      { colorPrimario: '#1b1b1b', colorSecundario: '#f4f1ec', colorTexto: '#1b1b1b', colorAccent: '#b0532f', fuente: 'Playfair Display', fuenteSecundaria: 'Lato' }
+    revista:      { colorPrimario: '#1b1b1b', colorSecundario: '#f4f1ec', colorTexto: '#1b1b1b', colorAccent: '#b0532f', fuente: 'Playfair Display', fuenteSecundaria: 'Lato' },
+    boho:         { colorPrimario: '#c17a52', colorSecundario: '#fdf6ee', colorTexto: '#3d2b1f', colorAccent: '#8b6348', fuente: 'Cormorant Garamond', fuenteSecundaria: 'Josefin Sans' }
   };
 
   const PAREJAS = {
@@ -20,7 +21,8 @@ const DEMOS = (() => {
     mediterranea: ['Elena', 'Marcos', 'Hacienda Cala Blanca', 'Ctra. del Faro km 3, Mallorca'],
     deco:         ['Carla', 'Hugo', 'Gran Hotel Inglés', 'Calle Echegaray 8, Madrid'],
     acuarela:     ['Sara', 'Álvaro', 'Masía Can Roure', 'Camí de la Font 21, Girona'],
-    revista:      ['Noa', 'Bruno', 'Galería Lumen', 'Calle del Arte 40, Valencia']
+    revista:      ['Noa', 'Bruno', 'Galería Lumen', 'Calle del Arte 40, Valencia'],
+    boho:         ['Alba', 'Mateo', 'Finca El Olivar', 'Camino de los Almendros 7, Granada']
   };
 
   function boda(plantilla) {

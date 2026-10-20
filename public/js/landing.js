@@ -8,14 +8,14 @@
     { id: 'mediterranea', nombre: 'Mediterránea', desc: 'Azulejo, sol y luz de costa. Para bodas de verano.' },
     { id: 'deco',         nombre: 'Art Déco',     desc: 'Geometría, abanicos y marcos dobles. Glamour años 20.' },
     { id: 'acuarela',     nombre: 'Acuarela',     desc: 'Manchas de color suaves y trazos de pincel.' },
-    { id: 'revista',      nombre: 'Revista',      desc: 'Estilo editorial con secciones numeradas.' }
+    { id: 'revista',      nombre: 'Revista',      desc: 'Estilo editorial con secciones numeradas.' },
+    { id: 'boho',         nombre: 'Boho',         desc: 'Arcos, sol naciente y tonos tierra. Cálida y natural.' }
   ];
   const ANCHO_MOVIL = 390;
 
-  // Escala los iframes (390px de ancho real) al tamaño de su marco
-  const ro = new ResizeObserver(entradas => entradas.forEach(e => {
-    e.target.style.setProperty('--k', (e.contentRect.width / ANCHO_MOVIL).toFixed(4));
-  }));
+  // Escala los iframes (ancho real: 390px móvil, 1280px ordenador) al tamaño de su marco
+  const ajustar = el => el.style.setProperty('--k', (el.clientWidth / (+el.dataset.base || ANCHO_MOVIL)).toFixed(4));
+  const ro = new ResizeObserver(entradas => entradas.forEach(e => ajustar(e.target)));
   const escalar = el => ro.observe(el);
 
   // ── Cabecera ──
@@ -43,6 +43,19 @@
   document.querySelectorAll('#chips .l-chip').forEach(chip => chip.addEventListener('click', () => {
     document.querySelectorAll('#chips .l-chip').forEach(c => c.classList.toggle('activo', c === chip));
     frame.src = 'invitation.html?demo=' + chip.dataset.demo;
+  }));
+
+  // Móvil / Ordenador: el mismo iframe cambia de marco y de ancho real
+  const dispositivo = document.getElementById('dispositivo');
+  const pantalla = document.getElementById('probador-pantalla');
+  document.querySelectorAll('#modos .l-modo').forEach(b => b.addEventListener('click', () => {
+    const ordenador = b.dataset.modo === 'ordenador';
+    document.querySelectorAll('#modos .l-modo').forEach(x => x.classList.toggle('activo', x === b));
+    dispositivo.classList.toggle('l-movil', !ordenador);
+    dispositivo.classList.toggle('l-movil--grande', !ordenador);
+    dispositivo.classList.toggle('l-navegador', ordenador);
+    pantalla.dataset.base = ordenador ? 1280 : ANCHO_MOVIL;
+    ajustar(pantalla);
   }));
 
   // ── Ejemplos ──

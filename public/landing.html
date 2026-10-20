@@ -55,8 +55,12 @@
         </ul>
       </div>
       <div class="l-probador">
-        <div class="l-movil l-movil--grande">
-          <div class="l-movil__pantalla">
+        <div class="l-modos" id="modos" role="group" aria-label="Ver en">
+          <button class="l-modo activo" data-modo="movil">Móvil</button>
+          <button class="l-modo" data-modo="ordenador">Ordenador</button>
+        </div>
+        <div class="l-movil l-movil--grande" id="dispositivo">
+          <div class="l-movil__pantalla" id="probador-pantalla" data-base="390">
             <iframe id="probador-frame" src="invitation.html?demo=clasica" title="Invitación de ejemplo" loading="eager"></iframe>
           </div>
         </div>
@@ -68,6 +72,7 @@
           <button class="l-chip" data-demo="deco">Art Déco</button>
           <button class="l-chip" data-demo="acuarela">Acuarela</button>
           <button class="l-chip" data-demo="revista">Revista</button>
+          <button class="l-chip" data-demo="boho">Boho</button>
         </div>
       </div>
     </div>
@@ -78,7 +83,7 @@
     <div class="l-contenedor">
       <div class="l-cab l-cab--centro l-revelar">
         <p class="l-kicker">Ejemplos</p>
-        <h2 class="l-titulo">Siete estilos, <em>infinitas</em> combinaciones</h2>
+        <h2 class="l-titulo">Ocho estilos, <em>infinitas</em> combinaciones</h2>
         <p class="l-sub">Cada estilo se adapta a vuestros colores, tipografías y fotos. Tocad cualquiera para verlo como lo verán vuestros invitados.</p>
       </div>
       <div class="l-ejemplos" id="lista-ejemplos"></div>
