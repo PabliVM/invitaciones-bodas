@@ -51,6 +51,10 @@
       <div class="header__logo">Wedding Builder</div>
       <div class="header__sub">Panel de gestión</div>
     </div>
+    <div class="header__usuario">
+      <span class="header__email" id="usuario-email"></span>
+      <button class="btn btn--secundario" id="btn-logout" onclick="DB.logout()">Salir</button>
+    </div>
   </header>
 
   <main class="main">
@@ -114,7 +118,10 @@
       cargarBodas();
     }
 
-    cargarBodas();
+    DB.requireAdmin().then(function(user) {
+      document.getElementById('usuario-email').textContent = user.email;
+      cargarBodas();
+    });
   </script>
 
 </body>
