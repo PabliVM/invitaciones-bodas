@@ -122,8 +122,11 @@
 
   // ── Diseñad la vuestra: estilo + colores + letra con vista en vivo ──
   const cfg = { estilo: 'floral', paleta: '', fuente: '', modo: 'movil' };
-  const PALETAS = typeof PRESETS !== 'undefined' ? PRESETS : [];
-  const FUENTES = typeof DEMOS !== 'undefined' ? DEMOS.FUENTES : [];
+  // Selección corta y muy distinta entre sí (el editor tiene todas)
+  const PALETAS_WEB = ['clasica', 'moderna', 'romantica', 'mediterranea', 'oliva', 'terracota', 'lavanda', 'esmeralda'];
+  const FUENTES_WEB = ['Cormorant Garamond', 'Playfair Display', 'EB Garamond', 'Lora', 'Great Vibes', 'Dancing Script', 'Parisienne', 'Josefin Sans', 'Montserrat', 'Raleway', 'Libre Baskerville'];
+  const PALETAS = typeof PRESETS !== 'undefined' ? PALETAS_WEB.map(id => PRESETS.find(p => p.id === id)).filter(Boolean) : [];
+  const FUENTES = typeof DEMOS !== 'undefined' ? FUENTES_WEB.filter(f => DEMOS.FUENTES.includes(f)) : [];
   const cDisp = document.getElementById('config-disp');
   const cPant = document.getElementById('config-pantalla');
   const cFrame = document.getElementById('config-frame');
@@ -133,12 +136,12 @@
   const muestra = cols => '<span class="l-opcion__muestra">' + cols.map(c => '<i style="background:' + c + '"></i>').join('') + '</span>';
 
   document.getElementById('config-estilos').innerHTML = EJEMPLOS.map(e => opcion('estilo', e.id, escHtml(e.nombre), e.desc)).join('');
-  document.getElementById('config-colores').innerHTML = opcion('paleta', '', muestra([]) + 'Los del estilo', 'Colores originales del estilo') +
-    PALETAS.map(p => opcion('paleta', p.id, muestra([p.estilos.colorSecundario, p.estilos.colorPrimario, p.estilos.colorAccent]) + escHtml(p.nombre), p.descripcion || p.nombre)).join('') +
-    opcion('paleta', 'libre', '<span class="l-opcion__muestra l-opcion__muestra--libre"></span>Elegid los vuestros', 'Probad cualquier color');
+  document.getElementById('config-colores').innerHTML = opcion('paleta', '', muestra([]) + '<span>Original</span>', 'Colores originales del estilo') +
+    PALETAS.map(p => opcion('paleta', p.id, muestra([p.estilos.colorSecundario, p.estilos.colorPrimario, p.estilos.colorAccent]) + '<span>' + escHtml(p.nombre) + '</span>', p.descripcion || p.nombre)).join('') +
+    opcion('paleta', 'libre', '<span class="l-opcion__muestra l-opcion__muestra--libre"></span><span>A medida</span>', 'Probad cualquier color');
   const libre = k => document.getElementById('config-' + k).value.slice(1).toLowerCase();
-  document.getElementById('config-fuentes').innerHTML = opcion('fuente', '', '<span class="l-opcion__aa">Aa</span>La del estilo', 'Tipografía original del estilo') +
-    FUENTES.map(f => opcion('fuente', f, '<span class="l-opcion__aa" style="font-family:\'' + f + '\', serif">Aa</span>' + escHtml(f), f)).join('');
+  document.getElementById('config-fuentes').innerHTML = opcion('fuente', '', '<span class="l-opcion__aa">Aa</span><span>Original</span>', 'Tipografía original del estilo') +
+    FUENTES.map(f => opcion('fuente', f, '<span class="l-opcion__aa" style="font-family:\'' + f + '\', serif">Aa</span><span>' + escHtml(f) + '</span>', f)).join('');
 
   // Carga las tipografías solo cuando se acerca la sección (y solo las letras necesarias)
   let fuentesCargadas = false;
