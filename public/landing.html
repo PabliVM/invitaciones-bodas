@@ -24,6 +24,7 @@
       <a href="#inicio" class="l-logo">✦ Wedding Builder</a>
       <nav class="l-nav" id="nav">
         <a href="#ejemplos">Ejemplos</a>
+        <a href="#disena">Personalizar</a>
         <a href="#como-funciona">Cómo funciona</a>
         <a href="#incluye">Qué incluye</a>
         <a href="#planes">Planes</a>
@@ -71,6 +72,38 @@
         </div>
       </div>
       <div class="l-ejemplos" id="lista-ejemplos"></div>
+    </div>
+  </section>
+
+  <!-- ════════ DISEÑAD LA VUESTRA ════════ -->
+  <section class="l-sec l-sec--marfil2" id="disena">
+    <div class="l-contenedor">
+      <div class="l-cab l-cab--centro l-revelar">
+        <p class="l-kicker">Diseñad la vuestra</p>
+        <h2 class="l-titulo">Elegid estilo, colores y <em>letra</em></h2>
+        <p class="l-sub">Probad combinaciones y mirad al momento cómo queda. Cuando os guste, pedidla tal cual.</p>
+      </div>
+      <div class="l-config">
+        <div class="l-config__vista">
+          <div class="l-vista" id="vista-config" role="group" aria-label="Ver en">
+            <button class="l-vista__btn activo" data-modo="movil">Móvil</button>
+            <button class="l-vista__btn" data-modo="ordenador">Ordenador</button>
+          </div>
+          <div class="l-movil" id="config-disp">
+            <div class="l-movil__pantalla" id="config-pantalla" data-base="390"><iframe id="config-frame" title="Vista de vuestra invitación" loading="lazy"></iframe></div>
+          </div>
+        </div>
+        <div class="l-config__opciones">
+          <fieldset class="l-config__grupo"><legend>1 · Estilo</legend><div class="l-opciones" id="config-estilos"></div></fieldset>
+          <fieldset class="l-config__grupo"><legend>2 · Colores</legend><div class="l-opciones" id="config-colores"></div></fieldset>
+          <fieldset class="l-config__grupo"><legend>3 · Letra de los títulos</legend><div class="l-opciones" id="config-fuentes"></div></fieldset>
+          <p class="l-config__resumen" id="config-resumen" aria-live="polite"></p>
+          <div class="l-config__acciones">
+            <button type="button" class="l-btn l-btn--oro" id="config-pedir">Quiero esta invitación</button>
+            <button type="button" class="l-btn l-btn--linea" id="config-copiar">Copiar enlace</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -263,7 +296,7 @@
       </div>
       <button class="l-visor__nav l-visor__next" id="visor-next" aria-label="Estilo siguiente">›</button>
     </div>
-    <p class="l-visor__pista">Podéis recorrer la invitación como lo haría un invitado</p>
+    <p class="l-visor__pista">Podéis recorrer la invitación como lo haría un invitado · <button type="button" class="l-visor__personalizar" id="visor-personalizar">Cambiar colores y letra →</button></p>
   </div>
 
   <!-- ════════ PIE ════════ -->
@@ -283,6 +316,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" defer></script>
   <script src="/supabase-config.js" defer></script>
   <script src="js/db.js" defer></script>
+  <script src="js/presets.js" defer></script>
+  <script src="js/demos.js" defer></script>
   <script src="js/landing.js" defer></script>
 </body>
 </html>

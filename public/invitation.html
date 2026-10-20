@@ -50,6 +50,7 @@
   <script src="/js/db.js"></script>
   <script src="/js/invitacion.js"></script>
   <script src="/js/demos.js"></script>
+  <script src="/js/presets.js"></script>
   <script src="/js/magia.js"></script>
 
   <script>
@@ -78,6 +79,10 @@
     if (DEMO) {
       // Ejemplo para la web pública: datos de muestra, los formularios no envían nada
       var demo = DEMOS.boda(DEMO);
+      // ?paleta=<preset>: colores predefinidos del editor · ?fuente=<tipografía de títulos>
+      var paleta = PRESETS.filter(function(x) { return x.id === PARAMS.get('paleta'); })[0];
+      if (paleta) ['colorPrimario', 'colorSecundario', 'colorTexto', 'colorAccent'].forEach(function(k) { demo.estilos[k] = paleta.estilos[k]; });
+      if (DEMOS.FUENTES.indexOf(PARAMS.get('fuente')) !== -1) demo.estilos.fuente = PARAMS.get('fuente');
       document.title = 'Ejemplo · ' + demo.pareja.novio + ' & ' + demo.pareja.novia;
       INVITACION.render(demo, raiz, {
         onRsvp: function() { return Promise.resolve(); },

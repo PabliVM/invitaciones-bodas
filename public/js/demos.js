@@ -25,6 +25,10 @@ const DEMOS = (() => {
     boho:         ['Alba', 'Mateo', 'Finca El Olivar', 'Camino de los Almendros 7, Granada']
   };
 
+  // Tipografías de títulos que ofrece el editor
+  const FUENTES = ['Cormorant Garamond', 'Playfair Display', 'EB Garamond', 'Libre Baskerville', 'Lora',
+    'Great Vibes', 'Dancing Script', 'Parisienne', 'Pinyon Script', 'Josefin Sans', 'Montserrat', 'Raleway'];
+
   function boda(plantilla) {
     const id = TEMAS[plantilla] ? plantilla : 'clasica';
     const [novia, novio, lugar, direccion] = PAREJAS[id];
@@ -70,5 +74,5 @@ const DEMOS = (() => {
     };
   }
 
-  return { boda, TEMAS, PLANTILLAS: Object.keys(TEMAS) };
+  return { FUENTES, boda, TEMAS, PLANTILLAS: Object.keys(TEMAS) };
 })();

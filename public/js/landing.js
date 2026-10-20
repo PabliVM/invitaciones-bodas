@@ -120,6 +120,106 @@
     if (ev.key === 'ArrowRight') visorVer(vIndice + 1);
   });
 
+  // ── Diseñad la vuestra: estilo + colores + letra con vista en vivo ──
+  const cfg = { estilo: 'floral', paleta: '', fuente: '', modo: 'movil' };
+  const PALETAS = typeof PRESETS !== 'undefined' ? PRESETS : [];
+  const FUENTES = typeof DEMOS !== 'undefined' ? DEMOS.FUENTES : [];
+  const cDisp = document.getElementById('config-disp');
+  const cPant = document.getElementById('config-pantalla');
+  const cFrame = document.getElementById('config-frame');
+  const escHtml = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const opcion = (grupo, valor, contenido, titulo) =>
+    '<button type="button" class="l-opcion" data-grupo="' + grupo + '" data-valor="' + escHtml(valor) + '" title="' + escHtml(titulo) + '">' + contenido + '</button>';
+  const muestra = cols => '<span class="l-opcion__muestra">' + cols.map(c => '<i style="background:' + c + '"></i>').join('') + '</span>';
+
+  document.getElementById('config-estilos').innerHTML = EJEMPLOS.map(e => opcion('estilo', e.id, escHtml(e.nombre), e.desc)).join('');
+  document.getElementById('config-colores').innerHTML = opcion('paleta', '', muestra([]) + 'Los del estilo', 'Colores originales del estilo') +
+    PALETAS.map(p => opcion('paleta', p.id, muestra([p.estilos.colorSecundario, p.estilos.colorPrimario, p.estilos.colorAccent]) + escHtml(p.nombre), p.descripcion || p.nombre)).join('');
+  document.getElementById('config-fuentes').innerHTML = opcion('fuente', '', '<span class="l-opcion__aa">Aa</span>La del estilo', 'Tipografía original del estilo') +
+    FUENTES.map(f => opcion('fuente', f, '<span class="l-opcion__aa" style="font-family:\'' + f + '\', serif">Aa</span>' + escHtml(f), f)).join('');
+
+  // Carga las tipografías solo cuando se acerca la sección (y solo las letras necesarias)
+  let fuentesCargadas = false;
+  function cargarFuentesConfig() {
+    if (fuentesCargadas || !FUENTES.length) return;
+    fuentesCargadas = true;
+    const l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?' + FUENTES.map(f => 'family=' + f.replace(/ /g, '+')).join('&') + '&display=swap&text=Aa';
+    document.head.appendChild(l);
+  }
+
+  const nombreDe = {
+    estilo: v => (EJEMPLOS.find(e => e.id === v) || {}).nombre,
+    paleta: v => v ? (PALETAS.find(p => p.id === v) || {}).nombre : 'los del estilo',
+    fuente: v => v || 'la del estilo'
+  };
+  const enlaceConfig = () => {
+    const q = new URLSearchParams();
+    if (cfg.paleta) q.set('paleta', cfg.paleta);
+    if (cfg.fuente) q.set('fuente', cfg.fuente);
+    return location.origin + '/ejemplos/' + cfg.estilo + (q.toString() ? '?' + q : '');
+  };
+  const textoConfig = () => 'Estilo ' + nombreDe.estilo(cfg.estilo) + ' · colores ' + nombreDe.paleta(cfg.paleta) + ' · letra ' + nombreDe.fuente(cfg.fuente);
+
+  let cTimer = null;
+  function configPintar() {
+    document.querySelectorAll('.l-opcion').forEach(b => b.classList.toggle('activo', cfg[b.dataset.grupo] === b.dataset.valor));
+    document.getElementById('config-resumen').textContent = textoConfig();
+    clearTimeout(cTimer);
+    cTimer = setTimeout(() => {
+      const q = new URLSearchParams({ demo: cfg.estilo });
+      if (cfg.paleta) q.set('paleta', cfg.paleta);
+      if (cfg.fuente) q.set('fuente', cfg.fuente);
+      cFrame.src = 'invitation.html?' + q;
+    }, 150);
+  }
+  function configModo(modo) {
+    cfg.modo = modo;
+    const pc = modo === 'ordenador';
+    cDisp.className = pc ? 'l-navegador' : 'l-movil';
+    cPant.dataset.base = pc ? 1280 : ANCHO_MOVIL;
+    document.querySelectorAll('#vista-config .l-vista__btn').forEach(b => b.classList.toggle('activo', b.dataset.modo === modo));
+    requestAnimationFrame(() => ajustar(cPant));
+  }
+  escalar(cPant);
+  document.querySelectorAll('.l-opcion').forEach(b => b.addEventListener('click', () => { cfg[b.dataset.grupo] = b.dataset.valor; configPintar(); }));
+  document.querySelectorAll('#vista-config .l-vista__btn').forEach(b => b.addEventListener('click', () => configModo(b.dataset.modo)));
+
+  // La vista se carga al acercarse a la sección
+  const ioCfg = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    cargarFuentesConfig();
+    if (!cFrame.getAttribute('src')) configPintar();
+    ioCfg.disconnect();
+  }, { rootMargin: '400px 0px' });
+  ioCfg.observe(document.getElementById('disena'));
+  configPintar();
+
+  document.getElementById('config-copiar').addEventListener('click', async ev => {
+    const b = ev.currentTarget;
+    try { await navigator.clipboard.writeText(enlaceConfig()); b.textContent = '✓ Enlace copiado'; }
+    catch (_) { window.prompt('Copia este enlace:', enlaceConfig()); }
+    setTimeout(() => { b.textContent = 'Copiar enlace'; }, 2200);
+  });
+  document.getElementById('config-pedir').addEventListener('click', () => {
+    const msg = document.getElementById('c-mensaje');
+    const texto = 'Nos gusta: ' + textoConfig() + '.';
+    if (msg.value.indexOf(texto) === -1) msg.value = (msg.value.trim() ? msg.value.trim() + '\n' : '') + texto;
+    document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => document.getElementById('c-nombre').focus({ preventScroll: true }), 600);
+  });
+
+  // Desde el visor: personalizar el estilo que se está viendo
+  document.getElementById('visor-personalizar').addEventListener('click', () => {
+    cfg.estilo = EJEMPLOS[vIndice].id;
+    configModo(vModo);
+    visorCerrar();
+    cargarFuentesConfig();
+    configPintar();
+    document.getElementById('disena').scrollIntoView({ behavior: 'smooth' });
+  });
+
   // ── Revelado al hacer scroll ──
   const io = new IntersectionObserver(entradas => entradas.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }

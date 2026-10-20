@@ -342,6 +342,40 @@ h1, h2, h3, p { margin: 0; }
 
 
 
+/* ══════════ DISEÑAD LA VUESTRA ══════════ */
+.l-config { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+.l-config__vista { position: sticky; top: 90px; display: grid; justify-items: center; gap: 18px; }
+.l-config__vista .l-vista { margin: 0; }
+.l-config__vista .l-movil { width: min(300px, 100%); }
+.l-config__vista .l-navegador { width: 100%; animation: none; }
+.l-config__opciones { display: grid; gap: 26px; }
+.l-config__grupo { border: 0; margin: 0; padding: 0; min-width: 0; }
+.l-config__grupo legend { padding: 0; margin-bottom: 12px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--l-tinta); }
+.l-opciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.l-opcion {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border: 0; border-radius: 999px;
+  background: #fff; color: var(--l-tinta); font-family: var(--l-sans); font-size: 13px; cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--l-linea); transition: box-shadow .2s, background .2s, transform .2s;
+}
+.l-opcion:hover { box-shadow: inset 0 0 0 1px var(--l-oro); }
+.l-opcion.activo { background: var(--l-tinta); color: var(--l-marfil); box-shadow: inset 0 0 0 1px var(--l-tinta); }
+.l-opcion__muestra { display: inline-flex; width: 20px; height: 20px; margin-left: -6px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 1px rgba(0, 0, 0, .15); background: conic-gradient(#c9a45c 0 33%, #f7f3ec 0 66%, #7a9e7e 0); }
+.l-opcion__muestra i { flex: 1; }
+.l-opcion__aa { font-size: 18px; line-height: 1; min-width: 22px; text-align: center; }
+.l-config__resumen { margin: 0; padding: 14px 18px; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1px var(--l-linea); font-size: 14px; color: var(--l-suave); }
+.l-config__acciones { display: flex; flex-wrap: wrap; gap: 10px; }
+.l-visor__personalizar { padding: 0; border: 0; background: none; color: var(--l-oro); font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+@media (max-width: 920px) {
+  .l-config { grid-template-columns: 1fr; }
+  .l-config__vista { position: static; }
+  .l-config__vista .l-movil { width: min(260px, 70vw); }
+  .l-opciones { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 2px 16px; }
+  .l-opciones::-webkit-scrollbar { display: none; }
+  .l-opcion { flex-shrink: 0; }
+  .l-config__acciones .l-btn { flex: 1; }
+}
+
 /* ══════════ VISOR DE EJEMPLOS ══════════ */
 .l-visor {
   position: fixed;
