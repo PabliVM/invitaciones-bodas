@@ -352,7 +352,7 @@ h1, h2, h3, p { margin: 0; }
 .l-config__grupo { border: 0; margin: 0; padding: 0; min-width: 0; }
 .l-config__grupo legend { padding: 0; margin-bottom: 12px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--l-tinta); }
 .l-opciones { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-#config-colores { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+#config-colores { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .l-opcion {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
   min-width: 0; min-height: 44px; padding: 10px 8px; border: 0; border-radius: 12px;
@@ -380,14 +380,23 @@ h1, h2, h3, p { margin: 0; }
 .l-config__resumen { margin: 0; padding: 14px 18px; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1px var(--l-linea); font-size: 14px; color: var(--l-suave); }
 .l-config__acciones { display: flex; flex-wrap: wrap; gap: 10px; }
 .l-visor__personalizar { padding: 0; border: 0; background: none; color: var(--l-oro); font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+/* Sección oscura */
+#disena .l-config__grupo legend { color: rgba(255, 255, 255, .8); }
+#disena .l-opcion { background: rgba(255, 255, 255, .05); color: rgba(255, 255, 255, .85); box-shadow: inset 0 0 0 1px var(--l-linea-osc); }
+#disena .l-opcion:hover { box-shadow: inset 0 0 0 1px var(--l-oro); }
+#disena .l-opcion.activo { background: rgba(201, 164, 92, .16); color: #fff; box-shadow: inset 0 0 0 1.5px var(--l-oro); }
+#disena .l-opcion__muestra { box-shadow: 0 0 0 1px rgba(255, 255, 255, .25); }
+#disena .l-config__resumen, #disena .l-color { background: rgba(255, 255, 255, .05); color: rgba(255, 255, 255, .75); box-shadow: inset 0 0 0 1px var(--l-linea-osc); }
+#disena .l-config__vista .l-vista { background: rgba(255, 255, 255, .06); box-shadow: inset 0 0 0 1px var(--l-linea-osc); }
+
 @media (max-width: 920px) {
   .l-config { grid-template-columns: 1fr; }
   .l-config__vista { position: static; }
   .l-config__vista .l-movil { width: min(260px, 70vw); }
   .l-opciones, #config-fuentes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   #config-estilos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  #config-colores { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-  #config-colores .l-opcion { min-height: 66px; padding: 8px 2px; font-size: 10px; letter-spacing: -.1px; }
+  #config-colores { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #config-colores .l-opcion { min-height: 70px; }
   .l-color { font-size: 11.5px; gap: 6px; }
   #config-estilos .l-opcion { padding: 10px 2px; font-size: 11.5px; }
   .l-config__acciones .l-btn { flex: 1; }
