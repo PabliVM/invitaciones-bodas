@@ -1083,6 +1083,88 @@ html body .editor-pestanas { display: none; }
   html body .estado-guardado { font-size: 10px; padding: 4px 8px; max-width: 108px; overflow: hidden; text-overflow: ellipsis; }
 }
 
+/* ══════════════════ ORDEN DE SECCIONES ══════════════════ */
+
+html body .orden-lista { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+html body .orden-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border: 1px solid var(--pm-line); border-radius: var(--pm-radius-sm);
+  background: var(--pm-glass); color: var(--pm-text); font-size: 13px;
+  position: relative; user-select: none; -webkit-user-select: none;
+}
+html body .orden-item:focus-visible { outline: 2px solid var(--pm-gold); outline-offset: 1px; }
+html body .orden-item__asa {
+  cursor: grab; touch-action: none; color: var(--pm-muted); font-size: 18px; line-height: 1;
+  padding: 4px 6px; margin: -4px 0 -4px -4px; border-radius: 6px;
+}
+html body .orden-item__asa:hover { color: var(--pm-gold); background: var(--pm-glass-2); }
+html body .orden-item__texto { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html body .orden-item__estado { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--pm-faint); }
+html body .orden-item--oculta .orden-item__texto, html body .orden-item--oculta .orden-item__icono { opacity: .45; }
+html body .orden-item--extra { border-style: dashed; }
+html body .orden-item--arrastrando {
+  z-index: 2; background: var(--pm-bg-2); border-color: var(--pm-gold); box-shadow: var(--pm-gold-glow);
+}
+html body .orden-item--arrastrando .orden-item__asa { cursor: grabbing; color: var(--pm-gold); }
+
+/* ══════════════════ ENCUADRE DE FOTOS ══════════════════ */
+
+html body .encuadre-campo { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+html body .encuadre-campo[hidden] { display: none; }
+html body .encuadre-campo__mini { width: 44px; height: 54px; object-fit: cover; border-radius: 6px; border: 1px solid var(--pm-line-2); background: var(--pm-glass); }
+html body .encuadre-campo__btn { padding: 6px 12px !important; font-size: 11px; }
+html body .encuadre-campo__estado { font-size: 11px; color: var(--pm-gold); }
+
+html body .encuadre-galeria { margin-top: 10px; }
+html body .encuadre-galeria[hidden] { display: none; }
+html body .encuadre-galeria__lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 6px; margin-top: 6px; }
+html body .encuadre-galeria__item { aspect-ratio: 1; padding: 0; border: 1px solid var(--pm-line-2); border-radius: 6px; overflow: hidden; cursor: pointer; background: var(--pm-glass); }
+html body .encuadre-galeria__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+html body .encuadre-galeria__item:hover, html body .encuadre-galeria__item:focus-visible { border-color: var(--pm-gold); }
+html body .encuadre-galeria__item--hecho { box-shadow: inset 0 0 0 2px var(--pm-gold); }
+
+html body.encuadre-abierto { overflow: hidden; }
+html body .encuadre { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0, 0, 0, .72); backdrop-filter: blur(6px); }
+html body .encuadre[hidden] { display: none; }
+html body .encuadre__caja {
+  width: min(920px, 100%); max-height: calc(100dvh - 32px); overflow: auto;
+  background: var(--pm-bg-2); border: 1px solid var(--pm-line-2); border-radius: var(--pm-radius);
+  padding: 18px; color: var(--pm-text); display: flex; flex-direction: column; gap: 12px;
+}
+html body .encuadre__cab { display: flex; align-items: center; justify-content: space-between; font-family: var(--pm-serif); font-size: 20px; }
+html body .encuadre__cerrar { background: none; border: 0; color: var(--pm-muted); font-size: 18px; cursor: pointer; }
+html body .encuadre__ayuda { margin: 0; font-size: 12px; color: var(--pm-muted); }
+html body .encuadre__cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 16px; align-items: start; }
+html body .encuadre__foto { position: relative; display: flex; justify-content: center; align-items: center; background: #000; border-radius: var(--pm-radius-sm); cursor: crosshair; touch-action: none; user-select: none; -webkit-user-select: none; }
+html body .encuadre__foto:focus-visible { outline: 2px solid var(--pm-gold); }
+html body .encuadre__foto img { display: block; max-width: 100%; max-height: 56dvh; pointer-events: none; }
+html body .encuadre__punto {
+  position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%;
+  border: 2px solid #fff; box-shadow: 0 0 0 2px var(--pm-gold), 0 2px 12px rgba(0,0,0,.6); pointer-events: none;
+}
+html body .encuadre__punto::after { content: ''; position: absolute; inset: 13px; border-radius: 50%; background: var(--pm-gold); }
+html body .encuadre__vistas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+html body .encuadre__vistas figure { margin: 0; }
+html body .encuadre__vistas figcaption { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--pm-muted); margin-top: 4px; text-align: center; }
+html body .encuadre__vista { overflow: hidden; border-radius: 8px; border: 1px solid var(--pm-line-2); background: #000; }
+html body .encuadre__vista img { width: 100%; height: 100%; object-fit: cover; display: block; }
+html body .encuadre__vista--portada { aspect-ratio: 6 / 7; }
+html body .encuadre__vista--pantalla { aspect-ratio: 9 / 16; }
+html body .encuadre__vista--lateral { aspect-ratio: 3 / 4; }
+html body .encuadre__vista--galeria { aspect-ratio: 1; }
+html body .encuadre__pie { display: flex; gap: 8px; align-items: center; }
+html body .encuadre__pie > span { flex: 1; }
+
+@media (max-width: 700px) {
+  html body .encuadre { padding: 8px; align-items: flex-end; }
+  html body .encuadre__cuerpo { grid-template-columns: 1fr; }
+  html body .encuadre__foto img { max-height: 42dvh; }
+  html body .encuadre__vistas { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  html body .encuadre__vistas figcaption { font-size: 8px; }
+  html body .encuadre__pie { flex-wrap: wrap; }
+  html body .encuadre__guardar { flex-basis: 100%; order: 3; }
+}
+
 /* ══════════════════ ACCESIBILIDAD ══════════════════ */
 
 @media (prefers-reduced-motion: reduce) {

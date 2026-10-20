@@ -52,6 +52,8 @@ const EDITOR = (() => {
     _actualizarBotonesHistorial();
     REVISION.init();
     FOCO.init();
+    ORDEN.init();
+    ENCUADRE.init();
   }
 
   function _renderizarPreview() {

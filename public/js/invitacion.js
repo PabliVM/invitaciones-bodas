@@ -46,6 +46,12 @@ const INVITACION = (() => {
     u = String(u || '').trim();
     return /^(https?:)?\/\//i.test(u) || /^\/[^/]/.test(u) ? esc(u) : '';
   }
+  // Punto importante de la foto elegido en el editor ('X% Y%')
+  let _encuadres = {};
+  function foco(u) {
+    const v = _encuadres[String(u || '').trim()];
+    return /^\d{1,3}% \d{1,3}%$/.test(v || '') ? ' style="object-position:' + v + '"' : '';
+  }
   function activa(sec) { return !!sec && sec.activo !== false && sec.activa !== false; }
 
   function fechaBoda(f) {
@@ -188,7 +194,7 @@ const INVITACION = (() => {
     const foto = url(boda.fotoCabecera);
     const lugar = boda.evento && activa(boda.evento) ? boda.evento.lugar : '';
     return '<section class="inv-sec inv-portada" id="sec-portada" data-seccion="portada"' + (foto ? ' data-foto="' + foto + '"' : '') + '>' +
-      (foto ? '<figure class="inv-portada__foto"><img src="' + foto + '" alt="" /></figure>' : '') +
+      (foto ? '<figure class="inv-portada__foto"><img src="' + foto + '" alt=""' + foco(boda.fotoCabecera) + ' /></figure>' : '') +
       '<div class="inv-portada__marco" aria-hidden="true"></div>' +
       '<div class="inv-sec__in">' +
         '<span class="inv-orn" aria-hidden="true"></span>' +
@@ -226,11 +232,12 @@ const INVITACION = (() => {
   }
 
   function galeria(sec) {
-    const fotos = (sec.fotos || []).map(url).filter(Boolean);
+    const originales = (sec.fotos || []).filter(u => url(u));
+    const fotos = originales.map(url);
     return seccion('galeria', 'galeria', sec.foto || fotos[0],
       cabecera(sec.titulo || 'Nuestra galería') +
       '<div class="inv-galeria__grid" data-n="' + Math.min(fotos.length, 5) + '">' +
-        fotos.map((u, i) => '<button type="button" class="inv-galeria__item" data-i="' + i + '" aria-label="Ver foto ' + (i + 1) + '"><img src="' + u + '" alt="" loading="lazy" /></button>').join('') +
+        fotos.map((u, i) => '<button type="button" class="inv-galeria__item" data-i="' + i + '" aria-label="Ver foto ' + (i + 1) + '"><img src="' + u + '" alt="" loading="lazy"' + foco(originales[i]) + ' /></button>').join('') +
       '</div>' + subsecciones(sec.subsecciones));
   }
 
@@ -466,7 +473,7 @@ const INVITACION = (() => {
     el.id = 'inv-bienvenida';
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-label', 'Abrir invitación');
-    el.innerHTML = (foto ? '<img class="inv-bienvenida__foto" src="' + foto + '" alt="" />' : '') +
+    el.innerHTML = (foto ? '<img class="inv-bienvenida__foto" src="' + foto + '" alt=""' + foco(boda.fotoCabecera) + ' />' : '') +
       '<div class="inv-bienvenida__in">' +
         '<span class="inv-orn" aria-hidden="true"></span>' +
         '<p class="inv-kicker">Estás invitado a la boda de</p>' +
@@ -498,7 +505,7 @@ const INVITACION = (() => {
     const mapaFoto = {};
     secciones.forEach(s => { if (s.dataset.foto) ultima = s.dataset.foto; mapaFoto[s.dataset.seccion] = ultima; });
     const distintas = Array.from(new Set(Object.values(mapaFoto).filter(Boolean)));
-    fotos.innerHTML = distintas.map(u => '<img src="' + esc(u) + '" alt="" data-src="' + esc(u) + '" />').join('');
+    fotos.innerHTML = distintas.map(u => '<img src="' + esc(u) + '" alt="" data-src="' + esc(u) + '"' + foco(u) + ' />').join('');
     lateral.classList.toggle('inv-lateral--sin-foto', !distintas.length);
 
     const activar = id => {
@@ -629,6 +636,7 @@ const INVITACION = (() => {
   function render(boda, raiz, opciones) {
     opciones = opciones || {};
     limpiar();
+    _encuadres = (boda.encuadres && typeof boda.encuadres === 'object') ? boda.encuadres : {};
     const plantilla = PLANTILLAS.indexOf(boda.plantilla) !== -1 ? boda.plantilla : 'clasica';
     raiz.classList.add('inv');
     raiz.setAttribute('data-plantilla', plantilla);
