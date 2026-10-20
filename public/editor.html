@@ -6,9 +6,8 @@
   <title>Editor — Wedding Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Great+Vibes&family=Dancing+Script:wght@400;700&family=Parisienne&family=Pinyon+Script&family=Libre+Baskerville:ital,wght@0,400;1,400&family=EB+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400&family=Josefin+Sans:wght@300;400&family=Montserrat:wght@300;400&family=Raleway:wght@300;400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/editor.css" />
-  <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/premium.css" />
 </head>
 <body>
@@ -377,10 +376,14 @@
 
     <!-- PREVIEW -->
     <section class="editor-preview">
-      <div class="preview-phone">
+      <div class="preview-modos" role="group" aria-label="Vista previa">
+        <button type="button" data-modo="movil" class="activo">Móvil</button>
+        <button type="button" data-modo="escritorio">Escritorio</button>
+      </div>
+      <div class="preview-phone" id="preview-marco">
         <div class="preview-phone__notch"></div>
         <div class="preview-phone__screen">
-          <div class="inv-root" id="preview-root"></div>
+          <iframe id="preview-frame" title="Vista previa de la invitación"></iframe>
         </div>
       </div>
     </section>
@@ -495,11 +498,7 @@
   <script src="/supabase-config.js"></script>
   <script src="js/db.js"></script>
   <script src="js/state.js"></script>
-  <script src="js/renderer.js"></script>
-  <script src="js/clasica.js"></script>
-  <script src="js/floral.js"></script>
-  <script src="js/moderna.js"></script>
-  <script src="js/mediterranea.js"></script>
+  <script src="js/preview.js"></script>
   <script src="js/orden.js"></script>
   <script src="js/formulario.js"></script>
   <script src="js/secciones.js"></script>

@@ -589,7 +589,42 @@ html body .preview-phone__notch {
   border-radius: 20px;
   background: #050505;
 }
-html body .preview-phone__screen { padding-top: 0; }
+html body .preview-phone__screen { padding-top: 0; max-height: none; overflow: hidden; }
+
+/* Vista previa real en iframe + selector móvil/escritorio */
+html body .editor-preview { flex-direction: column; align-items: center; gap: 18px; }
+html body .preview-modos {
+  display: inline-flex;
+  padding: 4px;
+  gap: 2px;
+  border-radius: 999px;
+  border: 1px solid var(--pm-line);
+  background: var(--pm-glass);
+  flex-shrink: 0;
+}
+html body .preview-modos button {
+  font-family: var(--pm-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  padding: 7px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--pm-muted);
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+html body .preview-modos button.activo { background: var(--pm-gold-grad); color: #1a1306; }
+html body #preview-frame { display: block; width: 100%; height: min(78vh, 760px); border: 0; background: #fff; transform-origin: 0 0; }
+html body .preview-phone { min-height: 0; flex-shrink: 0; }
+html body .preview-phone--escritorio {
+  width: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px rgba(217, 178, 106, 0.35), 0 40px 100px -20px rgba(0, 0, 0, 0.9), 0 0 120px -30px rgba(217, 178, 106, 0.35);
+}
+html body .preview-phone--escritorio .preview-phone__notch { display: none; }
+html body .preview-phone--escritorio #preview-frame { height: auto; }
 
 /* Carga + aviso de guardado */
 html body .editor-cargando { background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(10px); }

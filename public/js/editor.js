@@ -1,5 +1,5 @@
 // editor.js — Lógica del panel de edición.
-// Lee inputs → actualiza STATE → RENDERER re-dibuja el preview.
+// Lee inputs → actualiza STATE → PREVIEW re-dibuja la invitación real en el iframe.
 
 const EDITOR = (() => {
 
@@ -10,6 +10,7 @@ const EDITOR = (() => {
   const SECCIONES_CON_FOTO = ['historia', 'galeria', 'evento', 'dresscode', 'rsvp', 'mensaje', 'alojamiento', 'transporte'];
 
   async function init() {
+    PREVIEW.init();
     // 1. ¿Viene con ?id= en la URL? → cargar boda existente
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
@@ -41,10 +42,7 @@ const EDITOR = (() => {
   }
 
   function _renderizarPreview() {
-    const preview = document.getElementById('preview-root');
-    if (preview) {
-      RENDERER.render(STATE.get(), preview);
-    }
+    PREVIEW.actualizar(STATE.get());
   }
 
   // --- Poblar panel con valores del estado ---

@@ -1,5 +1,5 @@
 /* magia.css — Animaciones y acabado premium de la invitación.
-   Respeta colores/fuentes de cada boda (usa --color-primario, etc.).
+   Respeta colores/fuentes de cada boda (usa --inv-primario, etc.).
    Las clases mg-* las añade js/magia.js; sin JS todo se ve normal. */
 
 /* ── Pantalla de carga ── */
@@ -62,8 +62,8 @@
   pointer-events: none;
   transform-origin: 0 50%;
   transform: scaleX(0);
-  background: linear-gradient(90deg, transparent, var(--color-primario, #b8860b) 30%, #f3dcaa 60%, var(--color-primario, #b8860b));
-  box-shadow: 0 0 12px var(--color-primario, #b8860b);
+  background: linear-gradient(90deg, transparent, var(--inv-primario, #b8860b) 30%, #f3dcaa 60%, var(--inv-primario, #b8860b));
+  box-shadow: 0 0 12px var(--inv-primario, #b8860b);
 }
 
 /* ── Polvo dorado ── */
@@ -101,24 +101,10 @@
 .mg-entrada > *:nth-child(5) { animation-delay: 0.95s; }
 .mg-entrada > *:nth-child(n+6) { animation-delay: 1.1s; }
 
-/* ── Escritorio ── */
-@media (min-width: 900px) {
-  .desk-portada-wrap { overflow: hidden; }
-  .desk-portada-wrap img { animation: mg-zoom 14s cubic-bezier(.22,1,.36,1) both; }
-
-  /* Sin foto de portada: fondo nocturno con el color de la boda */
-  .desk-portada-wrap:not(:has(img)) {
-    background:
-      radial-gradient(50% 60% at 70% 30%, color-mix(in srgb, var(--color-primario, #b8860b) 35%, transparent), transparent 70%),
-      radial-gradient(60% 60% at 10% 90%, color-mix(in srgb, var(--color-primario, #b8860b) 20%, transparent), transparent 70%),
-      #0d0b09;
-  }
-
-  .desk-portada-nombres,
-  .desk-portada-fecha { animation: mg-subir 1.6s cubic-bezier(.22,1,.36,1) both; }
-  .desk-portada-nombres { animation-delay: 0.4s; }
-  .desk-portada-fecha { animation-delay: 0.9s; }
-  .desk-portada-nombres em {
+/* ── Escritorio: nombres del panel lateral ── */
+@media (min-width: 960px) {
+  .inv-lateral__pie { animation: mg-subir 1.6s cubic-bezier(.22,1,.36,1) .5s both; }
+  .inv-lateral__nombres span {
     background: linear-gradient(110deg, #fff 20%, #f3dcaa 45%, #fff 70%);
     background-size: 250% 100%;
     -webkit-background-clip: text;
@@ -126,41 +112,10 @@
     color: transparent;
     animation: mg-brillo 6s linear infinite;
   }
-
-  .desk-menu-btn {
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.55) !important;
-    backdrop-filter: blur(14px) saturate(160%) !important;
-    box-shadow: 0 8px 30px -10px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-  .desk-menu-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 34px -10px rgba(0, 0, 0, 0.45), inset 0 0 0 1px #fff; }
-
-  .desk-nav { box-shadow: 30px 0 80px -30px rgba(0, 0, 0, 0.35); transition: transform 0.6s cubic-bezier(.22,1,.36,1) !important; }
-  .desk-nav__link { transition: opacity .2s, color .2s, padding-left .3s cubic-bezier(.22,1,.36,1) !important; }
-  .desk-nav__link:hover { padding-left: 8px; }
-  .desk-overlay { backdrop-filter: blur(4px); }
-
-  .desk-bottombar { backdrop-filter: blur(14px) saturate(160%); }
-
-  .desk-sec-btn,
-  .desk-rsvp-btn,
-  .desk-bottombar__btn { position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s, opacity 0.2s !important; }
-  .desk-sec-btn:hover,
-  .desk-rsvp-btn:hover,
-  .desk-bottombar__btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -12px var(--color-primario, #b8860b); }
-
-  .desk-galeria-grid img { transition: transform 0.8s cubic-bezier(.22,1,.36,1), filter 0.6s; }
-  .desk-galeria-grid img:hover { transform: scale(1.03); filter: brightness(1.05); }
-
-  .desk-rsvp-form input:focus,
-  .desk-rsvp-form textarea:focus,
-  .desk-rsvp-form select:focus { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primario, #b8860b) 25%, transparent); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mg-reveal, .mg-reveal-img img, .mg-entrada > *, .desk-portada-wrap img,
-  .desk-portada-nombres, .desk-portada-fecha, .desk-portada-nombres em {
+  .mg-reveal, .mg-reveal-img img, .mg-entrada > *, .inv-lateral__pie, .inv-lateral__nombres span {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
@@ -168,4 +123,5 @@
     filter: none !important;
   }
   .mg-polvo { display: none; }
+  .inv-lateral__nombres span { background: none !important; color: #fff !important; }
 }
