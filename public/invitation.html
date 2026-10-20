@@ -672,7 +672,7 @@
       if (!id) { pantallaCarga.classList.add('oculto'); pantallaError.style.display='flex'; return; }
 
       try {
-        var boda = await DB.cargarBoda(id);
+        var boda = await DB.cargarBodaPublica(id);
         if (!boda) { pantallaCarga.classList.add('oculto'); pantallaError.style.display='flex'; return; }
         _boda = boda;
         _actualizarOGTags(boda);

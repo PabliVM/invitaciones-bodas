@@ -44,6 +44,13 @@ const DB = (() => {
     return data ? _aBoda(data) : null;
   }
 
+  // Cargar una boda para la invitación pública (sin login, solo por ID)
+  async function cargarBodaPublica(id) {
+    const { data, error } = await db.rpc('get_wedding_public', { p_id: id }).maybeSingle();
+    if (error) throw error;
+    return data ? _aBoda(data) : null;
+  }
+
   // Listar todas las bodas (para index.html)
   async function listarBodas() {
     const { data, error } = await db.from('weddings')
@@ -71,5 +78,35 @@ const DB = (() => {
     if (error) throw error;
   }
 
-  return { init, crearBoda, guardarBoda, cargarBoda, listarBodas, eliminarBoda, enviarRSVP, enviarFormulario };
+  // ── Auth ──
+
+  async function login(email, password) {
+    const { error } = await db.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    if (!(await esSuperadmin())) {
+      await db.auth.signOut();
+      throw new Error('Este usuario no tiene acceso de administrador.');
+    }
+  }
+
+  async function logout() {
+    await db.auth.signOut();
+    window.location.href = 'login.html';
+  }
+
+  async function esSuperadmin() {
+    const { data, error } = await db.rpc('is_superadmin');
+    return !error && data === true;
+  }
+
+  // Protege páginas de administración: sin sesión de superadmin → login
+  async function requireAdmin() {
+    const { data } = await db.auth.getSession();
+    if (data.session && (await esSuperadmin())) return data.session.user;
+    const volver = encodeURIComponent(window.location.pathname.replace(/^\//, '') + window.location.search);
+    window.location.replace('login.html?next=' + volver);
+    return new Promise(() => {}); // detiene la carga mientras redirige
+  }
+
+  return { init, crearBoda, guardarBoda, cargarBoda, cargarBodaPublica, listarBodas, eliminarBoda, enviarRSVP, enviarFormulario, login, logout, requireAdmin };
 })();

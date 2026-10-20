@@ -310,7 +310,8 @@ const EDITOR = (() => {
 })();
 
 // Arrancar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   DB.init();
+  await DB.requireAdmin();
   EDITOR.init();
 });
