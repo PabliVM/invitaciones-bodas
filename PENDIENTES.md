@@ -28,6 +28,8 @@ Lista de lo que queda por hacer o decidir por tu parte. Marca con `[x]` lo que v
 - [ ] Editor desde el **móvil**: pestañas Contenido · Diseño · Vista previa.
 - [ ] **Subir fotos** (portada, sección, varias a la galería).
 - [ ] **Subir una canción**, elegir el segundo de inicio y probar la pantalla de bienvenida.
+- [ ] **Orden**: en Secciones → *Orden de la invitación*, arrastrar ⠿ (también con el dedo en el móvil).
+- [ ] **Encuadrar** una foto (⌖ bajo cada foto y en las miniaturas de la galería) y ver que no se cortan las caras en móvil y ordenador.
 - [ ] Archivar, restaurar y duplicar una boda.
 - [ ] **Respuestas**: enviar un RSVP de prueba desde la invitación → verlo en Respuestas → descargar Excel.
 - [ ] **Área de novios**: en el panel → botón *Novios* → poner tu email → abrir el enlace del correo → ver `/novios`.

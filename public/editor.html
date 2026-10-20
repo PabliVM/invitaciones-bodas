@@ -111,9 +111,23 @@
               <li><strong>Portada</strong> (en Cabecera): arriba en el móvil y a la izquierda en ordenador.</li>
               <li><strong>Foto de sección</strong>: solo en ordenador; cambia la foto de la izquierda al llegar a esa sección.</li>
               <li><strong>Galería</strong>: cuadrícula en móvil y ordenador.</li>
+              <li>Pulsa <strong>⌖ Encuadrar</strong> bajo cada foto y marca las caras: así no se cortan ni en móvil ni en ordenador.</li>
               <li>Pulsa <strong>Subir</strong> junto a cada campo. Las fotos se guardan en la carpeta de esta boda y se reducen solas si pesan mucho.</li>
             </ul>
           </details>
+
+          <!-- SUB: ORDEN -->
+          <div class="eb-sub eb-sub--abierto">
+            <div class="eb-sub__cab" onclick="toggleSub(this)">
+              <span class="eb-sub__icono">⇅</span>
+              <span class="eb-sub__titulo">Orden de la invitación</span>
+              <span class="eb-chevron">▼</span>
+            </div>
+            <div class="eb-sub__body">
+              <p class="campo__ayuda">Arrastra <strong>⠿</strong> para cambiar el orden (con el ratón o el dedo). Con teclado: Alt + ↑ ↓. Las ocultas no se ven en la invitación.</p>
+              <ul class="orden-lista" id="orden-panel"></ul>
+            </div>
+          </div>
 
           <!-- SUB: CABECERA -->
           <div class="eb-sub">
@@ -585,6 +599,7 @@
   <script src="js/guardado.js"></script>
   <script src="js/revision.js"></script>
   <script src="js/foco.js"></script>
+  <script src="js/encuadre.js"></script>
   <script src="js/editor.js"></script>
   <script src="js/subidas.js"></script>
 

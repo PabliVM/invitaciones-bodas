@@ -22,6 +22,7 @@ const STATE = (() => {
       meta: { titulo: 'Nueva boda' },
       plantilla: 'clasica',
       fotoCabecera: '',  // URL de la foto principal de portada
+      encuadres: {},     // URL de foto → punto importante ('50% 30%'), para recortar bien en móvil y ordenador
       pareja: { novio: 'Alejandro', novia: 'Sofía' },
       fecha: { dia: f.dia, mes: f.mes, anio: f.anio, hora: '12:30' },
       historia: {
@@ -134,6 +135,10 @@ const STATE = (() => {
       opciones: Array.isArray(q && q.opciones) ? q.opciones.map(texto) : [],
       obligatoria: !!(q && q.obligatoria)
     }));
+    // Encuadres: solo valores 'X% Y%' válidos
+    const enc = esObjeto(b.encuadres) ? b.encuadres : {};
+    b.encuadres = {};
+    Object.keys(enc).forEach(k => { if (/^\d{1,3}% \d{1,3}%$/.test(enc[k])) b.encuadres[k] = enc[k]; });
     b.v = 2;
     return b;
   }

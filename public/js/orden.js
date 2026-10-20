@@ -1,30 +1,25 @@
-// orden.js — Gestor del orden unificado de secciones
-// Un solo array que mezcla predefinidas y extras
+// orden.js — Orden de las secciones de la invitación.
+// - Lista "Orden de la invitación" que se reordena arrastrando (ratón y dedo) o con el teclado.
+// - El panel del editor se reordena igual que la invitación.
+// - moverSeccion() sigue sirviendo para los botones ↑ ↓ de cada sección.
 
 const ORDEN = (() => {
 
-  var _timer = null;
-
-  var LABELS = {
-    historia:    '📖 Historia',
-    galeria:     '📷 Galería',
-    evento:      '📍 El evento',
-    dresscode:   '👔 Dress code',
-    alojamiento: '🏨 Alojamiento',
-    transporte:  '🚌 Transporte',
-    rsvp:        '✉️ RSVP',
-    mensaje:     '💌 Mensaje final',
-    formulario:  '📋 Formulario',
+  const ETIQUETAS = {
+    historia: 'Historia', galeria: 'Galería', evento: 'El evento', dresscode: 'Dress code',
+    alojamiento: 'Alojamiento', transporte: 'Transporte', rsvp: 'Confirmar asistencia',
+    mensaje: 'Mensaje final', formulario: 'Cuestionario'
+  };
+  const ICONOS = {
+    historia: '📖', galeria: '📷', evento: '📍', dresscode: '👔', alojamiento: '🏨',
+    transporte: '🚌', rsvp: '✉️', mensaje: '💌', formulario: '📋'
   };
 
-  var PREDEFINIDAS_VALIDAS = ['historia','galeria','evento','dresscode','alojamiento','transporte','rsvp','mensaje','formulario'];
+  let _timer = null;
+  let _arrastrando = false;
 
-  function init() {
-    _renderPanel();
-    STATE.suscribir(function() {
-      clearTimeout(_timer);
-      _timer = setTimeout(_renderPanel, 300);
-    });
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
   // Orden completo y válido (predefinidas + 'extra_<uid>'), calculado por STATE.normalizar
@@ -32,89 +27,145 @@ const ORDEN = (() => {
     return STATE.normalizar(boda).orden_secciones;
   }
 
+  function _info(boda, id) {
+    if (id.indexOf('extra_') === 0) {
+      const sec = (boda.secciones_extra || []).find(x => 'extra_' + x.uid === id) || {};
+      return { etiqueta: sec.titulo || 'Sección personalizada', icono: '✦', activa: true, extra: true };
+    }
+    if (id === 'formulario') {
+      return { etiqueta: (boda.formulario && boda.formulario.titulo) || ETIQUETAS.formulario, icono: ICONOS.formulario, activa: !!(boda.formulario && boda.formulario.activo) };
+    }
+    const sec = boda[id] || {};
+    return { etiqueta: sec.titulo || ETIQUETAS[id] || id, icono: ICONOS[id] || '', activa: sec.activo !== false && sec.activa !== false };
+  }
+
+  // ── Lista arrastrable ──
   function _renderPanel() {
-    var contenedor = document.getElementById('orden-panel');
-    if (!contenedor) return;
-    var boda = STATE.get();
-    var orden = _ordenCompleto(boda);
-    var extras = boda.secciones_extra || [];
+    const lista = document.getElementById('orden-panel');
+    if (!lista || _arrastrando) return;
+    const boda = STATE.get();
+    const act = document.activeElement;
+    const conFoco = act && lista.contains(act) ? act.dataset.id : null;
+    lista.innerHTML = _ordenCompleto(boda).map(id => {
+      const i = _info(boda, id);
+      return '<li class="orden-item' + (i.activa ? '' : ' orden-item--oculta') + (i.extra ? ' orden-item--extra' : '') + '" data-id="' + esc(id) + '" tabindex="0" aria-label="' + esc(i.etiqueta) + '. Alt + flechas para mover">' +
+        '<span class="orden-item__asa" aria-hidden="true">⠿</span>' +
+        '<span class="orden-item__icono" aria-hidden="true">' + i.icono + '</span>' +
+        '<span class="orden-item__texto">' + esc(i.etiqueta) + '</span>' +
+        (i.activa ? '' : '<span class="orden-item__estado">oculta</span>') +
+      '</li>';
+    }).join('');
+    if (conFoco) { const el = lista.querySelector('[data-id="' + CSS.escape(conFoco) + '"]'); if (el) el.focus({ preventScroll: true }); }
+  }
 
-    var html = '<div style="padding:8px 12px;display:flex;flex-direction:column;gap:4px">';
+  // Coloca los subapartados del panel en el mismo orden que la invitación
+  function _ordenarPanel() {
+    const ref = document.getElementById('chk-historia');
+    const sub = ref && ref.closest('.eb-sub');
+    const cont = sub && sub.parentElement;
+    if (!cont) return;
+    const subDe = id => { const chk = document.getElementById('chk-' + id); return chk && chk.closest('.eb-sub'); };
+    _ordenCompleto(STATE.get()).forEach(id => { const el = subDe(id); if (el && el.parentElement === cont) cont.appendChild(el); });
+  }
 
-    orden.forEach(function(id, i) {
-      var esExtra = id.indexOf('extra_') === 0;
-      var label, activa;
+  function _aplicar(orden, idMovido) {
+    STATE.set('orden_secciones', orden);
+    if (idMovido && typeof FOCO !== 'undefined') FOCO.ir(idMovido, true);
+  }
 
-      if (esExtra) {
-        var uid = id.replace('extra_', '');
-        var sec = extras.find(function(x) { return x.uid === uid; }) || {};
-        label = '✦ ' + (sec.titulo || 'Sección personalizada');
-        activa = true;
-      } else if (id === 'formulario') {
-        var formTitulo = (boda.formulario && boda.formulario.titulo) || 'Formulario';
-        label = '📋 ' + formTitulo;
-        activa = !!(boda.formulario && boda.formulario.activo);
-      } else {
-        var sec = boda[id] || {};
-        // Usar título personalizado si existe, si no el label por defecto
-        var tituloPersonalizado = sec.titulo;
-        var iconos = { historia:'📖', galeria:'📷', evento:'📍', dresscode:'👔', alojamiento:'🏨', transporte:'🚌', rsvp:'✉️', mensaje:'💌' };
-        label = (iconos[id] || '') + ' ' + (tituloPersonalizado || LABELS[id] || id);
-        activa = sec.activo !== false && sec.activa !== false;
-      }
+  function _ordenDeLista(lista) {
+    return Array.from(lista.querySelectorAll('.orden-item')).map(li => li.dataset.id);
+  }
 
-      var bordeColor = esExtra ? 'rgba(184,134,11,.3)' : 'var(--editor-border)';
+  // Arrastre con Pointer Events (funciona con ratón y con el dedo)
+  function _iniciarArrastre(lista) {
+    lista.addEventListener('pointerdown', e => {
+      const asa = e.target.closest('.orden-item__asa');
+      const item = asa && asa.closest('.orden-item');
+      if (!item) return;
+      e.preventDefault();
+      _arrastrando = true;
+      const inicioY = e.clientY;
+      let base = 0;
+      item.classList.add('orden-item--arrastrando');
+      try { item.setPointerCapture(e.pointerId); } catch (_) { /* puntero sintético */ }
 
-      html += '<div style="display:flex;align-items:center;gap:6px;background:var(--editor-input-bg);border:1px solid ' + bordeColor + ';padding:8px 10px;opacity:' + (activa ? '1' : '0.4') + '">';
-      html += '<span style="flex:1;font-size:12px;color:var(--editor-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + label + '</span>';
-      html += '<button onclick="ORDEN.mover(' + i + ',-1)" style="background:transparent;border:1px solid var(--editor-border);color:var(--editor-text-muted);cursor:pointer;padding:2px 7px;font-size:12px;line-height:1" ' + (i === 0 ? 'disabled' : '') + '>↑</button>';
-      html += '<button onclick="ORDEN.mover(' + i + ',1)" style="background:transparent;border:1px solid var(--editor-border);color:var(--editor-text-muted);cursor:pointer;padding:2px 7px;font-size:12px;line-height:1" ' + (i === orden.length - 1 ? 'disabled' : '') + '>↓</button>';
-      html += '</div>';
+      const mover = ev => {
+        let dy = ev.clientY - inicioY - base;
+        // Intercambia con el vecino al pasar su mitad
+        const prev = item.previousElementSibling, next = item.nextElementSibling;
+        if (dy > 0 && next && dy > next.offsetHeight / 2) {
+          lista.insertBefore(next, item);
+          base += next.offsetHeight + 4;
+          dy = ev.clientY - inicioY - base;
+        } else if (dy < 0 && prev && -dy > prev.offsetHeight / 2) {
+          lista.insertBefore(item, prev);
+          base -= prev.offsetHeight + 4;
+          dy = ev.clientY - inicioY - base;
+        }
+        item.style.transform = 'translateY(' + dy + 'px)';
+      };
+      const soltar = () => {
+        item.removeEventListener('pointermove', mover);
+        item.removeEventListener('pointerup', soltar);
+        item.removeEventListener('pointercancel', soltar);
+        item.classList.remove('orden-item--arrastrando');
+        item.style.transform = '';
+        _arrastrando = false;
+        const nuevo = _ordenDeLista(lista);
+        if (JSON.stringify(nuevo) !== JSON.stringify(STATE.get().orden_secciones)) _aplicar(nuevo, item.dataset.id);
+      };
+      item.addEventListener('pointermove', mover);
+      item.addEventListener('pointerup', soltar);
+      item.addEventListener('pointercancel', soltar);
     });
 
-    html += '</div>';
-    contenedor.innerHTML = html;
+    // Teclado: Alt + ↑/↓ mueve el elemento con foco
+    lista.addEventListener('keydown', e => {
+      const item = e.target.closest('.orden-item');
+      if (!item || !e.altKey || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
+      e.preventDefault();
+      const id = item.dataset.id;
+      moverSeccion(id, e.key === 'ArrowUp' ? -1 : 1);
+      _renderPanel();
+      const nuevo = lista.querySelector('[data-id="' + CSS.escape(id) + '"]');
+      if (nuevo) nuevo.focus();
+    });
+  }
 
-    // Guardar orden actualizado en state si cambió
-    var ordenActual = JSON.stringify(boda.orden_secciones || []);
-    var ordenNuevo = JSON.stringify(orden);
-    if (ordenActual !== ordenNuevo) {
-      boda.orden_secciones = orden; // actualizar sin notificar para evitar loop
-    }
+  function init() {
+    const lista = document.getElementById('orden-panel');
+    _renderPanel();
+    _ordenarPanel();
+    if (lista) _iniciarArrastre(lista);
+    STATE.suscribir(() => {
+      clearTimeout(_timer);
+      _timer = setTimeout(() => { _renderPanel(); _ordenarPanel(); }, 120);
+    });
   }
 
   function mover(i, direccion) {
-    var boda = STATE.get();
-    var orden = _ordenCompleto(boda).slice();
-    var j = i + direccion;
+    const orden = _ordenCompleto(STATE.get()).slice();
+    const j = i + direccion;
     if (j < 0 || j >= orden.length) return;
-    var tmp = orden[j];
-    orden[j] = orden[i];
-    orden[i] = tmp;
-    STATE.set('orden_secciones', orden);
+    [orden[i], orden[j]] = [orden[j], orden[i]];
+    _aplicar(orden, orden[j]);
   }
 
-  // Llamar cuando se añade una sección extra nueva
+  // Llamar cuando se añade/activa una sección
   function sincronizar() {
-    var boda = STATE.get();
-    var orden = _ordenCompleto(boda);
-    STATE.set('orden_secciones', orden);
+    STATE.set('orden_secciones', _ordenCompleto(STATE.get()));
   }
 
-
-
-  // Mover sección desde los botones inline del panel
+  // Botones ↑ ↓ de cada sección del panel
   function moverSeccion(id, direccion) {
-    var boda = STATE.get();
-    var orden = _ordenCompleto(boda).slice();
-    var idx = orden.indexOf(id);
+    const orden = _ordenCompleto(STATE.get()).slice();
+    const idx = orden.indexOf(id);
     if (idx === -1) return;
-    var j = idx + direccion;
+    const j = idx + direccion;
     if (j < 0 || j >= orden.length) return;
-    var tmp = orden[j];
-    orden[j] = orden[idx];
-    orden[idx] = tmp;
-    STATE.set('orden_secciones', orden);
+    [orden[idx], orden[j]] = [orden[j], orden[idx]];
+    _aplicar(orden, id);
   }
 
   return { init, mover, moverSeccion, sincronizar };
