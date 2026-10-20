@@ -132,10 +132,10 @@ const PRESETS = [
     id: 'medianoche',
     nombre: 'Medianoche',
     descripcion: 'Azul noche y plata',
-    muestra: ['#9fb4d0', '#0e1726'],
+    muestra: ['#9fb4d0', '#070b14'],
     estilos: {
       colorPrimario:   '#9fb4d0',
-      colorSecundario: '#0e1726',
+      colorSecundario: '#070b14',
       colorTexto:      '#e6ebf2',
       colorAccent:     '#d8c7a3',
       fuente:          'Playfair Display',
