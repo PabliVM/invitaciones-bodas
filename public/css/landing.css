@@ -138,7 +138,9 @@ h1, h2, h3, p { margin: 0; }
 @keyframes l-zoom { from { transform: scale(1.1); } to { transform: scale(1); } }
 .l-hero__in { position: relative; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
 .l-hero__movil { display: grid; justify-items: center; gap: 14px; }
-.l-hero__movil .l-movil { width: min(310px, 100%); animation: l-aparecer .9s var(--l-ease) .2s both; }
+.l-hero__movil .l-movil { width: min(310px, 100%, calc((100svh - 190px) * 390 / 800)); animation: l-aparecer .9s var(--l-ease) .2s both; }
+/* En ordenador "Modelos" y "Pedir información" ya están en la cabecera: no se repiten en la portada */
+@media (min-width: 921px) { .l-hero .l-hero__ctas { display: none; } }
 .l-hero__pie { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255, 255, 255, .45); }
 .l-hero__texto { max-width: 640px; }
 .l-hero__texto { display: grid; gap: 22px; }
