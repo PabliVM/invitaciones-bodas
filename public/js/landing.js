@@ -86,6 +86,7 @@
   const vFrame = document.getElementById('visor-frame');
   let vIndice = 0;
   let vModo = 'ordenador';
+  let vStd = false; // false = invitación, true = save the date
   escalar(vPant);
 
   function visorModo(modo) {
@@ -100,11 +101,13 @@
   function visorVer(i) {
     vIndice = (i + TODOS.length) % TODOS.length;
     const e = TODOS[vIndice];
-    document.getElementById('visor-nombre').textContent = e.nombre;
-    vFrame.src = 'invitation.html?demo=' + e.id;
+    document.getElementById('visor-nombre').textContent = e.nombre + (vStd ? ' · Save the date' : '');
+    vFrame.src = 'invitation.html?demo=' + e.id + (vStd ? '&std=1' : '');
+    document.getElementById('visor-std').textContent = vStd ? 'Ver la invitación' : 'Ver su save the date';
   }
 
   function visorAbrir(i) {
+    vStd = false;
     visorModo(modoEjemplos);
     visorVer(i);
     visor.hidden = false;
@@ -124,6 +127,7 @@
   }));
   visor.querySelectorAll('.l-visor__modo').forEach(b => b.addEventListener('click', () => visorModo(b.dataset.modo)));
   document.getElementById('visor-cerrar').addEventListener('click', visorCerrar);
+  document.getElementById('visor-std').addEventListener('click', () => { vStd = !vStd; visorVer(vIndice); });
   document.getElementById('visor-prev').addEventListener('click', () => visorVer(vIndice - 1));
   document.getElementById('visor-next').addEventListener('click', () => visorVer(vIndice + 1));
   visor.addEventListener('click', ev => { if (ev.target === visor || ev.target.classList.contains('l-visor__escena')) visorCerrar(); });

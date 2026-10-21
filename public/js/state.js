@@ -38,6 +38,11 @@ const STATE = (() => {
         fotos: ['/assets/demo/pareja-1.jpg', '/assets/demo/pareja-2.jpg'],
         subsecciones: []
       },
+      saveTheDate: {
+        titulo: 'Save the date',
+        texto: 'Reservad la fecha. La invitación formal llegará más adelante.',
+        mostrarLugar: true,
+      },
       musica: {
         activa: false,
         titulo: 'Nuestra canción',

@@ -36,6 +36,7 @@ Lista de lo que queda por hacer o decidir por tu parte. Marca con `[x]` lo que v
 - [ ] Vista previa: abrir una sección del panel y ver que la previa salta a ella.
 - [ ] Editor desde el **móvil**: pestañas Contenido · Diseño · Vista previa.
 - [ ] **Subir fotos** (portada, sección, varias a la galería).
+- [ ] **Save the date**: en el editor → bloque *Save the date* → *Ver save the date* y *Copiar enlace*.
 - [ ] **Subir una canción**, elegir el segundo de inicio y probar la pantalla de bienvenida.
 - [ ] **Orden**: en Secciones → *Orden de la invitación*, arrastrar ⠿ (también con el dedo en el móvil).
 - [ ] **Encuadrar** una foto (⌖ bajo cada foto y en las miniaturas de la galería) y ver que no se cortan las caras en móvil y ordenador.

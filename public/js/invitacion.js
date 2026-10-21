@@ -206,17 +206,17 @@ const INVITACION = (() => {
 
   // ── Secciones ──
 
-  function portada(boda) {
+  function portada(boda, kicker, conLugar) {
     const p = boda.pareja || {}, f = boda.fecha || {};
     const mes = (MESES[parseInt(f.mes) - 1] || '').slice(0, 3);
     const foto = url(boda.fotoCabecera);
-    const lugar = boda.evento && activa(boda.evento) ? boda.evento.lugar : '';
+    const lugar = conLugar !== false && boda.evento && activa(boda.evento) ? boda.evento.lugar : '';
     return '<section class="inv-sec inv-portada" id="sec-portada" data-seccion="portada"' + (foto ? ' data-foto="' + foto + '"' : '') + '>' +
       (foto ? '<figure class="inv-portada__foto"><img src="' + foto + '" alt=""' + foco(boda.fotoCabecera) + ' /></figure>' : '') +
       '<div class="inv-portada__marco" aria-hidden="true"></div>' +
       '<div class="inv-sec__in">' +
         '<span class="inv-orn" aria-hidden="true"></span>' +
-        '<p class="inv-kicker inv-portada__kicker">' + esc(textos(boda).kicker) + '</p>' +
+        '<p class="inv-kicker inv-portada__kicker">' + esc(kicker || textos(boda).kicker) + '</p>' +
         '<h1 class="inv-nombres">' +
           '<span class="inv-nombres__uno">' + esc(p.novio) + '</span>' +
           (p.novia ? '<span class="inv-nombres__y">&amp;</span><span class="inv-nombres__dos">' + esc(p.novia) + '</span>' : '') +
@@ -258,15 +258,20 @@ const INVITACION = (() => {
       '</div>' + subsecciones(sec.subsecciones));
   }
 
+  // Enlace "Añadir a Google Calendar" (6 h de duración)
+  function calendario(boda, lugar) {
+    const inicio = fechaBoda(boda.fecha || {});
+    if (isNaN(inicio)) return '';
+    const fmt = d => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(textos(boda).titulo + ' ' + nombresTexto(boda.pareja || {}, ' y ')) +
+      '&dates=' + fmt(inicio) + '/' + fmt(new Date(inicio.getTime() + 6 * 3600000)) +
+      '&location=' + encodeURIComponent(lugar || '');
+  }
+
   function evento(sec, boda) {
     const f = boda.fecha || {};
     const inicio = fechaBoda(f);
-    const fmt = d => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-    const p = boda.pareja || {};
-    const cal = isNaN(inicio) ? '' :
-      'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(textos(boda).titulo + ' ' + nombresTexto(p, ' y ')) +
-      '&dates=' + fmt(inicio) + '/' + fmt(new Date(inicio.getTime() + 6 * 3600000)) +
-      '&location=' + encodeURIComponent([sec.lugar, sec.direccion].filter(Boolean).join(', '));
+    const cal = calendario(boda, [sec.lugar, sec.direccion].filter(Boolean).join(', '));
     const mapa = url(sec.googleMapsUrl);
     return seccion('evento', 'evento', sec.foto,
       cabecera(sec.titulo || 'La celebración') +
@@ -395,11 +400,40 @@ const INVITACION = (() => {
         '<nav class="inv-nav" aria-label="Secciones"><div class="inv-nav__pista">' + enlaces + '</div></nav>' +
         portada(boda) + cuentaAtras() +
         ids.map(id => construirSeccion(boda, id, preview)).join('') +
-        '<footer class="inv-pie"><span class="inv-orn" aria-hidden="true"></span><p>' + esc(p.novio) + ' &amp; ' + esc(p.novia) + ' · ' + esc(f.anio) + '</p></footer>' +
+        '<footer class="inv-pie"><span class="inv-orn" aria-hidden="true"></span><p>' + nombresHtml(p) + ' · ' + esc(f.anio) + '</p></footer>' +
       '</div>' +
       '<div class="inv-lightbox" hidden><button type="button" class="inv-lightbox__cerrar" aria-label="Cerrar">✕</button>' +
         '<button type="button" class="inv-lightbox__nav inv-lightbox__prev" aria-label="Anterior">‹</button>' +
         '<img alt="" /><button type="button" class="inv-lightbox__nav inv-lightbox__next" aria-label="Siguiente">›</button></div>';
+  }
+
+  // Save the date: mismo modelo, colores y letra; solo portada, cuenta atrás y aviso
+  function construirSaveTheDate(boda) {
+    const p = boda.pareja || {}, f = boda.fecha || {};
+    const std = boda.saveTheDate || {};
+    const lugar = boda.evento && activa(boda.evento) ? [boda.evento.lugar, boda.evento.direccion].filter(Boolean).join(', ') : '';
+    const cal = calendario(boda, std.mostrarLugar === false ? '' : lugar);
+    return '' +
+      '<aside class="inv-lateral" aria-hidden="true">' +
+        '<div class="inv-lateral__fotos"></div>' +
+        '<div class="inv-lateral__vacio"><span>' + esc(iniciales(p)) + '</span></div>' +
+        '<div class="inv-lateral__velo"></div>' +
+        '<div class="inv-lateral__pie">' +
+          '<p class="inv-lateral__nombres">' + nombresHtml(p) + '</p>' +
+          '<p class="inv-lateral__fecha">' + esc(fechaLarga(f)) + '</p>' +
+        '</div>' +
+      '</aside>' +
+      '<div class="inv-contenido inv-contenido--std">' +
+        portada(boda, std.titulo || 'Save the date', std.mostrarLugar !== false) + cuentaAtras() +
+        '<section class="inv-sec inv-std" id="sec-std" data-seccion="std"><div class="inv-sec__in">' +
+          '<span class="inv-orn" aria-hidden="true"></span>' +
+          '<p class="inv-std__fecha">' + esc(fechaLarga(f)) + '</p>' +
+          (std.texto ? '<p class="inv-std__texto">' + parrafos(std.texto) + '</p>' : '') +
+          (cal ? '<a class="inv-btn inv-btn--lleno" href="' + esc(cal) + '" target="_blank" rel="noopener">Añadir al calendario</a>' : '') +
+          '<span class="inv-regla" aria-hidden="true"></span>' +
+        '</div></section>' +
+        '<footer class="inv-pie"><span class="inv-orn" aria-hidden="true"></span><p>' + nombresHtml(p) + ' · ' + esc(f.anio) + '</p></footer>' +
+      '</div>';
   }
 
   // ── Comportamiento ──
@@ -659,6 +693,13 @@ const INVITACION = (() => {
     raiz.setAttribute('data-plantilla', plantilla);
     aplicarTema(boda.estilos, plantilla, raiz);
     cargarFuentes(boda.estilos, plantilla);
+
+    if (opciones.saveTheDate) {
+      raiz.innerHTML = construirSaveTheDate(boda);
+      iniciarCuenta(raiz, boda.fecha);
+      iniciarScroll(raiz);
+      return;
+    }
 
     const ids = orden(boda);
     raiz.innerHTML = construir(boda, ids, opciones.preview);

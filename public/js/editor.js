@@ -86,6 +86,9 @@ const EDITOR = (() => {
     _toggleCampoPersonalizado(boda.musica ? boda.musica.mostrarTexto : 'titulo');
     _setVal('inp-musica-inicio', _aMinutos(boda.musica.inicio));
     _setCheck('chk-musica-bienvenida', boda.musica.bienvenida);
+    _setVal('inp-std-titulo', boda.saveTheDate.titulo);
+    _setVal('inp-std-texto', boda.saveTheDate.texto);
+    _setCheck('chk-std-lugar', boda.saveTheDate.mostrarLugar !== false);
     _sincronizarReproductor(boda);
     _setVal('inp-titulo-evento', boda.evento.titulo || 'La celebración');
     _setVal('inp-lugar', boda.evento.lugar);
@@ -157,6 +160,9 @@ const EDITOR = (() => {
     on('inp-musica-texto-flotante', 'musica.textoFlotante');
 
     on('chk-musica-bienvenida', 'musica.bienvenida');
+    on('inp-std-titulo', 'saveTheDate.titulo');
+    on('inp-std-texto', 'saveTheDate.texto');
+    on('chk-std-lugar', 'saveTheDate.mostrarLugar');
     on('inp-musica-inicio', 'musica.inicio', _aSegundos);
 
     // Reproductor de prueba: empieza donde se ha elegido; "Usar el punto actual" fija el inicio
@@ -232,6 +238,8 @@ const EDITOR = (() => {
     // Botones del panel
     document.getElementById('btn-guardar')?.addEventListener('click', guardarAhora);
     document.getElementById('btn-abrir-invitacion')?.addEventListener('click', abrirInvitacion);
+    document.getElementById('btn-ver-std')?.addEventListener('click', () => abrirInvitacion(true));
+    document.getElementById('btn-copiar-std')?.addEventListener('click', copiarEnlaceStd);
     document.getElementById('btn-deshacer')?.addEventListener('click', () => STATE.deshacer());
     document.getElementById('btn-rehacer')?.addEventListener('click', () => STATE.rehacer());
 
@@ -256,12 +264,23 @@ const EDITOR = (() => {
   }
 
   // Abre la invitación real (si es nueva, la guarda antes para tener enlace)
-  async function abrirInvitacion() {
+  async function abrirInvitacion(std) {
     const ventana = window.open('about:blank', '_blank');
     const id = _bodaId || await GUARDADO.guardarAhora();
     if (!id) { if (ventana) ventana.close(); alert('No se pudo guardar la boda. Revisa la conexión.'); return; }
-    const url = 'invitation.html?id=' + id;
+    const url = 'invitation.html?id=' + id + (std === true ? '&std=1' : '');
     if (ventana) ventana.location = url; else window.location.href = url;
+  }
+
+  // Enlace del save the date para mandar por WhatsApp/email
+  async function copiarEnlaceStd(ev) {
+    const btn = ev.currentTarget;
+    const id = _bodaId || await GUARDADO.guardarAhora();
+    if (!id) { alert('No se pudo guardar la boda. Revisa la conexión.'); return; }
+    const url = location.origin + '/invitation.html?id=' + encodeURIComponent(id) + '&std=1';
+    try { await navigator.clipboard.writeText(url); btn.textContent = '✓ Copiado'; }
+    catch (_) { window.prompt('Copia este enlace:', url); }
+    setTimeout(() => { btn.textContent = 'Copiar enlace'; }, 2000);
   }
 
   function _actualizarBotonesHistorial() {

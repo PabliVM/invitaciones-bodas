@@ -1180,3 +1180,7 @@ html body .encuadre__pie > span { flex: 1; }
 .marca__date { color: #d9a89c; -webkit-text-fill-color: #d9a89c; }
 html body .header__logo, html body .login-card__logo, html body .editor-topbar__logo { background: none !important; -webkit-text-fill-color: initial !important; }
 html body .campo__opcional { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--pm-faint); }
+html body .campo.campo--fila { flex-direction: row !important; text-align: left; }
+html body .campo--fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+html body .std-acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+html body .preview-vista { margin-bottom: -6px; }
