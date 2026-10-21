@@ -43,6 +43,10 @@
     actualizarCab();
   }));
 
+  // Móvil de la portada
+  const heroPantalla = document.getElementById('hero-pantalla');
+  if (heroPantalla) escalar(heroPantalla);
+
   // ── Ejemplos ──
   const lista = document.getElementById('lista-ejemplos');
   let modoEjemplos = 'movil';

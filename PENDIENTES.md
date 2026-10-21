@@ -18,6 +18,14 @@ Lista de lo que queda por hacer o decidir por tu parte. Marca con `[x]` lo que v
   - Redirect URLs: añadir `https://invitaciones-bodas-pablivms-projects.vercel.app/novios`
 - [ ] **Supabase → Authentication → Sign In / Providers:** desactivar *Allow new users to sign up*.
 
+## 1b. Conectar el dominio yourdate.es
+
+- [ ] **Vercel → proyecto → Settings → Domains → Add:** `yourdate.es` y `www.yourdate.es` (que `www` redirija a `yourdate.es`).
+- [ ] **En la web donde compraste el dominio (DNS):** poner los registros que te muestre Vercel (normalmente un `A` a `76.76.21.21` para `yourdate.es` y un `CNAME` `www` → `cname.vercel-dns.com`). Tarda de minutos a unas horas.
+- [ ] **Supabase → Authentication → URL Configuration:**
+  - Site URL: `https://yourdate.es`
+  - Redirect URLs: añadir `https://yourdate.es/novios`
+
 ## 2. Cosas por probar
 
 - [ ] Login en `/admin` con tu email.
@@ -38,8 +46,8 @@ Lista de lo que queda por hacer o decidir por tu parte. Marca con `[x]` lo que v
 
 ## 3. Decisiones pendientes
 
-- [ ] **Nombre de la marca** (ahora "Wedding Builder" en todas partes).
-- [ ] **Dominio** (comprarlo y decirme cuál).
+- [x] **Nombre de la marca**: yourdate · "Tu fecha. Tu historia."
+- [x] **Dominio**: yourdate.es (falta conectarlo, ver abajo).
 - [ ] **Email de contacto** para la web y la política de privacidad.
 - [ ] **Datos legales** para `privacidad.html` (nombre/razón social, NIF, dirección).
 - [ ] **Otros tipos de evento**: ¿solo celebraciones familiares (boda, bautizo, comunión, cumpleaños, aniversario), también empresa, o todo?
