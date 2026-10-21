@@ -1175,7 +1175,7 @@ html body .encuadre__pie > span { flex: 1; }
 }
 
 /* ══════════ MARCA: yourdate ══════════ */
-.marca { font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif; font-weight: 400; font-style: normal; letter-spacing: -.02em; white-space: nowrap; -webkit-text-fill-color: initial; }
+.marca { font-size: 1.12em; font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif; font-weight: 400; font-style: normal; letter-spacing: -.02em; white-space: nowrap; -webkit-text-fill-color: initial; }
 .marca__your { color: #f4ede8; -webkit-text-fill-color: #f4ede8; }
 .marca__date { color: #d9a89c; -webkit-text-fill-color: #d9a89c; }
 html body .header__logo, html body .login-card__logo, html body .editor-topbar__logo { background: none !important; -webkit-text-fill-color: initial !important; }
