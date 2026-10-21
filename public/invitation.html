@@ -68,7 +68,8 @@
 
     function actualizarOG(boda) {
       var p = boda.pareja || {};
-      var titulo = 'Boda de ' + (p.novio || '') + ' & ' + (p.novia || '');
+      var TITULOS = { bautizo: 'Bautizo de ', comunion: 'Comunión de ', cumpleanos: 'Cumpleaños de ', aniversario: 'Aniversario de ', evento: 'Celebración de ' };
+      var titulo = (TITULOS[boda.tipoEvento] || 'Boda de ') + (p.novio || '') + (p.novia ? ' & ' + p.novia : '');
       var foto = boda.fotoCabecera || ((boda.galeria && boda.galeria.fotos && boda.galeria.fotos[0]) || '');
       document.title = titulo;
       var set = function(id, v) { var e = document.getElementById(id); if (e && v) e.setAttribute('content', v); };
@@ -93,7 +94,7 @@
       }
       if (hex('principal')) demo.estilos.colorPrimario = hex('principal');
       if (hex('detalle')) demo.estilos.colorAccent = hex('detalle');
-      document.title = 'Ejemplo · ' + demo.pareja.novio + ' & ' + demo.pareja.novia;
+      document.title = 'Ejemplo · ' + demo.pareja.novio + (demo.pareja.novia ? ' & ' + demo.pareja.novia : '');
       INVITACION.render(demo, raiz, {
         onRsvp: function() { return Promise.resolve(); },
         onFormulario: function() { return Promise.resolve(); }

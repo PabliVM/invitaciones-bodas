@@ -29,7 +29,42 @@ const DEMOS = (() => {
   const FUENTES = ['Cormorant Garamond', 'Playfair Display', 'EB Garamond', 'Lora', 'Great Vibes', 'Dancing Script',
     'Parisienne', 'Josefin Sans', 'Montserrat', 'Raleway', 'Libre Baskerville'];
 
+  // Otros eventos (con música y pantalla de bienvenida): se montan sobre un modelo
+  const MUSICA_DEMO = { activa: true, titulo: 'Nuestra canción', url: '/assets/demo/musica-demo.mp3', mostrarTexto: 'titulo', inicio: 0, bienvenida: true };
+  const EVENTOS = {
+    bautizo: b => Object.assign(b, {
+      tipoEvento: 'bautizo', fotoCabecera: '',
+      pareja: { novio: 'Lucas', novia: '' },
+      fecha: { dia: '12', mes: '09', anio: '2027', hora: '12:00' },
+      historia: { activa: true, titulo: 'Bienvenido, Lucas', texto: 'Llegó en primavera y lo cambió todo. Queremos compartir con vosotros este día tan especial.', subsecciones: [] },
+      galeria: { activa: false, fotos: [] },
+      evento: { activo: true, titulo: 'La celebración', lugar: 'Parroquia de San Miguel', direccion: 'Plaza Mayor 3, Toledo', googleMapsUrl: 'https://maps.google.com/?q=Toledo', subsecciones: [
+        { titulo: 'Bautizo', texto: '12:00 h · Parroquia de San Miguel' }, { titulo: 'Comida', texto: '14:00 h · Restaurante El Jardín' }] },
+      dresscode: { activo: false }, alojamiento: { activo: false }, transporte: { activo: false },
+      mensaje: { activo: true, titulo: 'Gracias', texto: '¡Os esperamos para celebrarlo juntos!', subsecciones: [] },
+      formulario: { activo: false, preguntas: [] },
+      musica: Object.assign({}, MUSICA_DEMO, { titulo: 'La canción de Lucas' })
+    }),
+    cumple: b => Object.assign(b, {
+      tipoEvento: 'cumpleanos', fotoCabecera: '',
+      pareja: { novio: 'Elena · 40', novia: '' },
+      fecha: { dia: '23', mes: '10', anio: '2027', hora: '21:00' },
+      historia: { activa: true, titulo: 'Cuarenta y fabulosa', texto: 'Una noche para celebrar con las personas que más quiero. Cena, música y baile hasta que el cuerpo aguante.', subsecciones: [] },
+      galeria: { activa: false, fotos: [] },
+      evento: { activo: true, titulo: 'La fiesta', lugar: 'Terraza Lumière', direccion: 'Calle Alcalá 120, Madrid', googleMapsUrl: 'https://maps.google.com/?q=Madrid', subsecciones: [
+        { titulo: 'Cena', texto: '21:00 h' }, { titulo: 'Fiesta', texto: '23:30 h · DJ' }] },
+      dresscode: { activo: true, titulo: 'Dress code', texto: 'Un toque dorado o brillante.', subsecciones: [] },
+      alojamiento: { activo: false }, transporte: { activo: false },
+      mensaje: { activo: true, titulo: 'Te espero', texto: '¡Sin ti no sería lo mismo!', subsecciones: [] },
+      formulario: { activo: true, titulo: 'Para la fiesta', descripcion: '', textoBtnEnviar: 'Enviar', mensajeConfirmacion: '¡Gracias!', preguntas: [
+        { id: 'cancion', texto: 'La canción que no puede faltar', tipo: 'texto', obligatoria: false }] },
+      musica: Object.assign({}, MUSICA_DEMO, { titulo: 'Música de la fiesta' })
+    })
+  };
+  const MODELO_EVENTO = { bautizo: 'acuarela', cumple: 'deco' };
+
   function boda(plantilla) {
+    if (EVENTOS[plantilla]) return EVENTOS[plantilla](boda(MODELO_EVENTO[plantilla]));
     const id = TEMAS[plantilla] ? plantilla : 'clasica';
     const [novia, novio, lugar, direccion] = PAREJAS[id];
     // Alterna las fotos de portada entre estilos para que los ejemplos no se repitan
@@ -74,5 +109,5 @@ const DEMOS = (() => {
     };
   }
 
-  return { FUENTES, boda, TEMAS, PLANTILLAS: Object.keys(TEMAS) };
+  return { FUENTES, boda, TEMAS, PLANTILLAS: Object.keys(TEMAS), MODELO_EVENTO };
 })();

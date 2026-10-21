@@ -21,6 +21,7 @@ const STATE = (() => {
       v: 2,
       meta: { titulo: 'Nueva boda' },
       plantilla: 'clasica',
+      tipoEvento: 'boda', // boda | bautizo | comunion | cumpleanos | aniversario | evento
       fotoCabecera: '',  // URL de la foto principal de portada
       encuadres: {},     // URL de foto → punto importante ('50% 30%'), para recortar bien en móvil y ordenador
       pareja: { novio: 'Alejandro', novia: 'Sofía' },
@@ -139,6 +140,7 @@ const STATE = (() => {
     const enc = esObjeto(b.encuadres) ? b.encuadres : {};
     b.encuadres = {};
     Object.keys(enc).forEach(k => { if (/^\d{1,3}% \d{1,3}%$/.test(enc[k])) b.encuadres[k] = enc[k]; });
+    if (['boda', 'bautizo', 'comunion', 'cumpleanos', 'aniversario', 'evento'].indexOf(b.tipoEvento) === -1) b.tipoEvento = 'boda';
     b.v = 2;
     return b;
   }

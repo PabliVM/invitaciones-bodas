@@ -65,6 +65,7 @@ const EDITOR = (() => {
     _setVal('inp-titulo', boda.meta.titulo);
     _setVal('inp-foto-cabecera', boda.fotoCabecera || '');
     SECCIONES_CON_FOTO.forEach(s => _setVal('inp-foto-' + s, boda[s] ? boda[s].foto : ''));
+    _setVal('sel-tipo-evento', boda.tipoEvento || 'boda');
     _setVal('inp-novio', boda.pareja.novio);
     _setVal('inp-novia', boda.pareja.novia);
     _setVal('inp-dia', boda.fecha.dia);
@@ -137,6 +138,7 @@ const EDITOR = (() => {
     on('inp-titulo',        'meta.titulo');
     on('inp-foto-cabecera', 'fotoCabecera');
     SECCIONES_CON_FOTO.forEach(s => on('inp-foto-' + s, s + '.foto'));
+    on('sel-tipo-evento', 'tipoEvento');
     on('inp-novio', 'pareja.novio');
     on('inp-novia', 'pareja.novia');
     on('inp-dia', 'fecha.dia');

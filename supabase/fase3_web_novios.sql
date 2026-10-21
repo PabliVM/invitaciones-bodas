@@ -9,7 +9,7 @@ create table if not exists solicitudes (
   email text not null check (char_length(email) <= 200 and email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'),
   telefono text check (char_length(telefono) <= 40),
   fecha_boda date,
-  plan text check (plan in ('esencial', 'premium', 'a_medida', 'no_se')),
+  plan text check (plan in ('esencial', 'completa', 'premium', 'a_medida', 'no_se')),
   mensaje text check (char_length(mensaje) <= 2000),
   acepta_privacidad boolean not null check (acepta_privacidad),
   estado text not null default 'nueva' check (estado in ('nueva', 'contactada', 'cliente', 'descartada')),
