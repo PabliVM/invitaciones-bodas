@@ -56,6 +56,8 @@
   <script>
     var PARAMS = new URLSearchParams(window.location.search);
     var PREVIEW = PARAMS.get('preview') === '1';
+    // ?std=1 → save the date (aviso previo con el mismo estilo que la invitación)
+    var STD = PARAMS.get('std') === '1';
     // Ejemplos: /ejemplos/<plantilla> (ruta limpia) o ?demo=<plantilla>
     var DEMO = PARAMS.get('demo') || (window.location.pathname.match(/^\/ejemplos\/([a-z]+)\/?$/) || [])[1];
     var raiz = document.getElementById('invitation-root');
@@ -70,6 +72,7 @@
       var p = boda.pareja || {};
       var TITULOS = { bautizo: 'Bautizo de ', comunion: 'Comunión de ', cumpleanos: 'Cumpleaños de ', aniversario: 'Aniversario de ', evento: 'Celebración de ' };
       var titulo = (TITULOS[boda.tipoEvento] || 'Boda de ') + (p.novio || '') + (p.novia ? ' & ' + p.novia : '');
+      if (STD) titulo = 'Save the date · ' + titulo;
       var foto = boda.fotoCabecera || ((boda.galeria && boda.galeria.fotos && boda.galeria.fotos[0]) || '');
       document.title = titulo;
       var set = function(id, v) { var e = document.getElementById(id); if (e && v) e.setAttribute('content', v); };
@@ -94,8 +97,9 @@
       }
       if (hex('principal')) demo.estilos.colorPrimario = hex('principal');
       if (hex('detalle')) demo.estilos.colorAccent = hex('detalle');
-      document.title = 'Ejemplo · ' + demo.pareja.novio + (demo.pareja.novia ? ' & ' + demo.pareja.novia : '');
+      document.title = (STD ? 'Save the date · ' : 'Ejemplo · ') + demo.pareja.novio + (demo.pareja.novia ? ' & ' + demo.pareja.novia : '');
       INVITACION.render(demo, raiz, {
+        saveTheDate: STD,
         onRsvp: function() { return Promise.resolve(); },
         onFormulario: function() { return Promise.resolve(); }
       });
@@ -108,7 +112,7 @@
         if (e.origin !== window.location.origin || !e.data) return;
         if (e.data.tipo === 'boda') {
           desplazamiento = window.scrollY;
-          INVITACION.render(e.data.boda, raiz, { preview: true });
+          INVITACION.render(e.data.boda, raiz, { preview: true, saveTheDate: !!e.data.std });
           window.scrollTo(0, desplazamiento);
         }
         // El editor pide ir a una sección: se desplaza y la resalta un momento
@@ -132,6 +136,7 @@
           if (!boda) return mostrarError();
           actualizarOG(boda);
           INVITACION.render(boda, raiz, {
+            saveTheDate: STD,
             onRsvp: function(datos) { return DB.enviarRSVP(boda.id || id, datos); },
             onFormulario: function(respuestas) { return DB.enviarFormulario(boda.id || id, respuestas); }
           });

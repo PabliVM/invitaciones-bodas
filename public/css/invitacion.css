@@ -1052,3 +1052,8 @@ body.inv-bloqueo { overflow: hidden; }
 .inv-bienvenida__nota { font-size: 12px; color: var(--inv-suave); }
 .inv-bienvenida.abierta { opacity: 0; transform: translateY(-4%) scale(1.03); pointer-events: none; }
 @keyframes inv-bienvenida-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+/* ══════════════════ SAVE THE DATE ══════════════════ */
+.inv-std .inv-sec__in { display: grid; justify-items: center; gap: 22px; text-align: center; }
+.inv-std__fecha { margin: 0; font-family: var(--inv-fuente-display); font-size: clamp(28px, 6vw, 44px); line-height: 1.15; color: var(--inv-primario); }
+.inv-std__texto { margin: 0; max-width: 34ch; line-height: 1.8; }

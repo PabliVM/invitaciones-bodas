@@ -467,6 +467,37 @@
         </div>
       </div>
 
+      <!-- BLOQUE: SAVE THE DATE -->
+      <div class="eb-bloque">
+        <div class="eb-bloque__cab" onclick="toggleBloque(this)">
+          <span class="eb-bloque__titulo">Save the date</span>
+          <span class="eb-chevron">▼</span>
+        </div>
+        <div class="eb-bloque__body">
+          <div class="eb-sub eb-sub--abierto" data-seccion="std">
+            <div class="eb-sub__body">
+              <p class="campo__ayuda">Aviso previo para que reserven la fecha. Usa el mismo modelo, colores, letra y foto que la invitación. Mandadlo unos meses antes; la invitación formal, más tarde.</p>
+              <div class="campo">
+                <label class="campo__label" for="inp-std-titulo">Título</label>
+                <input type="text" class="campo__input" id="inp-std-titulo" placeholder="Save the date" />
+              </div>
+              <div class="campo">
+                <label class="campo__label" for="inp-std-texto">Texto</label>
+                <textarea class="campo__textarea" id="inp-std-texto" rows="3" placeholder="Reservad la fecha. La invitación formal llegará más adelante."></textarea>
+              </div>
+              <div class="campo campo--fila">
+                <label class="campo__label" for="chk-std-lugar">Mostrar el lugar</label>
+                <label class="campo__toggle"><input type="checkbox" id="chk-std-lugar" checked /><span class="campo__toggle-slider"></span></label>
+              </div>
+              <div class="std-acciones">
+                <button type="button" class="btn btn--secundario" id="btn-ver-std">Ver save the date ↗</button>
+                <button type="button" class="btn btn--ghost" id="btn-copiar-std">Copiar enlace</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- BLOQUE: SECCIONES EXTRA -->
       <div class="eb-bloque">
         <div class="eb-bloque__cab" onclick="toggleBloque(this)">
@@ -482,6 +513,10 @@
 
     <!-- PREVIEW -->
     <section class="editor-preview">
+      <div class="preview-modos preview-vista" role="group" aria-label="Qué ver">
+        <button type="button" data-vista="invitacion" class="activo">Invitación</button>
+        <button type="button" data-vista="std">Save the date</button>
+      </div>
       <div class="preview-modos" role="group" aria-label="Vista previa">
         <button type="button" data-modo="movil" class="activo">Móvil</button>
         <button type="button" data-modo="escritorio">Escritorio</button>

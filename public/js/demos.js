@@ -104,6 +104,7 @@ const DEMOS = (() => {
           { id: 'cancion', texto: 'Una canción que no puede faltar', tipo: 'texto', obligatoria: false }
         ]
       },
+      saveTheDate: { titulo: 'Save the date', texto: 'Reservad la fecha. La invitación formal llegará más adelante.', mostrarLugar: true },
       secciones_extra: [],
       orden_secciones: ['historia', 'galeria', 'evento', 'dresscode', 'alojamiento', 'transporte', 'rsvp', 'formulario', 'mensaje']
     };

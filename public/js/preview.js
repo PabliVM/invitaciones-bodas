@@ -8,10 +8,11 @@ const PREVIEW = (() => {
   let _pendiente = null;
   let _timer = null;
   let _modo = 'movil';
+  let _std = false; // true = save the date
 
   function _enviar() {
     if (!_listo || !_pendiente || !_frame.contentWindow) return;
-    _frame.contentWindow.postMessage({ tipo: 'boda', boda: _pendiente }, window.location.origin);
+    _frame.contentWindow.postMessage({ tipo: 'boda', boda: _pendiente, std: _std }, window.location.origin);
   }
 
   // Programa un render (agrupa cambios seguidos al escribir)
@@ -42,9 +43,22 @@ const PREVIEW = (() => {
   }
 
   // Desplaza la vista previa hasta una sección y la resalta
+  // (la sección 'std' cambia a la vista del save the date; cualquier otra vuelve a la invitación)
   function irA(seccion) {
     if (!_listo || !_frame.contentWindow) return;
-    _frame.contentWindow.postMessage({ tipo: 'ir', seccion }, window.location.origin);
+    const std = seccion === 'std';
+    if (std !== _std) {
+      verSaveTheDate(std);
+      setTimeout(() => irA(seccion), 350);
+      return;
+    }
+    _frame.contentWindow.postMessage({ tipo: 'ir', seccion: std ? 'portada' : seccion }, window.location.origin);
+  }
+
+  function verSaveTheDate(activo) {
+    _std = !!activo;
+    document.querySelectorAll('.preview-vista button').forEach(b => b.classList.toggle('activo', (b.dataset.vista === 'std') === _std));
+    _enviar();
   }
 
   function cambiarModo(modo) {
@@ -64,8 +78,9 @@ const PREVIEW = (() => {
     });
     _frame.src = 'invitation.html?preview=1';
     document.querySelectorAll('.preview-modos button').forEach(b => b.addEventListener('click', () => cambiarModo(b.dataset.modo)));
+    document.querySelectorAll('.preview-vista button').forEach(b => b.addEventListener('click', () => verSaveTheDate(b.dataset.vista === 'std')));
     window.addEventListener('resize', _ajustar);
   }
 
-  return { init, actualizar, cambiarModo, irA };
+  return { init, actualizar, cambiarModo, irA, verSaveTheDate };
 })();
