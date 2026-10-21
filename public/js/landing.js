@@ -11,6 +11,12 @@
     { id: 'revista',      nombre: 'Revista',      desc: 'Estilo editorial con secciones numeradas.' },
     { id: 'boho',         nombre: 'Boho',         desc: 'Arcos, sol naciente y tonos tierra. Cálida y natural.' }
   ];
+  // Otros eventos (con música): se recorren en el visor junto a los modelos
+  const OTROS = [
+    { id: 'bautizo', nombre: 'Bautizo', desc: 'Modelo Acuarela, con música y pantalla de bienvenida.', plantilla: 'acuarela' },
+    { id: 'cumple',  nombre: 'Cumpleaños', desc: 'Modelo Art Déco, con música y pantalla de bienvenida.', plantilla: 'deco' }
+  ];
+  const TODOS = EJEMPLOS.concat(OTROS);
   const ANCHO_MOVIL = 390;
 
   // Escala los iframes (ancho real: 390px móvil, 1280px ordenador) al tamaño de su marco
@@ -50,21 +56,25 @@
   // ── Ejemplos ──
   const lista = document.getElementById('lista-ejemplos');
   let modoEjemplos = 'movil';
-  lista.innerHTML = EJEMPLOS.map((e, i) =>
+  const tarjeta = (e, i) =>
     '<a class="l-ejemplo l-revelar" style="--d:' + (i % 4) * 0.06 + 's" href="/ejemplos/' + e.id + '" data-ver="' + i + '">' +
       '<div class="l-movil"><div class="l-movil__pantalla" data-base="390"><iframe src="invitation.html?demo=' + e.id + '" title="Ejemplo ' + e.nombre + '" loading="lazy" tabindex="-1"></iframe></div></div>' +
-      '<h3 class="l-ejemplo__nombre">' + e.nombre + '<span>Ver a fondo →</span></h3>' +
+      '<h3 class="l-ejemplo__nombre">' + e.nombre + (e.plantilla ? ' <small>♪ con música</small>' : '') + '<span>Ver a fondo →</span></h3>' +
       '<p class="l-ejemplo__desc">' + e.desc + '</p>' +
-    '</a>').join('');
-  lista.querySelectorAll('.l-movil__pantalla').forEach(escalar);
+    '</a>';
+  lista.innerHTML = EJEMPLOS.map(tarjeta).join('');
+  const listaOtros = document.getElementById('lista-otros');
+  if (listaOtros) listaOtros.innerHTML = OTROS.map((e, i) => tarjeta(e, EJEMPLOS.length + i)).join('');
+  document.querySelectorAll('.l-ejemplos .l-movil__pantalla').forEach(escalar);
+
 
   // Cambia todas las tarjetas entre marco de móvil (390px) y de ordenador (1280px) sin recargar
   function verEjemplosEn(modo) {
     modoEjemplos = modo;
     const pc = modo === 'ordenador';
-    lista.classList.toggle('l-ejemplos--ordenador', pc);
-    lista.querySelectorAll('.l-ejemplo > div').forEach(d => { d.className = pc ? 'l-navegador' : 'l-movil'; });
-    lista.querySelectorAll('.l-movil__pantalla').forEach(p => { p.dataset.base = pc ? 1280 : ANCHO_MOVIL; ajustar(p); });
+    document.querySelectorAll('.l-ejemplos').forEach(l => l.classList.toggle('l-ejemplos--ordenador', pc));
+    document.querySelectorAll('.l-ejemplos .l-ejemplo > div').forEach(d => { d.className = pc ? 'l-navegador' : 'l-movil'; });
+    document.querySelectorAll('.l-ejemplos .l-movil__pantalla').forEach(p => { p.dataset.base = pc ? 1280 : ANCHO_MOVIL; ajustar(p); });
     document.querySelectorAll('#vista-ejemplos .l-vista__btn').forEach(b => b.classList.toggle('activo', b.dataset.modo === modo));
   }
   document.querySelectorAll('#vista-ejemplos .l-vista__btn').forEach(b => b.addEventListener('click', () => verEjemplosEn(b.dataset.modo)));
@@ -88,8 +98,8 @@
   }
 
   function visorVer(i) {
-    vIndice = (i + EJEMPLOS.length) % EJEMPLOS.length;
-    const e = EJEMPLOS[vIndice];
+    vIndice = (i + TODOS.length) % TODOS.length;
+    const e = TODOS[vIndice];
     document.getElementById('visor-nombre').textContent = e.nombre;
     vFrame.src = 'invitation.html?demo=' + e.id;
   }
@@ -108,7 +118,7 @@
     vFrame.src = 'about:blank';
   }
 
-  lista.querySelectorAll('[data-ver]').forEach(a => a.addEventListener('click', ev => {
+  document.querySelectorAll('.l-ejemplos [data-ver]').forEach(a => a.addEventListener('click', ev => {
     ev.preventDefault();
     visorAbrir(+a.dataset.ver);
   }));
@@ -225,7 +235,7 @@
 
   // Desde el visor: personalizar el estilo que se está viendo
   document.getElementById('visor-personalizar').addEventListener('click', () => {
-    cfg.estilo = EJEMPLOS[vIndice].id;
+    cfg.estilo = TODOS[vIndice].plantilla || TODOS[vIndice].id;
     configModo(vModo);
     visorCerrar();
     cargarFuentesConfig();

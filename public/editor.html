@@ -143,12 +143,25 @@
                 <p class="campo__ayuda">La primera que se ve: arriba en el móvil y a la izquierda en ordenador. Mejor vertical (4:5) y de al menos 1200 px.</p>
               </div>
               <div class="campo">
-                <label class="campo__label">Nombre del novio</label>
+                <label class="campo__label" for="sel-tipo-evento">Tipo de evento</label>
+                <select class="campo__select" id="sel-tipo-evento">
+                  <option value="boda">Boda</option>
+                  <option value="bautizo">Bautizo</option>
+                  <option value="comunion">Comunión</option>
+                  <option value="cumpleanos">Cumpleaños</option>
+                  <option value="aniversario">Aniversario</option>
+                  <option value="evento">Otra celebración</option>
+                </select>
+                <p class="campo__ayuda">Cambia los textos de la invitación ("Nos casamos", "Mi bautizo"…).</p>
+              </div>
+              <div class="campo">
+                <label class="campo__label">Primer nombre</label>
                 <input type="text" class="campo__input" id="inp-novio" placeholder="Alejandro" />
               </div>
               <div class="campo">
-                <label class="campo__label">Nombre de la novia</label>
+                <label class="campo__label">Segundo nombre <span class="campo__opcional">(opcional)</span></label>
                 <input type="text" class="campo__input" id="inp-novia" placeholder="Sofía" />
+                <p class="campo__ayuda">Para un bautizo o un cumpleaños, déjalo vacío y solo saldrá un nombre.</p>
               </div>
               <div class="campo">
                 <label class="campo__label">Fecha</label>

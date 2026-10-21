@@ -42,8 +42,8 @@ const REVISION = (() => {
     const p = b.pareja || {}, f = b.fecha || {};
 
     // Pareja y fecha
-    if (vacio(p.novio)) err('Falta el primer nombre de la pareja', 'inp-novio');
-    if (vacio(p.novia)) err('Falta el segundo nombre de la pareja', 'inp-novia');
+    if (vacio(p.novio)) err('Falta el nombre', 'inp-novio');
+    if (vacio(p.novia) && (b.tipoEvento || 'boda') === 'boda') err('Falta el segundo nombre de la pareja', 'inp-novia');
     if (p.novio === 'Alejandro' && p.novia === 'Sofía') avi('Los nombres son los de ejemplo', 'inp-novio');
     const dia = +f.dia, mes = +f.mes, anio = +f.anio;
     const fecha = new Date(anio, mes - 1, dia);

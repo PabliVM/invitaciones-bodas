@@ -262,6 +262,8 @@ h1, h2, h3, p { margin: 0; }
 .l-plan--destacado { position: relative; background: var(--l-negro); color: #fff; box-shadow: 0 0 0 1px rgba(216, 169, 158, .5), 0 40px 80px -30px rgba(216, 169, 158, .45); }
 .l-plan__etiqueta { position: absolute; top: -12px; left: 30px; padding: 5px 12px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #3b2a26; background: var(--l-oro-grad); }
 .l-plan h3 { font-family: var(--l-serif); font-size: 34px; font-weight: 500; }
+.l-plan__precio { margin: -10px 0 0; font-family: 'Playfair Display', var(--l-serif); font-size: 44px; line-height: 1; color: var(--l-oro); }
+.l-plan--destacado .l-plan__precio { color: var(--l-oro-2); }
 .l-plan__desc { font-size: 14px; line-height: 1.6; color: var(--l-suave); }
 .l-plan--destacado .l-plan__desc { color: rgba(255, 255, 255, .65); }
 .l-plan ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; flex: 1; align-content: start; }
@@ -466,3 +468,11 @@ h1, h2, h3, p { margin: 0; }
 .l-eventos__lista { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .l-eventos__lista li { padding: 8px 16px; border-radius: 999px; background: rgba(255, 255, 255, .35); font-size: 13px; letter-spacing: .5px; }
 @media (max-width: 920px) { .l-eventos__in { justify-content: center; text-align: center; } .l-eventos__lista { justify-content: center; } }
+
+/* Otros eventos (bajo los modelos) */
+.l-otros__cab { margin: clamp(56px, 8vw, 90px) 0 clamp(28px, 4vw, 40px); }
+.l-otros__titulo { margin: 0; font-family: var(--l-serif); font-weight: 400; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.15; }
+.l-ejemplos--otros { max-width: 560px; margin: 0 auto; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.l-ejemplos--otros.l-ejemplos--ordenador { max-width: none; }
+.l-ejemplo__nombre small { font-family: var(--l-sans); font-size: 11px; letter-spacing: .5px; color: var(--l-oro); white-space: nowrap; }
+@media (max-width: 680px) { .l-ejemplos--otros.l-ejemplos--ordenador { grid-template-columns: 1fr; } }

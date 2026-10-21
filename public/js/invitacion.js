@@ -66,6 +66,24 @@ const INVITACION = (() => {
     const d = fechaBoda(f);
     return isNaN(d) ? '' : DIAS[d.getDay()];
   }
+  // Textos según el tipo de evento (boda por defecto)
+  const TIPOS = {
+    boda:        { kicker: 'Nos casamos',                 invitado: 'Estás invitado a la boda de',        titulo: 'Boda de',        para: 'los novios' },
+    bautizo:     { kicker: 'Mi bautizo',                  invitado: 'Estás invitado al bautizo de',       titulo: 'Bautizo de',     para: 'la familia' },
+    comunion:    { kicker: 'Mi primera comunión',         invitado: 'Estás invitado a la comunión de',    titulo: 'Comunión de',    para: 'la familia' },
+    cumpleanos:  { kicker: '¡Lo celebramos!',             invitado: 'Estás invitado al cumpleaños de',    titulo: 'Cumpleaños de',  para: 'el anfitrión' },
+    aniversario: { kicker: 'Celebramos nuestro aniversario', invitado: 'Estás invitado al aniversario de', titulo: 'Aniversario de', para: 'los anfitriones' },
+    evento:      { kicker: 'Te invitamos',                invitado: 'Estás invitado a la celebración de', titulo: 'Celebración de', para: 'los anfitriones' }
+  };
+  function textos(boda) { return TIPOS[boda && boda.tipoEvento] || TIPOS.boda; }
+  // "Ana & Luis" o solo "Lucas" si hay un único nombre
+  function nombresHtml(p) {
+    return p.novia ? esc(p.novio) + ' <span>&amp;</span> ' + esc(p.novia) : esc(p.novio);
+  }
+  function nombresTexto(p, union) {
+    return p.novia ? (p.novio || '') + union + p.novia : (p.novio || '');
+  }
+
   function iniciales(p) {
     return ((p.novio || ' ')[0] + (p.novia || ' ')[0]).toUpperCase().trim();
   }
@@ -198,11 +216,10 @@ const INVITACION = (() => {
       '<div class="inv-portada__marco" aria-hidden="true"></div>' +
       '<div class="inv-sec__in">' +
         '<span class="inv-orn" aria-hidden="true"></span>' +
-        '<p class="inv-kicker inv-portada__kicker">Nos casamos</p>' +
+        '<p class="inv-kicker inv-portada__kicker">' + esc(textos(boda).kicker) + '</p>' +
         '<h1 class="inv-nombres">' +
           '<span class="inv-nombres__uno">' + esc(p.novio) + '</span>' +
-          '<span class="inv-nombres__y">&amp;</span>' +
-          '<span class="inv-nombres__dos">' + esc(p.novia) + '</span>' +
+          (p.novia ? '<span class="inv-nombres__y">&amp;</span><span class="inv-nombres__dos">' + esc(p.novia) + '</span>' : '') +
         '</h1>' +
         '<p class="inv-portada__fecha">' +
           '<span class="inv-portada__dia">' + esc(diaSemana(f)) + '</span>' +
@@ -247,7 +264,7 @@ const INVITACION = (() => {
     const fmt = d => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
     const p = boda.pareja || {};
     const cal = isNaN(inicio) ? '' :
-      'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent('Boda de ' + (p.novio || '') + ' y ' + (p.novia || '')) +
+      'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(textos(boda).titulo + ' ' + nombresTexto(p, ' y ')) +
       '&dates=' + fmt(inicio) + '/' + fmt(new Date(inicio.getTime() + 6 * 3600000)) +
       '&location=' + encodeURIComponent([sec.lugar, sec.direccion].filter(Boolean).join(', '));
     const mapa = url(sec.googleMapsUrl);
@@ -273,7 +290,7 @@ const INVITACION = (() => {
       subsecciones(sec.subsecciones));
   }
 
-  function rsvp(sec, preview) {
+  function rsvp(sec, preview, boda) {
     let limite = '';
     if (sec.fechaLimite) {
       const d = new Date(sec.fechaLimite);
@@ -287,7 +304,7 @@ const INVITACION = (() => {
           '<label class="inv-opcion"><input type="radio" name="asistencia" value="si" required /><span>Asistiré con alegría</span></label>' +
           '<label class="inv-opcion"><input type="radio" name="asistencia" value="no" /><span>No podré asistir</span></label>' +
         '</div>' +
-        '<textarea class="inv-input" name="mensaje" rows="3" placeholder="Mensaje para los novios (opcional)"></textarea>' +
+        '<textarea class="inv-input" name="mensaje" rows="3" placeholder="Mensaje para ' + esc(textos(boda).para) + ' (opcional)"></textarea>' +
         '<p class="inv-form__error" hidden></p>' +
         '<button class="inv-btn inv-btn--lleno" type="submit">' + (preview ? 'Confirmar (vista previa)' : 'Confirmar asistencia') + '</button>' +
       '</form>' +
@@ -300,7 +317,7 @@ const INVITACION = (() => {
     return seccion('mensaje', 'mensaje', sec.foto,
       '<span class="inv-orn inv-orn--triple" aria-hidden="true"></span>' +
       (sec.texto ? '<p class="inv-mensaje__texto">' + parrafos(sec.texto) + '</p>' : '') +
-      '<p class="inv-firma">' + esc(p.novio) + ' <span>&amp;</span> ' + esc(p.novia) + '</p>' +
+      '<p class="inv-firma">' + nombresHtml(p) + '</p>' +
       subsecciones(sec.subsecciones));
   }
 
@@ -349,7 +366,7 @@ const INVITACION = (() => {
       case 'dresscode':   return texto('dresscode', sec, 'Dress code');
       case 'alojamiento': return texto('alojamiento', sec, 'Alojamiento');
       case 'transporte':  return texto('transporte', sec, 'Transporte');
-      case 'rsvp':        return rsvp(sec, preview);
+      case 'rsvp':        return rsvp(sec, preview, boda);
       case 'mensaje':     return mensaje(sec, boda);
       case 'formulario':  return formulario(boda.formulario, preview);
     }
@@ -370,7 +387,7 @@ const INVITACION = (() => {
         '<div class="inv-lateral__vacio"><span>' + esc(iniciales(p)) + '</span></div>' +
         '<div class="inv-lateral__velo"></div>' +
         '<div class="inv-lateral__pie">' +
-          '<p class="inv-lateral__nombres">' + esc(p.novio) + ' <span>&amp;</span> ' + esc(p.novia) + '</p>' +
+          '<p class="inv-lateral__nombres">' + nombresHtml(p) + '</p>' +
           '<p class="inv-lateral__fecha">' + esc(fechaLarga(f)) + '</p>' +
         '</div>' +
       '</aside>' +
@@ -476,8 +493,8 @@ const INVITACION = (() => {
     el.innerHTML = (foto ? '<img class="inv-bienvenida__foto" src="' + foto + '" alt=""' + foco(boda.fotoCabecera) + ' />' : '') +
       '<div class="inv-bienvenida__in">' +
         '<span class="inv-orn" aria-hidden="true"></span>' +
-        '<p class="inv-kicker">Estás invitado a la boda de</p>' +
-        '<p class="inv-bienvenida__nombres">' + esc(p.novio) + ' <span>&amp;</span> ' + esc(p.novia) + '</p>' +
+        '<p class="inv-kicker">' + esc(textos(boda).invitado) + '</p>' +
+        '<p class="inv-bienvenida__nombres">' + nombresHtml(p) + '</p>' +
         '<p class="inv-bienvenida__fecha">' + esc(fechaLarga(f)) + '</p>' +
         '<button type="button" class="inv-btn inv-btn--lleno inv-bienvenida__btn">Abrir invitación</button>' +
         (_reproducir ? '<p class="inv-bienvenida__nota">♪ con música</p>' : '') +

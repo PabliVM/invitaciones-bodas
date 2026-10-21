@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lato:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/landing.css?v=24" />
+  <link rel="stylesheet" href="css/landing.css?v=25" />
 </head>
 <body>
 
@@ -26,9 +26,9 @@
     <div class="l-contenedor l-header__in">
       <a href="#inicio" class="l-logo"><span class="marca"><span class="marca__your">your</span><span class="marca__date">date</span></span></a>
       <nav class="l-nav" id="nav">
-        <a href="#incluye">Qué incluye</a>
         <a href="#ejemplos">Modelos</a>
         <a href="#disena">Personalizar</a>
+        <a href="#incluye">Qué incluye</a>
         <a href="#como-funciona">Cómo funciona</a>
         <a href="#planes">Planes</a>
         <a href="#preguntas">Preguntas</a>
@@ -72,6 +72,66 @@
       <ul class="l-eventos__lista">
         <li>Bodas</li><li>Bautizos</li><li>Comuniones</li><li>Cumpleaños</li><li>Aniversarios</li><li>Despedidas</li><li>Eventos de empresa</li>
       </ul>
+    </div>
+  </section>
+
+  <!-- ════════ EJEMPLOS ════════ -->
+  <section class="l-sec" id="ejemplos">
+    <div class="l-contenedor">
+      <div class="l-cab l-cab--centro l-revelar">
+        <p class="l-kicker">Modelos</p>
+        <h2 class="l-titulo">Ocho estilos, <em>infinitas</em> combinaciones</h2>
+        <p class="l-sub">Cada estilo se adapta a vuestros colores, tipografías y fotos. Elegid cómo verlos y tocad cualquiera para recorrerlo a fondo.</p>
+        <div class="l-vista" id="vista-ejemplos" role="group" aria-label="Ver los ejemplos en">
+          <button class="l-vista__btn activo" data-modo="movil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg> Móvil</button>
+          <button class="l-vista__btn" data-modo="ordenador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Ordenador</button>
+        </div>
+      </div>
+      <div class="l-ejemplos" id="lista-ejemplos"></div>
+      <div class="l-cab l-cab--centro l-otros__cab l-revelar">
+        <p class="l-kicker">Otros eventos</p>
+        <h3 class="l-otros__titulo">También para bautizos, cumpleaños y cualquier celebración</h3>
+        <p class="l-sub">Estos dos llevan música: pulsad «Abrir invitación» para escucharla.</p>
+      </div>
+      <div class="l-ejemplos l-ejemplos--otros" id="lista-otros"></div>
+    </div>
+  </section>
+
+  <!-- ════════ DISEÑAD LA VUESTRA ════════ -->
+  <section class="l-sec l-sec--marfil2" id="disena">
+    <div class="l-contenedor">
+      <div class="l-cab l-cab--centro l-revelar">
+        <p class="l-kicker">Diseñad la vuestra</p>
+        <h2 class="l-titulo">Elegid estilo, colores y <em>letra</em></h2>
+        <p class="l-sub">Probad combinaciones y mirad al momento cómo queda. Cuando os guste, pedidla tal cual.</p>
+      </div>
+      <div class="l-config">
+        <div class="l-config__vista">
+          <div class="l-vista" id="vista-config" role="group" aria-label="Ver en">
+            <button class="l-vista__btn activo" data-modo="movil">Móvil</button>
+            <button class="l-vista__btn" data-modo="ordenador">Ordenador</button>
+          </div>
+          <div class="l-movil" id="config-disp">
+            <div class="l-movil__pantalla" id="config-pantalla" data-base="390"><iframe id="config-frame" title="Vista de vuestra invitación" loading="lazy"></iframe></div>
+          </div>
+        </div>
+        <div class="l-config__opciones">
+          <fieldset class="l-config__grupo"><legend>1 · Estilo</legend><div class="l-opciones" id="config-estilos"></div></fieldset>
+          <fieldset class="l-config__grupo"><legend>2 · Colores</legend><div class="l-opciones" id="config-colores"></div>
+            <div class="l-colores-libres" id="config-libres" hidden>
+              <label class="l-color"><input type="color" id="config-fondo" value="#f7efe6" /><span>Fondo</span></label>
+              <label class="l-color"><input type="color" id="config-principal" value="#b5502f" /><span>Color principal</span></label>
+              <label class="l-color"><input type="color" id="config-detalle" value="#6b7a3a" /><span>Detalles</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="l-config__grupo"><legend>3 · Letra de los títulos</legend><div class="l-opciones" id="config-fuentes"></div></fieldset>
+          <p class="l-config__resumen" id="config-resumen" aria-live="polite"></p>
+          <div class="l-config__acciones">
+            <button type="button" class="l-btn l-btn--oro" id="config-pedir">Quiero esta invitación</button>
+            <button type="button" class="l-btn l-btn--linea" id="config-copiar">Copiar enlace</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -133,60 +193,6 @@
     </div>
   </section>
 
-  <!-- ════════ EJEMPLOS ════════ -->
-  <section class="l-sec" id="ejemplos">
-    <div class="l-contenedor">
-      <div class="l-cab l-cab--centro l-revelar">
-        <p class="l-kicker">Modelos</p>
-        <h2 class="l-titulo">Ocho estilos, <em>infinitas</em> combinaciones</h2>
-        <p class="l-sub">Cada estilo se adapta a vuestros colores, tipografías y fotos. Elegid cómo verlos y tocad cualquiera para recorrerlo a fondo.</p>
-        <div class="l-vista" id="vista-ejemplos" role="group" aria-label="Ver los ejemplos en">
-          <button class="l-vista__btn activo" data-modo="movil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg> Móvil</button>
-          <button class="l-vista__btn" data-modo="ordenador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Ordenador</button>
-        </div>
-      </div>
-      <div class="l-ejemplos" id="lista-ejemplos"></div>
-    </div>
-  </section>
-
-  <!-- ════════ DISEÑAD LA VUESTRA ════════ -->
-  <section class="l-sec l-sec--marfil2" id="disena">
-    <div class="l-contenedor">
-      <div class="l-cab l-cab--centro l-revelar">
-        <p class="l-kicker">Diseñad la vuestra</p>
-        <h2 class="l-titulo">Elegid estilo, colores y <em>letra</em></h2>
-        <p class="l-sub">Probad combinaciones y mirad al momento cómo queda. Cuando os guste, pedidla tal cual.</p>
-      </div>
-      <div class="l-config">
-        <div class="l-config__vista">
-          <div class="l-vista" id="vista-config" role="group" aria-label="Ver en">
-            <button class="l-vista__btn activo" data-modo="movil">Móvil</button>
-            <button class="l-vista__btn" data-modo="ordenador">Ordenador</button>
-          </div>
-          <div class="l-movil" id="config-disp">
-            <div class="l-movil__pantalla" id="config-pantalla" data-base="390"><iframe id="config-frame" title="Vista de vuestra invitación" loading="lazy"></iframe></div>
-          </div>
-        </div>
-        <div class="l-config__opciones">
-          <fieldset class="l-config__grupo"><legend>1 · Estilo</legend><div class="l-opciones" id="config-estilos"></div></fieldset>
-          <fieldset class="l-config__grupo"><legend>2 · Colores</legend><div class="l-opciones" id="config-colores"></div>
-            <div class="l-colores-libres" id="config-libres" hidden>
-              <label class="l-color"><input type="color" id="config-fondo" value="#f7efe6" /><span>Fondo</span></label>
-              <label class="l-color"><input type="color" id="config-principal" value="#b5502f" /><span>Color principal</span></label>
-              <label class="l-color"><input type="color" id="config-detalle" value="#6b7a3a" /><span>Detalles</span></label>
-            </div>
-          </fieldset>
-          <fieldset class="l-config__grupo"><legend>3 · Letra de los títulos</legend><div class="l-opciones" id="config-fuentes"></div></fieldset>
-          <p class="l-config__resumen" id="config-resumen" aria-live="polite"></p>
-          <div class="l-config__acciones">
-            <button type="button" class="l-btn l-btn--oro" id="config-pedir">Quiero esta invitación</button>
-            <button type="button" class="l-btn l-btn--linea" id="config-copiar">Copiar enlace</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ════════ CÓMO FUNCIONA ════════ -->
   <section class="l-sec" id="como-funciona">
     <div class="l-contenedor">
@@ -209,45 +215,48 @@
       <div class="l-cab l-cab--centro l-revelar">
         <p class="l-kicker">Planes</p>
         <h2 class="l-titulo">Elegid cómo <em>queréis</em> vuestra invitación</h2>
-        <p class="l-sub">Os preparamos un presupuesto sin compromiso según lo que necesitéis.</p>
+        <p class="l-sub">Precio cerrado por invitación. Elegid el plan y nosotros la preparamos.</p>
       </div>
       <div class="l-planes">
         <article class="l-plan l-revelar">
           <h3>Esencial</h3>
+          <p class="l-plan__precio">29 €</p>
           <p class="l-plan__desc">Todo lo imprescindible, con un diseño precioso.</p>
           <ul>
-            <li>Un estilo a elegir, con vuestros colores</li>
-            <li>Portada con vuestros nombres y foto</li>
-            <li>Cuenta atrás, lugar y "cómo llegar"</li>
+            <li>Un modelo a elegir, con vuestros colores y letra</li>
+            <li>Portada con nombres, foto y cuenta atrás</li>
+            <li>Lugar con mapa, "cómo llegar" y añadir al calendario</li>
             <li>Confirmación de asistencia</li>
-            <li>Enlace único para compartir</li>
+            <li>Respuestas en vuestra área privada y en Excel</li>
           </ul>
-          <button class="l-btn l-btn--linea" data-plan="esencial">Solicitar presupuesto</button>
+          <button class="l-btn l-btn--linea" data-plan="esencial">Lo quiero</button>
         </article>
         <article class="l-plan l-plan--destacado l-revelar" style="--d:.08s">
           <span class="l-plan__etiqueta">Recomendado</span>
-          <h3>Premium</h3>
-          <p class="l-plan__desc">La experiencia completa para vosotros y vuestros invitados.</p>
+          <h3>Completa</h3>
+          <p class="l-plan__precio">49 €</p>
+          <p class="l-plan__desc">Toda la información para vuestros invitados.</p>
           <ul>
             <li>Todo lo del plan Esencial</li>
-            <li>Galería de fotos y vuestra canción</li>
-            <li>Cuestionario a medida (menús, alergias…)</li>
-            <li>Alojamiento, transporte y dress code</li>
-            <li>Área privada con respuestas en tiempo real</li>
-            <li>Descarga de respuestas en Excel</li>
+            <li>Vuestra historia y galería de fotos</li>
+            <li>Cuestionario a medida (menú, alergias, autobús…)</li>
+            <li>Dress code, alojamiento y transporte</li>
+            <li>Secciones propias y en el orden que queráis</li>
           </ul>
-          <button class="l-btn l-btn--oro" data-plan="premium">Solicitar presupuesto</button>
+          <button class="l-btn l-btn--oro" data-plan="completa">Lo quiero</button>
         </article>
         <article class="l-plan l-revelar" style="--d:.16s">
-          <h3>A medida</h3>
-          <p class="l-plan__desc">Para bodas que quieren algo único.</p>
+          <h3>Premium</h3>
+          <p class="l-plan__precio">69 €</p>
+          <p class="l-plan__desc">La experiencia completa, con música.</p>
           <ul>
-            <li>Todo lo del plan Premium</li>
-            <li>Diseño exclusivo a partir de vuestra idea</li>
-            <li>Secciones personalizadas</li>
-            <li>Acompañamiento personal hasta el gran día</li>
+            <li>Todo lo del plan Completa</li>
+            <li>Vuestra canción, desde el segundo que elijáis</li>
+            <li>Pantalla de bienvenida "Abrir invitación"</li>
+            <li>Una foto distinta en cada sección (ordenador)</li>
+            <li>Cambios hasta el día del evento</li>
           </ul>
-          <button class="l-btn l-btn--linea" data-plan="a_medida">Solicitar presupuesto</button>
+          <button class="l-btn l-btn--linea" data-plan="premium">Lo quiero</button>
         </article>
       </div>
     </div>
@@ -287,9 +296,9 @@
         <div class="l-campo l-campo--ancho"><label for="c-plan">Plan que os interesa</label>
           <select id="c-plan" name="plan">
             <option value="no_se">Aún no lo sabemos</option>
-            <option value="esencial">Esencial</option>
-            <option value="premium">Premium</option>
-            <option value="a_medida">A medida</option>
+            <option value="esencial">Esencial · 29 €</option>
+            <option value="completa">Completa · 49 €</option>
+            <option value="premium">Premium · 69 €</option>
           </select>
         </div>
         <div class="l-campo l-campo--ancho"><label for="c-mensaje">Contadnos algo de vuestra boda (opcional)</label><textarea id="c-mensaje" name="mensaje" maxlength="2000" placeholder="Estilo que os gusta, número de invitados, lo que se os ocurra…"></textarea></div>
@@ -338,8 +347,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" defer></script>
   <script src="/supabase-config.js" defer></script>
   <script src="js/db.js" defer></script>
-  <script src="js/presets.js?v=24" defer></script>
-  <script src="js/demos.js?v=24" defer></script>
-  <script src="js/landing.js?v=24" defer></script>
+  <script src="js/presets.js?v=25" defer></script>
+  <script src="js/demos.js?v=25" defer></script>
+  <script src="js/landing.js?v=25" defer></script>
 </body>
 </html>

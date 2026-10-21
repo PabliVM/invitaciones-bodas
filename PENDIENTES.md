@@ -12,6 +12,7 @@ Lista de lo que queda por hacer o decidir por tu parte. Marca con `[x]` lo que v
   - [ ] `supabase/fase2_gestion.sql` (archivar + fotos)
   - [ ] `supabase/fase3_web_novios.sql` (solicitudes + área de novios)
   - [ ] `supabase/fase4_musica.sql` (subir canciones)
+  - [ ] `supabase/fase5_planes.sql` (plan Completa en las solicitudes)
 - [ ] **Vercel → Environment Variables:** `SUPABASE_SERVICE_ROLE_KEY` = clave `service_role` (Supabase → API Keys → pestaña *Legacy*). Marcar **Sensitive**. Después **Redeploy**.
 - [ ] **Supabase → Authentication → URL Configuration:**
   - Site URL: `https://invitaciones-bodas-pablivms-projects.vercel.app`
@@ -50,7 +51,8 @@ Lista de lo que queda por hacer o decidir por tu parte. Marca con `[x]` lo que v
 - [x] **Dominio**: yourdate.es (falta conectarlo, ver abajo).
 - [ ] **Email de contacto** para la web y la política de privacidad.
 - [ ] **Datos legales** para `privacidad.html` (nombre/razón social, NIF, dirección).
-- [ ] **Otros tipos de evento**: ¿solo celebraciones familiares (boda, bautizo, comunión, cumpleaños, aniversario), también empresa, o todo?
+- [x] **Otros tipos de evento**: el editor ya tiene "Tipo de evento" (boda, bautizo, comunión, cumpleaños, aniversario, otra).
+- [ ] **Precios**: 29 / 49 / 69 € — confirmar si llevan IVA incluido y si "Cambios hasta el día del evento" va en Premium.
 - [ ] **Web pública con varios eventos**: ¿general con la boda como estrella, o una página por tipo?
 
 ## 4. Próximas fases (cuando decidas)
