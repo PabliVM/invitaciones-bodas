@@ -34,9 +34,13 @@ const NO_INDEXAR = ['/admin', '/index.html', '/editor.html', '/login.html', '/re
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  // La ruta de vista previa (WhatsApp) lee invitation.html del disco
+  outputFileTracingIncludes: { '/api/invitacion': ['./public/invitation.html'] },
   async rewrites() {
     return {
       beforeFiles: [
+        // Invitación real (con ?id=): vista previa con foto y nombres al compartir el enlace
+        { source: '/invitation.html', has: [{ type: 'query', key: 'id' }], destination: '/api/invitacion' },
         { source: '/', destination: '/landing.html' },
         { source: '/admin', destination: '/index.html' },
         { source: '/novios', destination: '/novios.html' },
