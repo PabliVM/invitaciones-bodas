@@ -9,10 +9,11 @@ Lista de lo que queda por hacer o decidir por tu parte. Marca con `[x]` lo que v
 - [ ] **Supabase → SQL Editor:** ejecutar, en este orden, los que falten:
   - [x] `supabase/schema.sql`
   - [x] `supabase/fase1_auth.sql` (+ rol superadmin)
-  - [ ] `supabase/fase2_gestion.sql` (archivar + fotos)
-  - [ ] `supabase/fase3_web_novios.sql` (solicitudes + área de novios)
-  - [ ] `supabase/fase4_musica.sql` (subir canciones)
-  - [ ] `supabase/fase5_planes.sql` (plan Completa en las solicitudes)
+  - [x] `supabase/fase2_gestion.sql` (archivar + fotos)
+  - [x] `supabase/fase3_web_novios.sql` (solicitudes + área de novios)
+  - [x] `supabase/fase4_musica.sql` (subir canciones)
+  - [x] `supabase/fase5_planes.sql` (plan Completa en las solicitudes)
+  - [ ] `supabase/fase6_antispam.sql` (límite de respuestas de invitados)
 - [ ] **Vercel → Environment Variables:** `SUPABASE_SERVICE_ROLE_KEY` = clave `service_role` (Supabase → API Keys → pestaña *Legacy*). Marcar **Sensitive**. Después **Redeploy**.
 - [ ] **Supabase → Authentication → URL Configuration:**
   - Site URL: `https://invitaciones-bodas-pablivms-projects.vercel.app`
